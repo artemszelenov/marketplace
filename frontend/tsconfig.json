@@ -1,0 +1,12 @@
+{
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "paths": {
+      "@/payload/*": [
+        "../backend/src/*"
+      ]
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  }
+}
