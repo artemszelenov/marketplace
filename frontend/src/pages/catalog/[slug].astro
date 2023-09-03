@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const { title, description } = Astro.props;
+
+export async function getStaticPaths() {
+  const res = await fetch("http://localhost:4000/api/products");
+  const products = await res.json();
+
+  return products.docs.map((product) => {
+    return {
+      params: { slug: product.id },
+      props: { title: product.title, description: product.description },
+    };
+  });
+}
+---
+
+<BaseLayout title={`${title} | 6:52`}>
+  <section>
+    <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
+      <h1 set:html={title} />
+      <p set:html={description} />
+      <button
+        class="items-center text-sm active:bg-gray-100 active:text-gray-900/60 active:transition-none border font-medium gap-2 inline-flex justify-center outline-offset-2 px-6 py-3 transition w-full lg:w-auto rounded-lg bg-black border-white/20 hover:bg-gray-600 text-white"
+        type="button"
+      >
+        Купить
+      </button>
+    </div>
+  </section>
+</BaseLayout>
