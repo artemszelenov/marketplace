@@ -1,23 +1,50 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { prepareImages } from "../../utils/images";
 
 const res = await fetch("http://localhost:4000/api/products");
-const products = await res.json();
+let products = await res.json();
+
+products = products.docs.map((product) => ({
+  ...product,
+  gallery: prepareImages(product.gallery, ["thumbnail", "medium", "large"]),
+}));
 ---
 
 <BaseLayout title="Каталог | 6:52">
   <section>
     <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
-      {
-        products.docs.map((product) => (
-          <article>
-            <h1 class="text-2xl font-bold">
-              <a href={`/catalog/${product.id}`} set:html={product.title} />
-            </h1>
-            <p set:html={product.description} />
-          </article>
-        ))
-      }
+      <div
+        class="grid md:grid-cols-2 lg:grid-cols-3 mt-12 gap-2 gap-y-12 lg:gap-y-24"
+      >
+        {
+          products.map(({ id, title, description, gallery }) => (
+            <article>
+              {gallery.map(({ src, width, height, alt, srcset }) => (
+                <picture>
+                  <img
+                    src={src}
+                    alt={alt}
+                    width={width}
+                    height={height}
+                    srcset={srcset}
+                    decoding="async"
+                    loading="lazy"
+                  />
+                </picture>
+              ))}
+              <h1 class="text-2xl font-bold">
+                <a
+                  href={`/catalog/${id}`}
+                  rel="prefetch-intent"
+                  set:html={title}
+                />
+              </h1>
+              <p set:html={description} />
+            </article>
+          ))
+        }
+      </div>
     </div>
   </section>
 </BaseLayout>

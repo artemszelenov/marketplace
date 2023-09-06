@@ -11,6 +11,24 @@ const Products: CollectionConfig = {
 
   fields: [
     {
+      name: 'gallery',
+      type: 'array',
+      minRows: 1,
+      maxRows: 10,
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true
+        }
+      ],
+      labels: {
+        singular: 'Image',
+        plural: 'Images',
+      },
+    },
+    {
       name: 'title',
       type: 'text',
       required: true
@@ -18,7 +36,7 @@ const Products: CollectionConfig = {
     {
       name: 'description',
       type: 'text',
-      required: false
+      required: true
     }
   ]
 };

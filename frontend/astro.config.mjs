@@ -5,7 +5,9 @@ import tailwind from "@astrojs/tailwind";
 // пока не используем, нужен домен
 // import sitemap from "@astrojs/sitemap";
 
+import prefetch from "@astrojs/prefetch";
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [alpinejs(), tailwind()]
+  integrations: [alpinejs(), tailwind(), prefetch()]
 });
