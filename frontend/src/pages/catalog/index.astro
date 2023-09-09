@@ -13,19 +13,24 @@ const { products } = await getProducts()
       >
         {products.map(({ id, title, description, gallery }) => (
           <article>
-            {gallery.map(({ src, width, height, alt, srcset }) => (
-              <picture>
-                <img
-                  src={src}
-                  alt={alt}
-                  width={width}
-                  height={height}
-                  srcset={srcset}
-                  decoding="async"
-                  loading="lazy"
-                />
-              </picture>
-            ))}
+            <ul class="aspect-square flex overflow-x-auto	snap-x">
+              {gallery.map(({ src, width, height, alt, srcset }) => (
+                <li class="w-full shrink-0 snap-center">
+                  <picture>
+                    <img
+                      src={src}
+                      alt={alt}
+                      width={width}
+                      height={height}
+                      srcset={srcset}
+                      decoding="async"
+                      loading="lazy"
+                    />
+                  </picture>
+                </li>
+              ))}
+            </ul>
+
             <h1 class="text-2xl font-bold">
               <a
                 href={`/catalog/${id}`}

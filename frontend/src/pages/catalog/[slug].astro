@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import Button from '../../components/ui/Button.astro'
 import { getStaticProduct } from '../../api/products'
 
 export const getStaticPaths = getStaticProduct
@@ -35,12 +36,9 @@ const { title, description, gallery } = Astro.props
           <div class="sticky top-3">
             <h1 set:html={title} />
             <p set:html={description} />
-            <button
-              class="items-center text-sm active:bg-gray-100 active:text-gray-900/60 active:transition-none border font-medium gap-2 inline-flex justify-center outline-offset-2 px-6 py-3 transition w-full lg:w-auto rounded-lg bg-black border-white/20 hover:bg-gray-600 text-white"
-              type="button"
-            >
-              Купить
-            </button>
+            <Button>
+              <span class="text-white">Купить</span>
+            </Button>
           </div>
         </div>
       </div>
