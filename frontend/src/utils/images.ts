@@ -1,33 +1,40 @@
+import type { Product, Media } from '@/payload-types'
+
+type ISizesTypes = keyof Media['sizes']
+
 interface IImage {
-  src: string;
-  srcset: string;
-  width: number;
-  height: number;
-  alt: string;
+  src: string
+  srcset: string
+  width: number
+  height: number
+  alt: string
 }
 
-export function prepareImages(gallery: any[], except: string[] = []): IImage[] {
-  return gallery.map(
-    ({ image: { url, alt, width, height, sizes } }) => {
-      const srcset = Object.keys(sizes).reduce((str, sizeName) => {
-        if (except.includes(sizeName) || !sizes[sizeName].url) {
-          return str;
-        }
+export function prepareImages(gallery: Product['gallery'], except: ISizesTypes[] = []): IImage[] {
+  if (!gallery || gallery.length === 0) return []
 
-        if (str === "") {
-          return `${sizes[sizeName].url} ${sizes[sizeName].width}w`;
-        }
+  return gallery.map(({ image }) => {
+    const { url, alt, width, height, sizes = {} } = image as Media
+    const sizesTypes = Object.keys(sizes) as ISizesTypes[]
 
-        return `${str}, ${sizes[sizeName].url} ${sizes[sizeName].width}w`;
-      }, "");
+    const srcset = sizesTypes.reduce((str, sizeName) => {
+      if (!sizes[sizeName] || !sizes[sizeName].url || except.includes(sizeName)) {
+        return str
+      }
 
-      return {
-        src: sizes.small.url ?? url,
-        width: sizes.small.width ?? width,
-        height: sizes.small.height ?? height,
-        alt,
-        srcset,
-      };
+      if (str === '') {
+        return `${sizes[sizeName].url} ${sizes[sizeName].width}w`
+      }
+
+      return `${str}, ${sizes[sizeName].url} ${sizes[sizeName].width}w`
+    }, '')
+
+    return {
+      src: sizes.small?.url ?? url,
+      width: sizes.small?.width ?? width,
+      height: sizes.small?.height ?? height,
+      alt,
+      srcset
     }
-  );
+  })
 }

@@ -1,14 +1,8 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { prepareImages } from "../../utils/images";
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getProducts } from '../../api/products'
 
-const res = await fetch("http://localhost:4000/api/products");
-let products = await res.json();
-
-products = products.docs.map((product) => ({
-  ...product,
-  gallery: prepareImages(product.gallery, ["thumbnail", "medium", "large"]),
-}));
+const { products } = await getProducts()
 ---
 
 <BaseLayout title="Каталог | 6:52">
@@ -17,33 +11,31 @@ products = products.docs.map((product) => ({
       <div
         class="grid md:grid-cols-2 lg:grid-cols-3 mt-12 gap-2 gap-y-12 lg:gap-y-24"
       >
-        {
-          products.map(({ id, title, description, gallery }) => (
-            <article>
-              {gallery.map(({ src, width, height, alt, srcset }) => (
-                <picture>
-                  <img
-                    src={src}
-                    alt={alt}
-                    width={width}
-                    height={height}
-                    srcset={srcset}
-                    decoding="async"
-                    loading="lazy"
-                  />
-                </picture>
-              ))}
-              <h1 class="text-2xl font-bold">
-                <a
-                  href={`/catalog/${id}`}
-                  rel="prefetch-intent"
-                  set:html={title}
+        {products.map(({ id, title, description, gallery }) => (
+          <article>
+            {gallery.map(({ src, width, height, alt, srcset }) => (
+              <picture>
+                <img
+                  src={src}
+                  alt={alt}
+                  width={width}
+                  height={height}
+                  srcset={srcset}
+                  decoding="async"
+                  loading="lazy"
                 />
-              </h1>
-              <p set:html={description} />
-            </article>
-          ))
-        }
+              </picture>
+            ))}
+            <h1 class="text-2xl font-bold">
+              <a
+                href={`/catalog/${id}`}
+                rel="prefetch-intent"
+                set:html={title}
+              />
+            </h1>
+            <p set:html={description} />
+          </article>
+        ))}
       </div>
     </div>
   </section>

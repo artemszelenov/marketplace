@@ -8,7 +8,6 @@ const Products: CollectionConfig = {
   access: {
     read: () => true
   },
-
   fields: [
     {
       name: 'gallery',
