@@ -11,11 +11,22 @@ export interface Config {
     users: User;
     products: Product;
     media: Media;
+    orders: Order;
   };
   globals: {};
 }
 export interface User {
   id: string;
+  name?: string;
+  roles?: ('admin' | 'customer')[];
+  purchases?: string[] | Product[];
+  cart?: {
+    items?: {
+      product?: string | Product;
+      quantity?: number;
+      id?: string;
+    }[];
+  };
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -83,4 +94,20 @@ export interface Media {
       filename?: string;
     };
   };
+}
+export interface Order {
+  id: string;
+  orderedBy?: {
+    user?: string | User;
+    name?: string;
+    email?: string;
+  };
+  items?: {
+    product?: string | Product;
+    title?: string;
+    quantity?: number;
+    id?: string;
+  }[];
+  updatedAt: string;
+  createdAt: string;
 }

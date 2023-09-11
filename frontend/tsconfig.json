@@ -27,7 +27,7 @@
     "allowJs": true,
     "paths": {
       "@/payload-types": [
-        "./generated-types/payload-types.ts"
+        "./src/payload-types.ts"
       ]
     }
   }

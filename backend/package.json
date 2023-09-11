@@ -11,7 +11,9 @@
     "build": "yarn copyfiles && yarn build:payload && yarn build:server",
     "serve": "cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production node dist/server.js",
     "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png}\" dist/",
-    "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types",
+    "generate:types:front": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts GENERATED_TYPES_PATH=../frontend/src payload generate:types",
+    "generate:types:back": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts GENERATED_TYPES_PATH=../backend/src payload generate:types",
+    "generate:types": "npm run generate:types:front && npm run generate:types:back",
     "generate:graphQLSchema": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:graphQLSchema"
   },
   "dependencies": {
