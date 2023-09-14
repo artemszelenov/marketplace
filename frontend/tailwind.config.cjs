@@ -11,8 +11,7 @@ module.exports = {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['InterVariable', 'Inter', ...defaultTheme.fontFamily.sans],
-				// serif: ['DM Serif Display', ...defaultTheme.fontFamily.serif]
+				sans: ['Noto Sans Mono', ...defaultTheme.fontFamily.sans]
 			}
 		},
 	},

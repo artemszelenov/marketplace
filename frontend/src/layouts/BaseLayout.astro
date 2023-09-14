@@ -1,5 +1,5 @@
 ---
-import '@fontsource/inter'
+import '@fontsource/noto-sans-mono'
 
 const { title } = Astro.props
 
@@ -27,6 +27,7 @@ const nav = [
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
+
   <body>
     <div class="w-full bg-white border-b border-dashed text-xs">
       <div class="inline-flex w-full items-center justify-between mx-auto">
@@ -38,9 +39,12 @@ const nav = [
           >
             <a
               class="gap-2 text-sm inline-flex items-center text-black uppercase"
-              href="/">6:52</a
+              href="/"
             >
+              6:52
+            </a>
           </div>
+
           <nav
             class="flex-col items-center flex-grow hidden md:pb-0 md:flex md:justify-end md:flex-row"
           >
@@ -65,7 +69,7 @@ const nav = [
           <div class="text-white xl:col-span-1">
             <a
               href="/"
-              class="lg:text-xl font-serif gap-2 inline-flex items-center text-black uppercase"
+              class="lg:text-xl gap-2 inline-flex items-center text-black uppercase"
             >
               6:52
             </a>

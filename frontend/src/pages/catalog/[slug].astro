@@ -34,11 +34,13 @@ const { title, description, gallery } = Astro.props
           class="mx-auto lg:col-span-3 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 max-w-2xl mt-14 sm:mt-16"
         >
           <div class="sticky top-3">
-            <h1 set:html={title} />
-            <p set:html={description} />
-            <Button>
-              <span class="text-white">Купить</span>
-            </Button>
+            <h1 class="text-3xl" set:html={title} />
+            <p class="mt-3" set:html={description} />
+            <div class="mt-3">
+              <Button>
+                <span class="text-white">Купить</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
