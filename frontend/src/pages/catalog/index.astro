@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import AddToCart from '../../components/cart/AddToCart.astro'
 import { getProducts } from '../../api/products'
 
 const { products } = await getProducts()
@@ -8,40 +9,45 @@ const { products } = await getProducts()
 <BaseLayout title="Каталог | 6:52">
   <section>
     <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
-      <div
-        class="grid md:grid-cols-2 lg:grid-cols-3 mt-12 gap-2 gap-y-12 lg:gap-y-24"
-      >
-        {products.map(({ id, title, description, gallery }) => (
-          <article>
-            <ul class="aspect-square flex overflow-x-auto	snap-x">
-              {gallery.map(({ src, width, height, alt, srcset }) => (
-                <li class="w-full shrink-0 snap-center">
-                  <picture>
-                    <img
-                      src={src}
-                      alt={alt}
-                      width={width}
-                      height={height}
-                      srcset={srcset}
-                      decoding="async"
-                      loading="lazy"
-                    />
-                  </picture>
-                </li>
-              ))}
-            </ul>
+      <ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-12 gap-4 gap-y-12 lg:gap-y-24">
+        {products.map(({ id, title, price, gallery }) => (
+          <li>
+            <article>
+              <ul class="aspect-square flex overflow-x-auto	snap-x rounded">
+                {gallery.map(({ src, width, height, alt, srcset }) => (
+                  <li class="w-full shrink-0 snap-center">
+                    <picture>
+                      <img
+                        src={src}
+                        alt={alt}
+                        width={width}
+                        height={height}
+                        srcset={srcset}
+                        decoding="async"
+                        loading="lazy"
+                      />
+                    </picture>
+                  </li>
+                ))}
+              </ul>
 
-            <h1 class="text-2xl font-bold">
-              <a
-                href={`/catalog/${id}`}
-                rel="prefetch-intent"
-                set:html={title}
-              />
-            </h1>
-            <p set:html={description} />
-          </article>
+              <h1 class="mt-2">
+                <a
+                  href={`/catalog/${id}`}
+                  rel="prefetch-intent"
+                  set:html={title}
+                />
+              </h1>
+
+              <p class="text-sm" set:html={price} />
+
+              <div class="mt-4">
+                <AddToCart productID={id} />
+              </div>
+            </article>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   </section>
 </BaseLayout>

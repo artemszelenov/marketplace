@@ -1,0 +1,49 @@
+<div class='cart'></div>
+
+<script>
+  import Alpine from 'alpinejs'
+  import persist from '@alpinejs/persist'
+  import type { Cart } from './types'
+ 
+  Alpine.plugin(persist)
+  window.Alpine = Alpine
+
+  const cart: Cart = {
+    items: window.Alpine.$persist([]).as('cart_items'),
+    get isEmpty() {
+      return this.items.length === 0
+    },
+    isProductInCart({ productID }) {
+      return this.items.some(item => item.id === productID)
+    },
+    currentProduct({ productID }) {
+      return this.items.find(item => item.id === productID) ?? null
+    },
+    addOne({ productID }) {
+      const productInCart = this.items.find(item => item.id === productID)
+      if (productInCart) {
+        productInCart.quantity += 1
+        return productInCart
+      }
+      const newProduct = { id: productID, quantity: 1 }
+      this.items.push(newProduct)
+      return newProduct
+    },
+    removeOne({ productID }) {
+      const productInCart = this.items.find(item => item.id === productID)
+      if (productInCart) {
+        if (productInCart.quantity === 1) {
+          this.items = this.items.filter(item => item.id !== productID)
+        } else {
+          productInCart.quantity -= 1
+        }
+        return productInCart
+      }
+      return null
+    }
+  }
+
+  document.addEventListener('alpine:init', () => Alpine.store('cart', cart))
+
+  Alpine.start()
+</script>

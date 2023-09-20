@@ -1,5 +1,6 @@
 ---
 import '@fontsource/noto-sans-mono'
+import Cart from '../components/cart/Cart.astro'
 
 const { title } = Astro.props
 
@@ -11,10 +12,6 @@ const nav = [
   {
     text: 'Каталог',
     url: '/catalog'
-  },
-  {
-    text: 'Корзина',
-    url: '/cart'
   }
 ]
 ---
@@ -56,12 +53,22 @@ const nav = [
                 {text}
               </a>
             ))}
+            <a
+              href='/cart'
+              class="relative px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-gray-600"
+              x-data
+              x-bind:class="$store.cart.isEmpty ? '' : 'cart-is-not-empty-indicator'"
+            >
+              Корзина
+            </a>
           </nav>
         </div>
       </div>
     </div>
 
     <slot />
+
+    <Cart />
 
     <footer class="bg-gray-50 border-t border-dashed">
       <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">

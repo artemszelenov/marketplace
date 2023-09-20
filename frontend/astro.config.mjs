@@ -1,13 +1,11 @@
-import { defineConfig } from 'astro/config';
-import alpinejs from "@astrojs/alpinejs";
-import tailwind from "@astrojs/tailwind";
+import { defineConfig } from 'astro/config'
+import tailwind from '@astrojs/tailwind'
+import prefetch from '@astrojs/prefetch'
 
 // пока не используем, нужен домен
-// import sitemap from "@astrojs/sitemap";
-
-import prefetch from "@astrojs/prefetch";
+// import sitemap from "@astrojs/sitemap"
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [alpinejs(), tailwind(), prefetch()]
-});
+  integrations: [tailwind(), prefetch()]
+})

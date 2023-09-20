@@ -40,12 +40,14 @@ export interface User {
 }
 export interface Product {
   id: string;
+  publishedDate?: string;
   gallery?: {
     image: string | Media;
     id?: string;
   }[];
   title: string;
   description: string;
+  defaultPrice: number;
   updatedAt: string;
   createdAt: string;
 }
