@@ -59,8 +59,14 @@ const Products: CollectionConfig = {
       name: 'defaultPrice',
       type: 'number',
       required: true
+    },
+    {
+      name: 'inStockCount',
+      type: 'number',
+      defaultValue: 0,
+      required: true
     }
   ]
-};
+}
 
 export default Products

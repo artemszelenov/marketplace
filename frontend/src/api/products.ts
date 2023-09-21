@@ -9,7 +9,7 @@ export async function getProducts() {
   return {
     products: products.map(product => ({
       ...product,
-      gallery: prepareImages(product.gallery, ['thumbnail', 'medium', 'large']),
+      gallery: prepareImages(product.gallery, ['thumbnail', 'large']),
       price: product.defaultPrice.toLocaleString('ru-RU') + ' руб.'
     }))
   }
@@ -30,7 +30,8 @@ export async function getStaticProduct() {
         title: product.title,
         description: product.description,
         gallery: prepareImages(product.gallery, ['thumbnail']),
-        price: product.defaultPrice.toLocaleString('ru-RU') + ' руб.'
+        price: product.defaultPrice.toLocaleString('ru-RU') + ' руб.',
+        inStockCount: product.inStockCount
       }
     }
   })

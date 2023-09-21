@@ -48,6 +48,7 @@ export interface Product {
   title: string;
   description: string;
   defaultPrice: number;
+  inStockCount: number;
   updatedAt: string;
   createdAt: string;
 }

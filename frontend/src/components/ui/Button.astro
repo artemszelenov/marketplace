@@ -1,15 +1,16 @@
 ---
-const { onClick, variant = 'primary', extraClasses = '' } = Astro.props
+const { onClick, variant = 'primary', extraClasses = '', disabled = false } = Astro.props
 
 const classes = {
   primary: 'inline-flex justify-center items-center gap-2 px-9 py-2.5 w-full text-sm select-none border rounded',
-  link: 'inline-flex justify-center items-center gap-2 px-5 py-2.5 text-sm select-none focus:outline-none rounded'
+  link: 'inline-flex justify-center items-center gap-2 px-4 py-2.5 text-sm select-none focus:outline-none rounded'
 }
 ---
 
 <button
   class={classes[variant] + ' ' + extraClasses}
   type="button"
+  disabled={disabled}
   x-on:click={onClick}
 >
   <slot />

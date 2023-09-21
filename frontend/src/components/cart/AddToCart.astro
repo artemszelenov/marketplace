@@ -1,10 +1,10 @@
 ---
 import Button from '../../components/ui/Button.astro'
 
-const { productID } = Astro.props
+const { productID, inStockCount } = Astro.props
 ---
 
-<div x-data={`{ productID: '${productID}' }`}>
+<div x-data={`{ productID: '${productID}', inStockCount: ${inStockCount} }`}>
   <template x-if="! $store.cart.isProductInCart($data)">
     <Button onClick="$store.cart.addOne($data)">
       <span>В корзину</span>
@@ -27,9 +27,17 @@ const { productID } = Astro.props
       
       <p class="text-sm mx-4" x-text="$store.cart.currentProduct($data).quantity" />
   
-      <Button variant="link" extraClasses="flex-1" onClick="$store.cart.addOne($data)">
-        <span>Добавить</span>
-      </Button>
+      <template x-if="$store.cart.isSoldOut($data)">
+        <Button variant="link" extraClasses="flex-1 text-gray" disabled>
+          <span>Больше нет</span>
+        </Button>
+      </template>
+
+      <template x-if="! $store.cart.isSoldOut($data)">
+        <Button variant="link" extraClasses="flex-1" onClick="$store.cart.addOne($data)">
+          <span>Добавить</span>
+        </Button>
+      </template>
     </div>
   </template>
 </div>

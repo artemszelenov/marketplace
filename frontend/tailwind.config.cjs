@@ -7,7 +7,9 @@ module.exports = {
 	theme: {
 		colors: {
 			black: 'oklch(20% 0 0)',
-			white: 'oklch(100% 0 0)'
+			white: 'oklch(100% 0 0)',
+			gray: 'oklch(55% 0 0)',
+			transparent: 'transparent'
 		},
 		extend: {
 			fontFamily: {

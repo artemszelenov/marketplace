@@ -13,6 +13,10 @@
     get isEmpty() {
       return this.items.length === 0
     },
+    isSoldOut({ productID, inStockCount }) {
+      const productInCart = this.items.find(item => item.id === productID)
+      return productInCart?.quantity === inStockCount
+    },
     isProductInCart({ productID }) {
       return this.items.some(item => item.id === productID)
     },

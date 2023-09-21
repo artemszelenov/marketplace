@@ -8,6 +8,12 @@ interface IImage {
   width: number
   height: number
   alt: string
+  thumbnail: {
+    src: string
+    width: number
+    height: number
+    alt: string
+  }
 }
 
 export function prepareImages(gallery: Product['gallery'], except: ISizesTypes[] = []): IImage[] {
@@ -34,7 +40,13 @@ export function prepareImages(gallery: Product['gallery'], except: ISizesTypes[]
       width: sizes.small?.width ?? width,
       height: sizes.small?.height ?? height,
       alt,
-      srcset
+      srcset,
+      thumbnail: {
+        src: sizes.thumbnail?.url ?? url,
+        width: sizes.thumbnail?.width ?? width,
+        height: sizes.thumbnail?.height ?? height,
+        alt
+      }
     }
   })
 }

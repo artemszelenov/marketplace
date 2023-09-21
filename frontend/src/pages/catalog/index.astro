@@ -10,28 +10,42 @@ const { products } = await getProducts()
   <section>
     <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
       <ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-12 gap-4 gap-y-12 lg:gap-y-24">
-        {products.map(({ id, title, price, gallery }) => (
+        {products.map(({ id, title, price, gallery, inStockCount }) => (
           <li>
-            <article>
-              <ul class="aspect-square flex overflow-x-auto	snap-x rounded">
-                {gallery.map(({ src, width, height, alt, srcset }) => (
-                  <li class="w-full shrink-0 snap-center">
-                    <picture>
-                      <img
-                        src={src}
-                        alt={alt}
-                        width={width}
-                        height={height}
-                        srcset={srcset}
-                        decoding="async"
-                        loading="lazy"
-                      />
-                    </picture>
+            <article x-data={`{
+                activeImageID: 0,
+                gallery: ${JSON.stringify(gallery)}
+              }`}
+            >
+              <img
+                class="aspect-square rounded object-cover"
+                x-bind:src={`gallery[activeImageID].src`}
+                x-bind:alt={`gallery[activeImageID].alt`}
+                x-bind:width={`gallery[activeImageID].width`}
+                x-bind:height={`gallery[activeImageID].height`}
+                x-bind:srcset={`gallery[activeImageID].srcset`}
+                decoding="async"
+                loading="eager"
+              />
+
+              <ul class="flex mt-1 space-x-1 overflow-x-auto">
+                {gallery.map(({ thumbnail }, index) => (
+                  <li class="w-8 shrink-0">
+                    <img
+                      x-on:click={`activeImageID = ${index}`}
+                      class="rounded cursor-pointer"
+                      src={thumbnail.src}
+                      alt={thumbnail.alt}
+                      width={thumbnail.width}
+                      height={thumbnail.height}
+                      decoding="async"
+                      loading="lazy"
+                    />
                   </li>
                 ))}
               </ul>
 
-              <h1 class="mt-2">
+              <h1 class="mt-3">
                 <a
                   href={`/catalog/${id}`}
                   rel="prefetch-intent"
@@ -41,8 +55,14 @@ const { products } = await getProducts()
 
               <p class="text-sm" set:html={price} />
 
-              <div class="mt-4">
-                <AddToCart productID={id} />
+              <div class="mt-3">
+                {inStockCount > 0 ? (
+                  <AddToCart productID={id} inStockCount={inStockCount} />
+                ) : (
+                  <p class="px-9 py-2.5 border text-sm text-center text-gray border-transparent">
+                    Товар закончился
+                  </p>
+                )}
               </div>
             </article>
           </li>
