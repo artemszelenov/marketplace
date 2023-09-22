@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import AddToCart from '../../components/cart/AddToCart.astro'
+import AddToCart from '../../components/AddToCart/Full.astro'
 import { getStaticProduct } from '../../api/products'
 
 export const getStaticPaths = getStaticProduct
 
-const { title, description, gallery, price, id } = Astro.props
+const { title, description, gallery, price, id, inStockCount } = Astro.props
 ---
 
 <BaseLayout title={`${title} | 6:52`}>
@@ -34,10 +34,10 @@ const { title, description, gallery, price, id } = Astro.props
 
         <div class="mx-auto lg:col-span-3 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 max-w-2xl mt-14 sm:mt-16">
           <div class="sticky top-3">
-            <h1 class="text-3xl" set:html={title} />
+            <h1 class="text-3xl font-semibold" set:html={title} />
             <p class="text-xl mt-2" set:html={price} />
-            <div class="mt-4">
-              <AddToCart productID={id} />
+            <div class="mt-5">
+              <AddToCart productID={id} inStockCount={inStockCount} />
             </div>
             <p class="mt-5" set:html={description} />
           </div>
