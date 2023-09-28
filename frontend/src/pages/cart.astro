@@ -3,5 +3,36 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
 <BaseLayout title={`Корзина | 6:52`}>
-  
+  <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
+    <ul x-data>
+      <template x-for="item in await $store.cart.getProductsFromCartItems()" :key="item.id">
+        <li>
+          <article class="flex space-x-5">
+            <img
+              class="w-28 aspect-square rounded object-cover"
+              x-bind:src="item.gallery[0].src"
+              x-bind:alt="item.gallery[0].alt"
+              x-bind:width="item.gallery[0].width"
+              x-bind:height="item.gallery[0].height"
+              x-bind:srcset="item.gallery[0].srcset"
+              decoding="async"
+              loading="eager"
+            />
+
+            <div>
+              <h1 class="font-semibold">
+                <a
+                  x-bind:href="'/catalog/' + item.id"
+                  x-text="item.title"
+                  rel="prefetch-intent"
+                />
+              </h1>
+    
+              <p class="text-sm" x-text="item.price" />
+            </div>
+          </article>
+        </li>
+      </template>
+    </ul>
+  </div>
 </BaseLayout>

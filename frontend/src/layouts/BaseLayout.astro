@@ -4,8 +4,9 @@ import '@fontsource/noto-sans-mono/500.css'
 import '@fontsource/noto-sans-mono/600.css'
 import '@fontsource/noto-sans-mono/700.css'
 
-import Cart from '../components/Cart/Cart.astro'
+import { me } from '../api/server/user'
 
+const { user } = await me()
 const { title } = Astro.props
 
 const nav = [
@@ -30,6 +31,8 @@ const nav = [
   </head>
 
   <body>
+    <use-auth data-user={user ? user.id : ''}></use-auth>
+
     <div class="w-full bg-white border-b border-dashed text-xs">
       <div class="inline-flex w-full items-center justify-between mx-auto">
         <div
@@ -51,15 +54,15 @@ const nav = [
           >
             {nav.map(({ text, url }) => (
               <a
-                class="px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-gray-600"
+                class="px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
                 href={url}
               >
                 {text}
               </a>
             ))}
             <a
-              href='/cart'
-              class="relative px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-gray-600"
+              href='/cart?param=test'
+              class="relative px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
               x-data
               x-bind:class="$store.cart.isEmpty ? '' : 'cart-is-not-empty-indicator'"
             >
@@ -72,9 +75,7 @@ const nav = [
 
     <slot />
 
-    <Cart />
-
-    <footer class="bg-gray-50 border-t border-dashed">
+    <footer class="bg-grey-50 border-t border-dashed">
       <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
         <div class="xl:grid xl:grid-cols-3 xl:gap-8">
           <div class="text-white xl:col-span-1">
@@ -91,3 +92,15 @@ const nav = [
     </footer>
   </body>
 </html>
+
+<script>
+  class UseAuth extends HTMLElement {
+    constructor() {
+      super()
+      const user = this.dataset.user
+      localStorage.setItem('652:me', user)
+    }
+  }
+
+  customElements.define('use-auth', UseAuth)
+</script>

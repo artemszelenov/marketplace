@@ -1,11 +1,9 @@
 /// <reference types="astro/client" />
 
-import type { Alpine as AlpineType } from 'alpinejs'
-
-interface Alpine extends AlpineType {
-  $persist?(initValue: any): any
+interface ImportMetaEnv {
+  readonly PUBLIC_SERVER_URL: string
 }
 
-declare global {
-  var Alpine: Alpine
+interface ImportMeta {
+  readonly env: ImportMetaEnv
 }

@@ -8,10 +8,10 @@ module.exports = {
 		colors: {
 			black: 'oklch(20% 0 0)',
 			white: 'oklch(100% 0 0)',
-			gray: 'oklch(55% 0 0)',
-			'light-gray': 'oklch(96% 0 0)',
-			red: 'oklch(58.2% 0.229 29)',
-			yellow: 'oklch(86.52% 0.1768282404898371 90)',
+			grey: 'oklch(55% 0 0)',
+			'light-grey': 'oklch(96% 0 0)',
+			red: 'oklch(55.17% 0.205 24.53)',
+			yellow: 'oklch(85% 0.19 90.38)',
 			transparent: 'transparent'
 		},
 		extend: {
@@ -29,11 +29,11 @@ module.exports = {
 						'outline': `1px dashed ${theme('colors.black')}`
 					},
 					'&:hover:not(:disabled)': {
-						'background-color': theme('colors[light-gray]')
+						'background-color': theme('colors[light-grey]')
 					},
 					'&:active:not(:disabled)': {
 						'transform': 'translateY(2px)',
-						'background-color': theme('colors[light-gray]')
+						'background-color': theme('colors[light-grey]')
 					}
 				},
 				'button': {

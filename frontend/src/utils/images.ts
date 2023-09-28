@@ -1,22 +1,9 @@
-import type { Product, Media } from '@/payload-types'
+import type { Product, Media } from '@/types/payload'
+import type { Image } from '@/types/image'
 
 type ISizesTypes = keyof Media['sizes']
 
-interface IImage {
-  src: string
-  srcset: string
-  width: number
-  height: number
-  alt: string
-  thumbnail: {
-    src: string
-    width: number
-    height: number
-    alt: string
-  }
-}
-
-export function prepareImages(gallery: Product['gallery'], except: ISizesTypes[] = []): IImage[] {
+export function prepareImages(gallery: Product['gallery'], except: ISizesTypes[] = []): Image[] {
   if (!gallery || gallery.length === 0) return []
 
   return gallery.map(({ image }) => {

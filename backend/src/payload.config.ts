@@ -23,12 +23,19 @@ let config: Config = {
   }
 }
 
-if (process.env.GENERATED_TYPES_PATH) {
+if (process.env.GENERATED_TYPES_PATH && process.env.FILE_NAME) {
   config = {
     ...config,
     typescript: {
-      outputFile: path.join(process.env.GENERATED_TYPES_PATH, 'payload-types.ts')
+      outputFile: path.join(process.env.GENERATED_TYPES_PATH, process.env.FILE_NAME)
     }
+  }
+}
+
+if (process.env.MARKETPLACE_URL) {
+  config = {
+    ...config,
+    cors: [process.env.MARKETPLACE_URL]
   }
 }
 
