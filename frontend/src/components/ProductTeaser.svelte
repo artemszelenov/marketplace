@@ -2,11 +2,11 @@
   import AddToCart from "../components/AddToCart.svelte";
   import type { Product } from "@/types/product";
 
-  export let product: Product
+  export let product: Product;
 
-  let activeImageID = 0
+  let activeImageID = 0;
 
-  const { gallery, id, title, price } = product
+  const { gallery, id, title, price } = product;
 </script>
 
 <article class="actions-show-on-hover">
@@ -32,17 +32,14 @@
           height={thumbnail.height}
           decoding="async"
           loading="lazy"
-          on:click={() => activeImageID = index}
+          on:click={() => (activeImageID = index)}
         />
       </li>
     {/each}
   </ul>
 
   <h1 class="mt-3 font-semibold">
-    <a
-      href={`/catalog/${id}`}
-      rel="prefetch-intent"
-    >
+    <a href={`/catalog/${id}`} rel="prefetch-intent">
       {title}
     </a>
   </h1>
