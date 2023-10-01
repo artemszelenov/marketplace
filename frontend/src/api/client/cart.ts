@@ -1,11 +1,11 @@
 import qs from 'qs'
 import { prepareImages } from '../../utils/images'
-import { $cartItems } from '../../stores/cart'
+import { cartItemsStore } from '../../stores/cart'
 import type { Product as ProductDoc } from '@/types/payload'
 import type { Product } from '@/types/product'
 
 export async function getProductsFromCartItems(): Promise<{ products: Product[] }> {
-  const cartItems = $cartItems.get()
+  const cartItems = cartItemsStore.get()
 
   if (cartItems.length === 0) return { products: [] }
 

@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import { AddToCart } from '../../components/AddToCart.tsx'
+import AddToCart from '../../components/AddToCart.svelte'
 import { getStaticProduct } from '../../api/server/products'
+import type { Product } from "@/types/product"
 
 export const getStaticPaths = getStaticProduct
 
 const { product } = Astro.props
-const { title, description, gallery, price } = product
+const { title, description, gallery, price } = product as Product
 ---
 
 <BaseLayout title={`${title} | 6:52`}>
@@ -38,7 +39,7 @@ const { title, description, gallery, price } = product
             <h1 class="text-3xl font-semibold" set:html={title} />
             <p class="text-xl mt-2" set:html={price} />
             <div class="mt-5">
-              <AddToCart product={product} variant='full' client:load />
+              <AddToCart product={product} variant="full" client:load />
             </div>
             <p class="mt-5" set:html={description} />
           </div>

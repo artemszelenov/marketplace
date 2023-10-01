@@ -98,7 +98,9 @@ const nav = [
     constructor() {
       super()
       const user = this.dataset.user
-      localStorage.setItem('652:me', user)
+      if (user) {
+        localStorage.setItem('652:me', user)
+      }
     }
   }
 

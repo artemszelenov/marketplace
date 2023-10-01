@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import { AddToCart } from '../../components/AddToCart.tsx'
+import ProductTeaser from "../../components/ProductTeaser.svelte";
 import { getProducts } from '../../api/server/products'
 
 const { products } = await getProducts()
@@ -10,55 +10,11 @@ const { products } = await getProducts()
   <section>
     <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
       <ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-12 gap-4 gap-y-12 lg:gap-y-24">
-        {products.map(product => {
-          const { id, title, price, gallery } = product
-
-          return (
-            <li>
-              <article class="actions-show-on-hover">
-                <img
-                  class="aspect-square rounded object-cover"
-                  x-bind:src="gallery[activeImageID].src"
-                  x-bind:alt="gallery[activeImageID].alt"
-                  x-bind:width="gallery[activeImageID].width"
-                  x-bind:height="gallery[activeImageID].height"
-                  x-bind:srcset="gallery[activeImageID].srcset"
-                  decoding="async"
-                  loading="eager"
-                />
-
-                <ul class="flex mt-1 space-x-1 overflow-x-auto">
-                  {gallery.map(({ thumbnail }, index) => (
-                    <li class="w-8 shrink-0">
-                      <img
-                        x-on:click={`activeImageID = ${index}`}
-                        class="rounded cursor-pointer"
-                        src={thumbnail.src}
-                        alt={thumbnail.alt}
-                        width={thumbnail.width}
-                        height={thumbnail.height}
-                        decoding="async"
-                        loading="lazy"
-                      />
-                    </li>
-                  ))}
-                </ul>
-
-                <h1 class="mt-3 font-semibold">
-                  <a
-                    href={`/catalog/${id}`}
-                    rel="prefetch-intent"
-                    set:html={title}
-                  />
-                </h1>
-
-                <p class="text-sm" set:html={price} />
-
-                <AddToCart product={product} client:visible />
-              </article>
-            </li>
-          )
-        })}
+        {products.map(product => (
+          <li>
+            <ProductTeaser {product} client:visible />
+          </li>
+        ))}
       </ul>
     </div>
   </section>

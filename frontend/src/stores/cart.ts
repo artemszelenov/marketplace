@@ -1,19 +1,23 @@
-import { action } from 'nanostores'
-import { persistentAtom } from '@nanostores/persistent'
-import { MARKETPALCE_NAME } from '../constants'
-import type { StorageCartItem } from '@/types/storage'
-import type { Product } from '@/types/product'
+import { action, atom } from "nanostores";
+import { persistentAtom } from "@nanostores/persistent";
+import { MARKETPALCE_NAME } from "../constants";
+import type { StorageCartItem } from "@/types/storage";
+import type { Product } from "@/types/product";
 
-const $cartItems = persistentAtom<StorageCartItem[]>(`${MARKETPALCE_NAME}:cart_items`, [], {
+const cartItemsStore = persistentAtom<StorageCartItem[]>(`${MARKETPALCE_NAME}:cart_items`, [], {
   encode: JSON.stringify,
   decode: JSON.parse
 })
 
-const addOne = action($cartItems, 'addOne', (cartItems, { id: productID, inStockCount }: Product) => {
+cartItemsStore.subscribe(value => {
+  console.log('value', value)
+})
+
+const addOne = action(cartItemsStore, 'addOne', (cartItems, { id: productID, inStockCount }: Product) => {
   const productInCart = cartItems.get().find(item => item.id === productID)
 
   if (productInCart) {
-    if (productInCart.quantity + 1 === inStockCount) return productInCart
+    if (productInCart.quantity + 1 > inStockCount) return productInCart
 
     cartItems.set(cartItems.get().map(item => {
       if (item.id === productID) {
@@ -30,7 +34,7 @@ const addOne = action($cartItems, 'addOne', (cartItems, { id: productID, inStock
   return newItem
 })
 
-const removeOne = action($cartItems, 'removeOne', (cartItems, { id: productID }: Product) => {
+const removeOne = action(cartItemsStore, 'removeOne', (cartItems, { id: productID }: Product) => {
   const productInCart = cartItems.get().find(item => item.id === productID)
 
   if (productInCart) {
@@ -51,18 +55,18 @@ const removeOne = action($cartItems, 'removeOne', (cartItems, { id: productID }:
   return null
 })
 
-const clear = action($cartItems, 'clear', cartItems => {
+const clear = action(cartItemsStore, 'clear', cartItems => {
   cartItems.set([])
   return cartItems.get()
 })
 
 const empty = (): boolean => {
-  return $cartItems.get().length === 0
+  return cartItemsStore.get().length === 0
 }
 
 const currentItem = ({ id: productID }: Product): StorageCartItem | null => {
-  return $cartItems.get().find(item => item.id === productID) ?? null
+  return cartItemsStore.get().find(item => item.id === productID) ?? null
 }
 
-export { $cartItems, addOne, removeOne, clear, empty, currentItem }
+export { cartItemsStore, addOne, removeOne, clear, empty, currentItem }
   

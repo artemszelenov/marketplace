@@ -9,6 +9,7 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noEmit": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,8 +18,6 @@
       "@/types/*": [
         "./src/types/*"
       ]
-    },
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    }
   }
 }
