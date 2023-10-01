@@ -1,24 +1,25 @@
 ---
-import '@fontsource/noto-sans-mono'
-import '@fontsource/noto-sans-mono/500.css'
-import '@fontsource/noto-sans-mono/600.css'
-import '@fontsource/noto-sans-mono/700.css'
+import "@fontsource/noto-sans-mono";
+import "@fontsource/noto-sans-mono/500.css";
+import "@fontsource/noto-sans-mono/600.css";
+import "@fontsource/noto-sans-mono/700.css";
 
-import { me } from '../api/server/user'
+import CartNavLink from "../components/UI/CartNavLink.svelte";
+import { me } from "../api/server/user";
 
-const { user } = await me()
-const { title } = Astro.props
+const { user } = await me();
+const { title } = Astro.props;
 
 const nav = [
   {
-    text: 'Главная',
-    url: '/'
+    text: "Главная",
+    url: "/",
   },
   {
-    text: 'Каталог',
-    url: '/catalog'
-  }
-]
+    text: "Каталог",
+    url: "/catalog",
+  },
+];
 ---
 
 <html lang="en">
@@ -31,7 +32,7 @@ const nav = [
   </head>
 
   <body>
-    <use-auth data-user={user ? user.id : ''}></use-auth>
+    <use-auth data-user={user ? user.id : ""}></use-auth>
 
     <div class="w-full bg-white border-b border-dashed text-xs">
       <div class="inline-flex w-full items-center justify-between mx-auto">
@@ -52,22 +53,17 @@ const nav = [
           <nav
             class="flex-col items-center flex-grow hidden md:pb-0 md:flex md:justify-end md:flex-row"
           >
-            {nav.map(({ text, url }) => (
-              <a
-                class="px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
-                href={url}
-              >
-                {text}
-              </a>
-            ))}
-            <a
-              href='/cart?param=test'
-              class="relative px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
-              x-data
-              x-bind:class="$store.cart.isEmpty ? '' : 'cart-is-not-empty-indicator'"
-            >
-              Корзина
-            </a>
+            {
+              nav.map(({ text, url }) => (
+                <a
+                  class="px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
+                  href={url}
+                >
+                  {text}
+                </a>
+              ))
+            }
+            <CartNavLink client:load />
           </nav>
         </div>
       </div>
@@ -96,13 +92,13 @@ const nav = [
 <script>
   class UseAuth extends HTMLElement {
     constructor() {
-      super()
-      const user = this.dataset.user
+      super();
+      const user = this.dataset.user;
       if (user) {
-        localStorage.setItem('652:me', user)
+        localStorage.setItem("652:me", user);
       }
     }
   }
 
-  customElements.define('use-auth', UseAuth)
+  customElements.define("use-auth", UseAuth);
 </script>

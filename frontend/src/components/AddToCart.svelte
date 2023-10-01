@@ -5,7 +5,8 @@
   import type { Product } from "@/types/product";
 
   export let product: Product;
-  export let variant: "full" | "compact" = "compact";
+  export let variant: "full" | "compact" = "full";
+  export let cartButtonStyle: "primary" | "link" = "link";
 
   $: productInCart =
     $cartItemsStore && $cartItemsStore.find((item) => item.id === product.id);
@@ -14,10 +15,7 @@
 {#if product.inStockCount > 0}
   <div class="-mt-1.5 -mr-2">
     {#if productInCart}
-      <div
-        class="flex items-center"
-        class:justify-between={variant === "compact"}
-      >
+      <div class="flex items-center" class:justify-between={variant === "full"}>
         <p class="text-sm font-semibold mr-4">
           {productInCart.quantity + " шт."}
         </p>
@@ -59,7 +57,7 @@
       </div>
     {:else}
       <div class="flex justify-end">
-        {#if variant === "compact"}
+        {#if cartButtonStyle === "link"}
           <Button
             title="Добавить в корзину"
             variant="iconLink"
@@ -67,7 +65,7 @@
           >
             <Icon name="cart" class="w-7" />
           </Button>
-        {:else if variant === "full"}
+        {:else if cartButtonStyle === "primary"}
           <Button
             title="Добавить в корзину"
             variant="iconPrimary"

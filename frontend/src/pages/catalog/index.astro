@@ -1,20 +1,22 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProductTeaser from "../../components/ProductTeaser.svelte";
-import { getProducts } from '../../api/server/products'
+import { getProducts } from "../../api/server/products";
 
-const { products } = await getProducts()
+const { products } = await getProducts();
 ---
 
 <BaseLayout title="Каталог | 6:52">
   <section>
     <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
-      <ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-12 gap-4 gap-y-12 lg:gap-y-24">
-        {products.map(product => (
-          <li>
-            <ProductTeaser {product} client:visible />
-          </li>
-        ))}
+      <ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-12 gap-4">
+        {
+          products.map((product) => (
+            <li>
+              <ProductTeaser {product} client:visible />
+            </li>
+          ))
+        }
       </ul>
     </div>
   </section>

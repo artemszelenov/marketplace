@@ -13,7 +13,7 @@ export async function getProductsFromCartItems(): Promise<{ products: Product[] 
 
   const query = {
     id: {
-      all: ids
+      in: ids
     }
   }
 
@@ -21,7 +21,10 @@ export async function getProductsFromCartItems(): Promise<{ products: Product[] 
     {
       where: query
     },
-    { addQueryPrefix: true }
+    {
+      addQueryPrefix: true,
+      encode: false
+    }
   )
 
   const res = await fetch(`${import.meta.env.PUBLIC_SERVER_URL}/api/products${stringifiedQuery}`, {

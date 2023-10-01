@@ -60,13 +60,5 @@ const clear = action(cartItemsStore, 'clear', cartItems => {
   return cartItems.get()
 })
 
-const empty = (): boolean => {
-  return cartItemsStore.get().length === 0
-}
-
-const currentItem = ({ id: productID }: Product): StorageCartItem | null => {
-  return cartItemsStore.get().find(item => item.id === productID) ?? null
-}
-
-export { cartItemsStore, addOne, removeOne, clear, empty, currentItem }
+export { cartItemsStore, addOne, removeOne, clear }
   
