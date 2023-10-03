@@ -18,7 +18,7 @@
     <p>Загрузка корзины...</p>
   {:then { products }}
     <ul class="space-y-7">
-      {#each products as product}
+      {#each products as product (product.id)}
         <li>
           <CartItem {product} />
         </li>

@@ -40,6 +40,9 @@ module.exports = {
 					'&:disabled': {
 						'cursor': 'not-allowed'
 					}
+				},
+				'img': {
+					'aspect-ratio': 'attr(width) / attr(height)'
 				}
 			})
 
