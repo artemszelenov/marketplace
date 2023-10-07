@@ -25,21 +25,40 @@ module.exports = {
 			addBase({
 				'a[href], button': {
 					'border-radius': theme('spacing[0.5]'),
-					'&:focus': {
-						'outline': `1px dashed ${theme('colors.black')}`
-					},
 					'&:hover:not(:disabled)': {
 						'background-color': theme('colors[light-grey]')
+					},
+					'&:focus': {
+						'outline': `1px dashed ${theme('colors.black')}`
 					},
 					'&:active:not(:disabled)': {
 						'transform': 'translateY(2px)',
 						'background-color': theme('colors[light-grey]')
 					}
 				},
-				'button': {
+				'button, input': {
 					'&:disabled': {
 						'cursor': 'not-allowed'
 					}
+				},
+				'input': {
+					'background-color': theme('colors[white]'),
+					'border': `1px solid ${theme('colors[black]')}`,
+					'border-radius': theme('spacing[0.5]'),
+					'&:hover': {
+						'background-color': theme('colors[light-grey]')
+					},
+					'&:focus': {
+						'background-color': theme('colors[white]'),
+						'outline': `1px dashed ${theme('colors.black')}`,
+						'outline-offset': 2
+					},
+					'&:active': {
+						'background-color': theme('colors[white]')
+					},
+					'&:disabled': {
+						'background-color': theme('colors[light-grey]')
+					},
 				},
 				'img': {
 					'aspect-ratio': 'attr(width) / attr(height)'

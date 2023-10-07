@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProductTeaser from "../../components/ProductTeaser.svelte";
-import { getProducts } from "../../api/server/products";
+import { GET } from "../api/products.ts";
 
-const { products } = await getProducts();
+const res = await GET();
+const products = await res.json();
 ---
 
 <BaseLayout title="Каталог | 6:52">

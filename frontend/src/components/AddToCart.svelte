@@ -26,7 +26,7 @@
               title="Удалить"
               variant="iconLink"
               extraClasses="text-red"
-              clickHandler={() => removeOne(product)}
+              onClick={() => removeOne(product)}
             >
               <Icon name="delete" class="w-7" />
             </Button>
@@ -34,7 +34,7 @@
             <Button
               title="Убрать"
               variant="iconLink"
-              clickHandler={() => removeOne(product)}
+              onClick={() => removeOne(product)}
             >
               <Icon name="minus" class="w-7" />
             </Button>
@@ -48,7 +48,7 @@
             <Button
               title="Добавить еще"
               variant="iconLink"
-              clickHandler={() => addOne(product)}
+              onClick={() => addOne(product)}
             >
               <Icon name="plus" class="w-7" />
             </Button>
@@ -61,7 +61,7 @@
           <Button
             title="Добавить в корзину"
             variant="iconLink"
-            clickHandler={() => addOne(product)}
+            onClick={() => addOne(product)}
           >
             <Icon name="cart" class="w-7" />
           </Button>
@@ -69,7 +69,7 @@
           <Button
             title="Добавить в корзину"
             variant="iconPrimary"
-            clickHandler={() => addOne(product)}
+            onClick={() => addOne(product)}
           >
             <Icon name="cart" class="w-7" />
             <span class="text-base font-medium">В корзину</span>

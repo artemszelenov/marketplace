@@ -1,4 +1,4 @@
-import { action, atom } from "nanostores";
+import { action } from "nanostores";
 import { persistentAtom } from "@nanostores/persistent";
 import { MARKETPALCE_NAME } from "../constants";
 import type { StorageCartItem } from "@/types/storage";
@@ -7,10 +7,6 @@ import type { Product } from "@/types/product";
 const cartItemsStore = persistentAtom<StorageCartItem[]>(`${MARKETPALCE_NAME}:cart_items`, [], {
   encode: JSON.stringify,
   decode: JSON.parse
-})
-
-cartItemsStore.subscribe(value => {
-  console.log('value', value)
 })
 
 const addOne = action(cartItemsStore, 'addOne', (cartItems, { id: productID, inStockCount }: Product) => {

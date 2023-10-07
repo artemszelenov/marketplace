@@ -3,7 +3,7 @@ import type { Image } from '@/types/image'
 
 type ISizesTypes = keyof Media['sizes']
 
-export function prepareImages(gallery: Product['gallery'], except: ISizesTypes[] = []): Image[] {
+export function prepareImages(gallery: Product['gallery']): Image[] {
   if (!gallery || gallery.length === 0) return []
 
   return gallery.map(({ image }) => {
@@ -11,7 +11,7 @@ export function prepareImages(gallery: Product['gallery'], except: ISizesTypes[]
     const sizesTypes = Object.keys(sizes) as ISizesTypes[]
 
     const srcset = sizesTypes.reduce((str, sizeName) => {
-      if (!sizes[sizeName] || !sizes[sizeName].url || except.includes(sizeName)) {
+      if (!sizes[sizeName] || !sizes[sizeName].url) {
         return str
       }
 

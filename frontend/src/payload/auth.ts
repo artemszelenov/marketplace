@@ -1,43 +1,52 @@
-const create = async args => {
+interface CreateParams {
+  email: string
+  password: string
+  passwordConfirm: string
+  name?: string
+}
+
+const create = async ({ email, password, passwordConfirm, name }: CreateParams) => {
   try {
-    const res = await fetch(`http://localhost:4000/api/users/create`, {
+    const res = await fetch(`${import.meta.env.PUBLIC_BACKEND_URL}/api/users`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email: args.email,
-        password: args.password,
-        passwordConfirm: args.passwordConfirm
+        email,
+        password,
+        passwordConfirm,
+        name
       })
-    })
-
-    console.log(res)
+    });
 
     if (res.ok) {
-      const { data, errors } = await res.json()
-      if (errors) throw new Error(errors[0].message)
-      console.log(data)
+      return (await res.json());
     } else {
-      throw new Error('Invalid login')
+      throw new Error('Invalid user creation')
     }
   } catch (e) {
     throw new Error('An error occurred while attempting to login.')
   }
 }
 
-const login = async args => {
+interface LoginParams {
+  email: string
+  password: string
+}
+
+const login = async ({ email, password }: LoginParams) => {
   try {
-    const res = await fetch(`http://localhost:4000/api/users/login`, {
+    const res = await fetch(`${import.meta.env.PUBLIC_BACKEND_URL}/api/users/login`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: args.email,
-        password: args.password,
+        email,
+        password
       }),
     })
 
@@ -55,7 +64,7 @@ const login = async args => {
 
 const logout = async () => {
   try {
-    const res = await fetch(`http://localhost:4000/api/users/logout`, {
+    const res = await fetch(`${import.meta.env.PUBLIC_BACKEND_URL}/api/users/logout`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -64,7 +73,7 @@ const logout = async () => {
     })
 
     if (res.ok) {
-      localStorage.setItem('me', '')
+      return await res.json()
     } else {
       throw new Error('An error occurred while attempting to logout.')
     }
@@ -75,7 +84,7 @@ const logout = async () => {
 
 const me = async () => {
   try {
-    const res = await fetch(`http://localhost:4000/api/users/me`, {
+    const res = await fetch(`${import.meta.env.PUBLIC_BACKEND_URL}/api/users/me`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -84,12 +93,13 @@ const me = async () => {
     })
 
     if (res.ok) {
-      return await res.json()
+      const json = await res.json()
+      console.log(json)
+      return json
     } else {
       throw new Error('An error occurred while fetching your account.')
     }
   } catch (e) {
-    // localStorage.setItem('me', '')
     throw new Error('An error occurred while fetching your account.')
   }
 }

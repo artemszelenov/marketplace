@@ -1,10 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ShoppingCart from "../components/ShoppingCart.svelte";
+
+const { user } = Astro.locals;
 ---
 
 <BaseLayout title={`Корзина | 6:52`}>
   <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
-    <ShoppingCart client:load />
+    <ShoppingCart user={user} client:load />
   </div>
 </BaseLayout>

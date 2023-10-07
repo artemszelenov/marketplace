@@ -1,13 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AddToCart from "../../components/AddToCart.svelte";
-import { getStaticProduct } from "../../api/server/products";
+import { GET } from "../api/product.ts";
 import type { Product } from "@/types/product";
 
-export const getStaticPaths = getStaticProduct;
+const res = await GET(Astro.params);
+const product = (await res.json()) as Product;
 
-const { product } = Astro.props;
-const { title, description, gallery, price } = product as Product;
+const { title, description, gallery, price } = product;
 ---
 
 <BaseLayout title={`${title} | 6:52`}>

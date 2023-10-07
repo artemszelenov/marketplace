@@ -11,13 +11,14 @@
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
+    "@astrojs/node": "^6.0.3",
     "@astrojs/prefetch": "^0.4.0",
     "@astrojs/sitemap": "^2.0.2",
     "@astrojs/svelte": "^4.0.2",
     "@astrojs/tailwind": "^5.0.0",
     "@fontsource/noto-sans-mono": "^5.0.12",
     "@nanostores/persistent": "^0.9.1",
-    "astro": "^3.1.4",
+    "astro": "^3.2.3",
     "nanostores": "^0.9.3",
     "postcss-preset-env": "^9.1.1",
     "qs": "^6.11.2",

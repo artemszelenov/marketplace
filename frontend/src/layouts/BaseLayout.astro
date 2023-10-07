@@ -5,9 +5,7 @@ import "@fontsource/noto-sans-mono/600.css";
 import "@fontsource/noto-sans-mono/700.css";
 
 import CartNavLink from "../components/UI/CartNavLink.svelte";
-import { me } from "../api/server/user";
 
-const { user } = await me();
 const { title } = Astro.props;
 
 const nav = [
@@ -32,8 +30,6 @@ const nav = [
   </head>
 
   <body>
-    <use-auth data-user={user ? user.id : ""}></use-auth>
-
     <div class="w-full bg-white border-b border-dashed text-xs">
       <div class="inline-flex w-full items-center justify-between mx-auto">
         <div
@@ -88,17 +84,3 @@ const nav = [
     </footer>
   </body>
 </html>
-
-<script>
-  class UseAuth extends HTMLElement {
-    constructor() {
-      super();
-      const user = this.dataset.user;
-      if (user) {
-        localStorage.setItem("652:me", user);
-      }
-    }
-  }
-
-  customElements.define("use-auth", UseAuth);
-</script>
