@@ -1,6 +1,6 @@
 import qs from 'qs'
-import { buildProduct } from '../utils/products'
-import { cartItemsStore } from '../stores/cart'
+import { buildProduct } from '../../utils/products'
+import { cartItemsStore } from '../../stores/cart'
 import type { Product as ProductDoc } from '@/types/payload'
 import type { Product } from '@/types/product'
 

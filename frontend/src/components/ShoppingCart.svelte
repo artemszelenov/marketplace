@@ -2,7 +2,7 @@
   import { onSet } from "nanostores";
   import CartItem from "./CartItem.svelte";
   import AuthForm from "./AuthForm.svelte";
-  import { getProductsFromCartItems } from "../payload/cart";
+  import { getProductsFromCartItems } from "../services/api/cart";
   import { cartItemsStore } from "../stores/cart";
 
   export let user;

@@ -2,7 +2,6 @@
   import Button from "./UI/Button.svelte";
 
   let currentStep: "login" | "registration" = "login";
-  let responseMessage;
 
   const steps = {
     login: {
@@ -21,7 +20,14 @@
     },
   };
 
-  async function handleLogin() {}
+  async function handleLogin(e: SubmitEvent) {
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const res = await fetch("/api/user/login", {
+      method: "POST",
+      body: formData,
+    });
+    const json = await res.json();
+  }
 
   async function handleCreateUser(e: SubmitEvent) {
     const formData = new FormData(e.currentTarget as HTMLFormElement);
@@ -30,7 +36,6 @@
       body: formData,
     });
     const { message } = await res.json();
-    responseMessage = message;
   }
 
   function handleToggle() {
@@ -48,7 +53,6 @@
 
 <form class="w-[25em]" on:submit|preventDefault={steps[currentStep].onSubmit}>
   <p>Вам нужно зарегистрироваться или войти, чтобы продолжить</p>
-  <p>{responseMessage}</p>
 
   <h2 class="mt-5 text-xl font-semibold">{steps[currentStep].title}</h2>
 

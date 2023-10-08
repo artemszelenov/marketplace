@@ -1,3 +1,5 @@
+import cookie from "cookie";
+
 interface CreateParams {
   email: string
   password: string
@@ -22,7 +24,7 @@ const create = async ({ email, password, passwordConfirm, name }: CreateParams) 
     });
 
     if (res.ok) {
-      return (await res.json());
+      return res
     } else {
       throw new Error('Invalid user creation')
     }
@@ -51,9 +53,7 @@ const login = async ({ email, password }: LoginParams) => {
     })
 
     if (res.ok) {
-      const { user, errors } = await res.json()
-      if (errors) throw new Error(errors[0].message)
-      return user
+      return res
     }
 
     throw new Error('Invalid login')
@@ -73,7 +73,7 @@ const logout = async () => {
     })
 
     if (res.ok) {
-      return await res.json()
+      return res
     } else {
       throw new Error('An error occurred while attempting to logout.')
     }
@@ -82,20 +82,22 @@ const logout = async () => {
   }
 }
 
-const me = async () => {
+const me = async (req: Request) => {
+  const cookies = cookie.parse(req.headers.get('cookie'))
+  const token = cookies['payload-token']
+
   try {
     const res = await fetch(`${import.meta.env.PUBLIC_BACKEND_URL}/api/users/me`, {
       method: 'GET',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `JWT ${token}`,
       },
     })
 
     if (res.ok) {
-      const json = await res.json()
-      console.log(json)
-      return json
+      return res
     } else {
       throw new Error('An error occurred while fetching your account.')
     }

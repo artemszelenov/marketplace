@@ -19,6 +19,7 @@
     "@fontsource/noto-sans-mono": "^5.0.12",
     "@nanostores/persistent": "^0.9.1",
     "astro": "^3.2.3",
+    "cookie": "^0.5.0",
     "nanostores": "^0.9.3",
     "postcss-preset-env": "^9.1.1",
     "qs": "^6.11.2",
