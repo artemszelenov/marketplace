@@ -1,4 +1,4 @@
-import { getProduct } from '../../services/api/products'
+import { getProduct } from '../../services/cms/api/products'
 import { buildProduct } from '../../utils/products'
 import type { APIContext } from "astro";
 

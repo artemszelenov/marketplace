@@ -62,13 +62,17 @@ const login = async ({ email, password }: LoginParams) => {
   }
 }
 
-const logout = async () => {
+const logout = async (req: Request) => {
+  const cookies = cookie.parse(req.headers.get('cookie'))
+  const token = cookies['payload-token']
+
   try {
     const res = await fetch(`${import.meta.env.PUBLIC_BACKEND_URL}/api/users/logout`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `JWT ${token}`,
       },
     })
 
@@ -83,7 +87,10 @@ const logout = async () => {
 }
 
 const me = async (req: Request) => {
-  const cookies = cookie.parse(req.headers.get('cookie'))
+  const cookieStr = req.headers.get('cookie')
+  if (!cookieStr) return new Response(JSON.stringify({ user: null }))
+
+  const cookies = cookie.parse(cookieStr)
   const token = cookies['payload-token']
 
   try {

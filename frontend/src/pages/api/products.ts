@@ -1,4 +1,4 @@
-import { getProducts } from '../../services/api/products';
+import { getProducts } from '../../services/cms/api/products';
 import { buildProduct } from '../../utils/products';
 
 export const GET = async () => {

@@ -1,4 +1,4 @@
-import { login } from "../../../services/api/auth"
+import { login } from "../../../services/cms/api/auth"
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ request, cookies }) => {
@@ -6,16 +6,20 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const email = data.get("email").toString();
   const password = data.get("password").toString();
 
-  const res = await login({
+  const originalResponse = await login({
     email,
     password,
-  })
+  });
 
-  const { token } = await res.json()
+  const response = new Response(
+    originalResponse.body,
+    {
+      status: 301,
+      headers: originalResponse.headers
+    }
+  );
 
-  return new Response(JSON.stringify({
-    message: 'Успешно'
-  }), {
-    status: 200
-  })
+  response.headers.set("Location", "/");
+
+  return response;
 };

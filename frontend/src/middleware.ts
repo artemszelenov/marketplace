@@ -1,4 +1,4 @@
-import { me } from "./services/api/auth";
+import { me } from "./services/cms/api/auth";
 
 export async function onRequest({ locals, request }, next) {
   const res = await me(request);
@@ -7,5 +7,5 @@ export async function onRequest({ locals, request }, next) {
 
   locals.user = user;
 
-  return next();
+  return next()
 };

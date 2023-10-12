@@ -6,32 +6,21 @@
   const steps = {
     login: {
       title: "Вход",
+      submitUrl: "/api/user/login",
       submitText: "Войти",
-      onSubmit: handleLogin,
       toggleText: "Еще не регистрировались?",
-      onToggle: handleToggle,
     },
     registration: {
       title: "Регистрация",
+      submitUrl: "/api/user/create",
       submitText: "Зарегистрироваться",
-      onSubmit: handleCreateUser,
       toggleText: "Вернуться ко входу",
-      onToggle: handleToggle,
     },
   };
 
-  async function handleLogin(e: SubmitEvent) {
+  async function handleSubmit(e: SubmitEvent) {
     const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const res = await fetch("/api/user/login", {
-      method: "POST",
-      body: formData,
-    });
-    const json = await res.json();
-  }
-
-  async function handleCreateUser(e: SubmitEvent) {
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const res = await fetch("/api/user/create", {
+    const res = await fetch(steps[currentStep].submitUrl, {
       method: "POST",
       body: formData,
     });
@@ -51,7 +40,12 @@
   }
 </script>
 
-<form class="w-[25em]" on:submit|preventDefault={steps[currentStep].onSubmit}>
+<form
+  class="w-[25em]"
+  action={steps[currentStep].submitUrl}
+  method="POST"
+  on:submit|preventDefault={handleSubmit}
+>
   <p>Вам нужно зарегистрироваться или войти, чтобы продолжить</p>
 
   <h2 class="mt-5 text-xl font-semibold">{steps[currentStep].title}</h2>
@@ -110,7 +104,7 @@
       title={steps[currentStep].toggleText}
       variant="link"
       extraClasses="underline underline-offset-2"
-      onClick={steps[currentStep].onToggle}
+      onClick={handleToggle}
     >
       {steps[currentStep].toggleText}
     </Button>

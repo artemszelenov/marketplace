@@ -1,4 +1,4 @@
-import { create } from "../../../services/api/auth"
+import { create } from "../../../services/cms/api/auth"
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ request }) => {
