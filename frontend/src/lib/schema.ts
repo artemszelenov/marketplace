@@ -28,5 +28,5 @@ export const ProductResult = z
 export const StorageCartItemResult = z
   .object({
     id: z.string(),
-    quantity: z.number()
+    q: z.number()
   })

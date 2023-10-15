@@ -1,31 +1,24 @@
 <script lang="ts">
   import Button from "./UI/Button.svelte";
 
+  export let redirectTo = window.location.href;
+
   let currentStep: "login" | "registration" = "login";
 
   const steps = {
     login: {
       title: "Вход",
-      submitUrl: "?/login",
+      submitUrl: "/user?/login",
       submitText: "Войти",
       toggleText: "Еще не регистрировались?",
     },
     registration: {
       title: "Регистрация",
-      submitUrl: "?/register",
+      submitUrl: "/user?/register",
       submitText: "Зарегистрироваться",
       toggleText: "Вернуться ко входу",
     },
   };
-
-  async function handleSubmit(e: SubmitEvent) {
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const res = await fetch(steps[currentStep].submitUrl, {
-      method: "POST",
-      body: formData,
-    });
-    const { message } = await res.json();
-  }
 
   function handleToggle() {
     if (currentStep === "login") {
@@ -40,15 +33,12 @@
   }
 </script>
 
-<form
-  class="w-[25em]"
-  action={steps[currentStep].submitUrl}
-  method="POST"
-  on:submit|preventDefault={handleSubmit}
->
+<form class="w-[25em]" method="POST" action={steps[currentStep].submitUrl}>
   <p>Вам нужно зарегистрироваться или войти, чтобы продолжить</p>
 
   <h2 class="mt-5 text-xl font-semibold">{steps[currentStep].title}</h2>
+
+  <input type="hidden" name="redirect-to" value={redirectTo} />
 
   <div class="mt-3">
     <label for="email" class="block text-sm">Почта *</label>

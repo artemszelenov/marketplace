@@ -1,16 +1,19 @@
 <script lang="ts">
-  import type { Product } from "$lib/types/product";
+  import type { z } from "zod";
+  import type { ProductResult } from "$lib/schema";
+  type Product = z.infer<typeof ProductResult>;
+
+  import { cartItems, addOne, removeOne } from "$lib/stores/cart";
 
   import Button from "./UI/Button.svelte";
   import Icon from "./UI/Icon.svelte";
-  import { cartItemsStore, addOne, removeOne } from "$lib/stores/cart";
 
   export let product: Product;
   export let variant: "full" | "compact" = "full";
   export let cartButtonStyle: "primary" | "link" = "link";
 
   $: productInCart =
-    $cartItemsStore && $cartItemsStore.find((item) => item.id === product.id);
+    $cartItems && $cartItems.find((item) => item.id === product.id);
 </script>
 
 {#if product.inStockCount > 0}
@@ -18,11 +21,11 @@
     {#if productInCart}
       <div class="flex items-center" class:justify-between={variant === "full"}>
         <p class="text-sm font-semibold mr-4">
-          {productInCart.quantity + " шт."}
+          {productInCart.q + " шт."}
         </p>
 
         <div class="flex items-center">
-          {#if productInCart.quantity === 1}
+          {#if productInCart.q === 1}
             <Button
               title="Удалить"
               variant="iconLink"
@@ -41,7 +44,7 @@
             </Button>
           {/if}
 
-          {#if productInCart.quantity === product.inStockCount}
+          {#if productInCart.q === product.inStockCount}
             <Button title="Больше нет в наличии" variant="iconLink" disabled>
               <Icon name="info" class="w-7" />
             </Button>

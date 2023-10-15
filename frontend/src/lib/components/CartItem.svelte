@@ -1,8 +1,9 @@
 <script lang="ts">
+  import type { z } from "zod";
+  import type { ProductResult } from "$lib/schema";
   import AddToCart from "./AddToCart.svelte";
-  import type { Product } from "$lib/types/product";
 
-  export let product: Product;
+  export let product: z.infer<typeof ProductResult>;
 
   let activeImageID = 0;
 
