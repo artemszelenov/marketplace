@@ -16,24 +16,22 @@
   }
 </script>
 
-<div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
-  <h1 class="text-2xl font-bold">Корзина</h1>
+<h1 class="text-2xl font-bold">Корзина</h1>
 
-  <div class="grid grid-cols-2 mt-5">
-    <ul class="space-y-7">
-      {#each cartItems as product (product.id)}
-        <li>
-          <CartItem {product} />
-        </li>
-      {/each}
-    </ul>
+<div class="grid grid-cols-2 mt-5">
+  <ul class="space-y-7">
+    {#each cartItems as product (product.id)}
+      <li>
+        <CartItem {product} />
+      </li>
+    {/each}
+  </ul>
 
-    <div>
-      {#if user}
-        <div>Вы зарегистрированы</div>
-      {:else}
-        <AuthForm redirectTo="/cart{$queryString}" />
-      {/if}
-    </div>
+  <div>
+    {#if user}
+      <div>Вы зарегистрированы</div>
+    {:else}
+      <AuthForm redirectTo="/cart{$queryString}" />
+    {/if}
   </div>
 </div>

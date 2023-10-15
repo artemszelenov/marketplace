@@ -61,7 +61,9 @@
 </header>
 
 <main>
-  <slot />
+  <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
+    <slot />
+  </div>
 </main>
 
 <footer class="bg-grey-50 border-t border-dashed">

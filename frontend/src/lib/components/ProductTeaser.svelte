@@ -1,6 +1,9 @@
 <script lang="ts">
+  import type { z } from "zod";
+  import type { ProductResult } from "$lib/schema";
+  type Product = z.infer<typeof ProductResult>;
+
   import AddToCart from "./AddToCart.svelte";
-  import type { Product } from "$lib/types/product";
 
   export let product: Product;
 
@@ -46,5 +49,5 @@
 
   <p class="text-sm">{price}</p>
 
-  <AddToCart {product} />
+  <AddToCart {product} variant="full" />
 </article>

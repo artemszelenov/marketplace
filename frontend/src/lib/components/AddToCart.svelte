@@ -73,6 +73,7 @@
           <Button
             title="Добавить в корзину"
             variant="iconPrimary"
+            extraClasses="w-full"
             onClick={() => addOne(product)}
           >
             <Icon name="cart" class="w-7" />
