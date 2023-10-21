@@ -5,6 +5,9 @@ export async function load({ params }) {
   const product = await getProduct(params.slug);
 
   return {
-    product: buildProduct(product)
+    product: buildProduct(product),
+    seo: {
+      title: product.title
+    }
   }
 }

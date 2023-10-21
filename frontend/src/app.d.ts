@@ -11,6 +11,9 @@ declare global {
 				roles: string[]
 				cart: object
 			} | null
+			seo: {
+				title: string
+			}
 		}
 		// interface PageData {}
 		// interface Platform {}

@@ -45,7 +45,6 @@
       if (result.type === "failure") {
         errors = result.data?.errors ?? [];
       }
-      console.log(result);
     };
   }}
 >

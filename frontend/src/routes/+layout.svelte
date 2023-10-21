@@ -1,13 +1,12 @@
 <script lang="ts">
   import "../app.css";
 
-  import { MARKETPALCE_NAME } from "$lib/constants";
+  import { page } from "$app/stores";
   import CartNavLink from "../lib/components/CartNavLink.svelte";
 
   export let data;
 
   const { user } = data;
-  const title = "";
 
   const nav = [
     {
@@ -22,7 +21,7 @@
 </script>
 
 <svelte:head>
-  <title>{`${title} | ${MARKETPALCE_NAME}`}</title>
+  <title>{`${$page.data.seo.title} | 6:52`}</title>
 </svelte:head>
 
 <header class="w-full bg-white border-b border-dashed text-xs">

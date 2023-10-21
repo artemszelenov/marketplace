@@ -1,4 +1,7 @@
 import { buildConfig, Config } from 'payload/config'
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { viteBundler } from '@payloadcms/bundler-vite'
 import path from 'path'
 import Users from './collections/Users'
 import Products from './collections/Products'
@@ -7,9 +10,14 @@ import Orders from './collections/Orders'
 
 let config: Config = {
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  db: mongooseAdapter({
+    url: process.env.MONGODB_URI
+  }),
   admin: {
     user: Users.slug,
+    bundler: viteBundler()
   },
+  editor: lexicalEditor({}),
   collections: [
     Users,
     Products,

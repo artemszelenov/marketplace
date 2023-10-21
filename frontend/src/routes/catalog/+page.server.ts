@@ -7,6 +7,9 @@ export async function load() {
   const products = docs.map(buildProduct);
 
   return {
-    products
+    products,
+    seo: {
+      title: "Каталог"
+    }
   }
 }
