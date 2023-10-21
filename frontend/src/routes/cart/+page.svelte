@@ -31,6 +31,9 @@
     {#if user}
       <div>Вы зарегистрированы</div>
     {:else}
+      <p class="w-[25em]">
+        Вам нужно зарегистрироваться или войти, чтобы продолжить
+      </p>
       <AuthForm redirectTo="/cart{$queryString}" />
     {/if}
   </div>

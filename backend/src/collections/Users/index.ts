@@ -7,6 +7,14 @@ import type { CollectionConfig } from 'payload/types'
 const Users: CollectionConfig = {
   slug: 'users',
   auth: true,
+  labels: {
+    singular: {
+      ru: 'Клиент',
+    },
+    plural: {
+      ru: 'Клиенты',
+    },
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'email'],
@@ -21,11 +29,17 @@ const Users: CollectionConfig = {
   fields: [
     {
       name: 'name',
-      type: 'text'
+      type: 'text',
+      label: {
+        ru: 'Имя'
+      }
     },
     {
       name: 'roles',
       type: 'select',
+      label: {
+        ru: 'Роли'
+      },
       hasMany: true,
       defaultValue: ['customer'],
       options: [
@@ -52,9 +66,11 @@ const Users: CollectionConfig = {
       hasMany: true,
     },
     {
-      label: 'Cart',
       name: 'cart',
       type: 'group',
+      label: {
+        ru: 'Корзина'
+      },
       fields: [
         {
           name: 'items',

@@ -1,8 +1,11 @@
 <script lang="ts">
+  import { enhance } from "$app/forms";
+
   import Button from "./UI/Button.svelte";
 
   export let redirectTo = window.location.href;
 
+  let errors: Array<{ message: string }> = [];
   let currentStep: "login" | "registration" = "login";
 
   const steps = {
@@ -33,10 +36,26 @@
   }
 </script>
 
-<form class="w-[25em]" method="POST" action={steps[currentStep].submitUrl}>
-  <p>Вам нужно зарегистрироваться или войти, чтобы продолжить</p>
-
+<form
+  class="w-[25em]"
+  method="POST"
+  action={steps[currentStep].submitUrl}
+  use:enhance={() => {
+    return ({ result }) => {
+      if (result.type === "failure") {
+        errors = result.data?.errors ?? [];
+      }
+      console.log(result);
+    };
+  }}
+>
   <h2 class="mt-5 text-xl font-semibold">{steps[currentStep].title}</h2>
+
+  {#if errors.length > 0}
+    {#each errors as error}
+      <p class="text-red">{error.message}</p>
+    {/each}
+  {/if}
 
   <input type="hidden" name="redirect-to" value={redirectTo} />
 

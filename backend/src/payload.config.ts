@@ -20,6 +20,10 @@ let config: Config = {
     limits: {
       fileSize: 5000000, // 5MB, written in bytes
     }
+  },
+  i18n: {
+    fallbackLng: 'en',
+    lng: 'ru'
   }
 }
 

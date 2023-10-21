@@ -5,6 +5,14 @@ const Media: CollectionConfig = {
   access: {
     read: () => true,
   },
+  labels: {
+    singular: {
+      ru: 'Медиа',
+    },
+    plural: {
+      ru: 'Медиа',
+    },
+  },
   upload: {
     staticURL: '/media',
     staticDir: 'media',

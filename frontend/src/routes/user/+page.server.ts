@@ -14,7 +14,13 @@ export const actions = {
         password: passwordInput.toString()
       });
 
-      const { token, exp, user } = await res.json();
+      const json = await res.json();
+
+      const { token, exp, user, errors, message } = json;
+
+      if (errors) {
+        return fail(422, { errors });
+      }
 
       cookies.set("payload-token", token, {
         maxAge: exp

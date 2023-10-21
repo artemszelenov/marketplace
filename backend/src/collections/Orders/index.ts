@@ -6,6 +6,14 @@ import { syncUser } from './hooks/syncUser'
 
 const Orders: CollectionConfig = {
   slug: 'orders',
+  labels: {
+    singular: {
+      ru: 'Заказ',
+    },
+    plural: {
+      ru: 'Заказы',
+    },
+  },
   admin: {
     useAsTitle: 'createdAt',
     defaultColumns: ['createdAt']

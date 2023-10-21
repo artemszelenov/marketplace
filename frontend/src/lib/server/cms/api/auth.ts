@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "$env/static/private";
 
-interface CreateParams {
+type CreateParams = {
   email: string
   password: string
   passwordConfirm: string
@@ -13,7 +13,8 @@ export const create = async ({ email, password, passwordConfirm, name }: CreateP
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept-Language': 'ru'
       },
       body: JSON.stringify({
         email,
@@ -33,33 +34,24 @@ export const create = async ({ email, password, passwordConfirm, name }: CreateP
   }
 }
 
-interface LoginParams {
+type LoginParams = {
   email: string
   password: string
 }
 
 export const login = async ({ email, password }: LoginParams) => {
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/users/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password
-      }),
-    })
-
-    if (res.ok) {
-      return res
-    }
-
-    throw new Error('Invalid login')
-  } catch (e) {
-    throw new Error('An error occurred while attempting to login.')
-  }
+  return fetch(`${BACKEND_URL}/api/users/login`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept-Language': 'ru'
+    },
+    body: JSON.stringify({
+      email,
+      password
+    }),
+  });
 }
 
 export const logout = async (token: string) => {
@@ -70,6 +62,7 @@ export const logout = async (token: string) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `JWT ${token}`,
+        'Accept-Language': 'ru'
       },
     })
 
@@ -91,6 +84,7 @@ export const me = async (token: string) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `JWT ${token}`,
+        'Accept-Language': 'ru'
       },
     })
 
