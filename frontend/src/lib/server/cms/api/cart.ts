@@ -1,7 +1,7 @@
 import type { z } from "zod";
 import type { Product as ProductDoc } from '../types';
 import type { ProductResult } from "$lib/schema";
-type Product = z.infer<typeof ProductResult>
+export type Product = z.infer<typeof ProductResult>
 
 import { BACKEND_URL } from "$env/static/private";
 import { buildProduct } from '$lib/utils/products';

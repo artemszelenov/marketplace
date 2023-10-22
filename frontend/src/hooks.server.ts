@@ -5,7 +5,7 @@ export async function handle({ event, resolve }) {
   let user = null
 
   if (token) {
-    const meResponse = await me(token);
+    const meResponse = await me(event.fetch, { token });
     const json = await meResponse.json();
     user = json.user
   }

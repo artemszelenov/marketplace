@@ -2,14 +2,14 @@ import { fail, redirect } from "@sveltejs/kit";
 import * as cms from "$lib/server/cms/api/auth";
 
 export const actions = {
-  login: async ({ request, cookies, locals }) => {
+  login: async ({ request, cookies, locals, fetch }) => {
     const data = await request.formData();
     const emailInput = data.get("email");
     const passwordInput = data.get("password");
     const redirectTo = data.get("redirect-to");
 
     if (emailInput && passwordInput) {
-      const res = await cms.login({
+      const res = await cms.login(fetch, {
         email: emailInput.toString(),
         password: passwordInput.toString()
       });
@@ -31,7 +31,7 @@ export const actions = {
       throw redirect(303, redirectTo?.toString() ?? "/user");
     }
   },
-  register: async ({ request, cookies, locals }) => {
+  register: async ({ request, cookies, locals, fetch }) => {
     const data = await request.formData();
     const emailInput = data.get("email");
     const passwordInput = data.get("password");
@@ -41,14 +41,14 @@ export const actions = {
 
     // добавить подтверждение email по почте
     if (emailInput && passwordInput && passwordConfirmInput) {
-      await cms.create({
+      await cms.create(fetch, {
         email: emailInput.toString(),
         password: passwordInput.toString(),
         passwordConfirm: passwordConfirmInput.toString(),
         name: nameInput ? nameInput.toString() : emailInput.toString().split("@")[0]
       });
 
-      const res = await cms.login({
+      const res = await cms.login(fetch, {
         email: emailInput.toString(),
         password: passwordInput.toString()
       });
@@ -64,11 +64,11 @@ export const actions = {
       throw redirect(303, redirectTo?.toString() ?? "/user");
     }
   },
-  logout: async ({ cookies, locals }) => {
+  logout: async ({ cookies, locals, fetch }) => {
     const token = cookies.get("payload-token");
 
     if (token) {
-      await cms.logout(token);
+      await cms.logout(fetch, { token });
       cookies.delete("payload-token");
       locals.user = null;
       throw redirect(303, "/");
