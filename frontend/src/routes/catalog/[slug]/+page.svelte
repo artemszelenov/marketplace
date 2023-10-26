@@ -34,7 +34,7 @@
   >
     <div class="sticky top-3">
       <h1 class="text-3xl font-semibold">{title}</h1>
-      <p class="text-xl mt-2">{price}</p>
+      <p class="text-xl mt-2">{price.toLocaleString("ru-RU") + " руб."}</p>
       <div class="mt-5">
         <AddToCart
           product={data.product}

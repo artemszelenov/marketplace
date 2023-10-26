@@ -21,7 +21,7 @@ export const ProductResult = z
     title: z.string(),
     description: z.string(),
     inStockCount: z.number(),
-    price: z.string(),
+    price: z.number(),
     gallery: z.array(ImageResult),
   });
 

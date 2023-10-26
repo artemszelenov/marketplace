@@ -38,7 +38,8 @@ export default {
 				},
 				'button, input': {
 					'&:disabled': {
-						'cursor': 'not-allowed'
+						'cursor': 'not-allowed',
+						'opacity': '0.3'
 					}
 				},
 				'input': {

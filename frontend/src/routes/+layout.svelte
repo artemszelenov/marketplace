@@ -4,10 +4,6 @@
   import { page } from "$app/stores";
   import CartNavLink from "../lib/components/CartNavLink.svelte";
 
-  export let data;
-
-  const { user } = data;
-
   const nav = [
     {
       text: "Главная",
@@ -48,7 +44,7 @@
         </a>
       {/each}
 
-      {#if user}
+      {#if $page.data.user}
         <a class="px-2 py-2 text-sm text-black lg:px-6 md:px-3" href="/user">
           Мой аккаунт
         </a>

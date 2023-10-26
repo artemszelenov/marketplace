@@ -29,7 +29,7 @@
       </a>
     </h1>
 
-    <p class="text-sm">{price}</p>
+    <p class="text-sm">{price.toLocaleString("ru-RU") + " руб."}</p>
 
     <div class="mt-auto">
       <AddToCart {product} variant="compact" />

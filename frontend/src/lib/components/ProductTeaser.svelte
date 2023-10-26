@@ -47,7 +47,7 @@
     </a>
   </h1>
 
-  <p class="text-sm">{price}</p>
+  <p class="text-sm">{price.toLocaleString("ru-RU") + " руб."}</p>
 
   <AddToCart {product} variant="full" />
 </article>

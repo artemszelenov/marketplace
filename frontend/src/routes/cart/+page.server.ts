@@ -8,7 +8,7 @@ type CartData = {
   }
 }
 
-export async function load({ url }) {
+export async function load({ url, fetch }) {
   const ids = url.searchParams.get("items");
 
   const data: CartData = {
@@ -19,7 +19,7 @@ export async function load({ url }) {
   }
 
   if (ids) {
-    const products = await getCartItems(ids);
+    const products = await getCartItems(fetch, ids);
 
     data.cartItems = products;
   }

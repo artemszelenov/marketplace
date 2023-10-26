@@ -1,5 +1,7 @@
 <script lang="ts">
+  import type { SubmitFunction } from "@sveltejs/kit";
   import { enhance } from "$app/forms";
+  import { invalidate } from "$app/navigation";
 
   import Button from "./UI/Button.svelte";
 
@@ -26,29 +28,30 @@
   function handleToggle() {
     if (currentStep === "login") {
       currentStep = "registration";
-      return;
-    }
-
-    if (currentStep === "registration") {
+    } else if (currentStep === "registration") {
       currentStep = "login";
-      return;
     }
   }
+
+  const handleFormResult: SubmitFunction = function () {
+    return async ({ result }) => {
+      if (result.type === "failure") {
+        errors = result.data?.errors ?? [];
+        return;
+      }
+
+      // await applyAction(result);
+      invalidate("app:root-layout");
+    };
+  };
 </script>
 
 <form
-  class="w-[25em]"
   method="POST"
   action={steps[currentStep].submitUrl}
-  use:enhance={() => {
-    return ({ result }) => {
-      if (result.type === "failure") {
-        errors = result.data?.errors ?? [];
-      }
-    };
-  }}
+  use:enhance={handleFormResult}
 >
-  <h2 class="mt-5 text-xl font-semibold">{steps[currentStep].title}</h2>
+  <h2 class="text-xl font-semibold">{steps[currentStep].title}</h2>
 
   {#if errors.length > 0}
     {#each errors as error}
