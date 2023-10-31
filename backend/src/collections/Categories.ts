@@ -3,7 +3,8 @@ import type { CollectionConfig } from 'payload/types'
 const Categories: CollectionConfig = {
   slug: 'categories',
   admin: {
-    useAsTitle: 'title'
+    useAsTitle: 'title',
+    group: 'Товары'
   },
   access: {
     read: () => true,

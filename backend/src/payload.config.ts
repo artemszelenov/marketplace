@@ -22,11 +22,11 @@ let config: Config = {
   editor: lexicalEditor({}),
   collections: [
     Users,
-    Products,
-    Media,
     Orders,
+    Products,
     Categories,
-    Sizes
+    Sizes,
+    Media,
   ],
   upload: {
     limits: {

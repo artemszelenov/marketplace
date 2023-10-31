@@ -14,7 +14,8 @@ const Products: CollectionConfig = {
     },
   },
   admin: {
-    useAsTitle: 'title'
+    useAsTitle: 'title',
+    group: 'Товары'
   },
   access: {
     read: () => true
