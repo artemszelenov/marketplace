@@ -1,6 +1,7 @@
+import type { CollectionConfig } from 'payload/types'
+
 import { deleteProductFromCarts } from './hooks/deleteProductFromCarts'
 import { populatePublishedDate } from './hooks/populatePublishedDate'
-import type { CollectionConfig } from 'payload/types'
 
 const Products: CollectionConfig = {
   slug: 'products',
@@ -38,62 +39,131 @@ const Products: CollectionConfig = {
       },
     },
     {
-      name: 'gallery',
-      type: 'array',
+      name: 'categories',
+      type: 'relationship',
       label: {
-        ru: 'Галлерея'
+        ru: 'Категории'
       },
-      labels: {
-        singular: 'Медиа',
-        plural: 'Медиа',
+      relationTo: 'categories',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
       },
-      minRows: 1,
-      maxRows: 10,
-      fields: [
+    },
+    {
+      type: 'tabs',
+      tabs: [
         {
-          name: 'image',
-          type: 'upload',
           label: {
             ru: 'Медиа'
           },
-          relationTo: 'media',
-          required: true
+          fields: [
+            {
+              name: 'gallery',
+              type: 'array',
+              label: {
+                ru: 'Галлерея'
+              },
+              labels: {
+                singular: 'Медиа',
+                plural: 'Медиа',
+              },
+              minRows: 1,
+              maxRows: 10,
+              fields: [
+                {
+                  name: 'image',
+                  type: 'upload',
+                  label: {
+                    ru: 'Медиа'
+                  },
+                  relationTo: 'media',
+                  required: true
+                }
+              ],
+            },
+          ]
+        },
+        {
+          label: {
+            ru: 'Контент'
+          },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: {
+                ru: 'Заголовок'
+              },
+              required: true
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: {
+                ru: 'Описание'
+              },
+              required: true
+            },
+          ]
+        },
+        {
+          label: {
+            ru: 'Детали продукта'
+          },
+          fields: [
+            {
+              name: 'defaultPrice',
+              type: 'number',
+              label: {
+                ru: 'Цена без учета доставки'
+              },
+              required: true
+            },
+          ]
+        },
+        {
+          label: {
+            ru: 'Размеры'
+          },
+          fields: [
+            {
+              name: 'sizes',
+              type: 'array',
+              label: {
+                ru: 'Размеры'
+              },
+              labels: {
+                singular: 'Размер',
+                plural: 'Размеры',
+              },
+              minRows: 1,
+              fields: [
+                {
+                  name: 'size',
+                  type: 'relationship',
+                  relationTo: 'sizes',
+                  hasMany: false,
+                  label: {
+                    ru: 'Размер'
+                  },
+                  required: true
+                },
+                {
+                  name: 'inStockCount',
+                  type: 'number',
+                  label: {
+                    ru: 'Количество на складе'
+                  },
+                  defaultValue: 0,
+                  required: true
+                }
+              ],
+            },
+          ]
         }
-      ],
+      ]
     },
-    {
-      name: 'title',
-      type: 'text',
-      label: {
-        ru: 'Заголовок'
-      },
-      required: true
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      label: {
-        ru: 'Описание'
-      },
-      required: true
-    },
-    {
-      name: 'defaultPrice',
-      type: 'number',
-      label: {
-        ru: 'Цена без учета доставки'
-      },
-      required: true
-    },
-    {
-      name: 'inStockCount',
-      type: 'number',
-      label: {
-        ru: 'Количество на складе'
-      },
-      defaultValue: 0,
-      required: true
-    }
   ]
 }
 

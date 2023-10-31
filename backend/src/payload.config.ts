@@ -7,6 +7,8 @@ import Users from './collections/Users'
 import Products from './collections/Products'
 import Media from './collections/Media'
 import Orders from './collections/Orders'
+import Categories from './collections/Categories'
+import Sizes from './collections/Sizes'
 
 let config: Config = {
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
@@ -22,7 +24,9 @@ let config: Config = {
     Users,
     Products,
     Media,
-    Orders
+    Orders,
+    Categories,
+    Sizes
   ],
   upload: {
     limits: {
