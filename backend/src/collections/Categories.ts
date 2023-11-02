@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload/types'
+import { validateUniqueByKey } from '../hooks/validateUniqueByKey'
 
 const Categories: CollectionConfig = {
   slug: 'categories',
@@ -20,20 +21,30 @@ const Categories: CollectionConfig = {
   fields: [
     {
       name: 'title',
-      type: 'text'
-    },
-    {
-      name: 'value',
       type: 'text',
       label: {
-        ru: 'Значение'
-      },
-      admin: {
-        description: 'Какое значение будет присвоено полю в базе данных'
+        ru: 'Название'
       },
       required: true
     },
+    {
+      name: 'key',
+      type: 'text',
+      label: {
+        ru: 'Ключ'
+      },
+      admin: {
+        description: 'Какое значение будет присвоено полю в базе данных. Например: underwear.'
+      },
+      required: true,
+      validate: async (_value, { data }) => {
+        return data.error ?? true
+      },
+    },
   ],
+  hooks: {
+    beforeValidate: [validateUniqueByKey]
+  }
 }
 
 export default Categories
