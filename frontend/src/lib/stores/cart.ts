@@ -1,70 +1,92 @@
 import type { z } from "zod";
-import type { StorageCartItemResult, ProductResult } from "$lib/schema";
+import type { StorageCartItemResult } from "$lib/schema";
 type StorageCartItem = z.infer<typeof StorageCartItemResult>
-type Product = z.infer<typeof ProductResult>
+
+export type Size = {
+  inStockCount: number,
+  value: {
+    id: string
+  }
+}
+
+type Payload = {
+  productID: string,
+  size?: Size
+}
 
 import { action, computed } from "nanostores";
 import { persistentAtom } from "@nanostores/persistent";
-import { MARKETPALCE_NAME } from "$lib/constants";
 
-export const cartItems = persistentAtom<StorageCartItem[]>(`${MARKETPALCE_NAME}:cart_items`, [], {
+export const cartItems = persistentAtom<StorageCartItem[]>('cart_items', [], {
   encode: JSON.stringify,
   decode: JSON.parse
-})
+});
 
-export const addOne = action(cartItems, 'addOne', (cartItems, { id: productID, inStockCount }: Product) => {
-  const productInCart = cartItems.get().find(item => item.id === productID)
+export const addOne = action(cartItems, 'addOne', (cartItems, { productID, size }: Payload) => {
+  if (!size) return;
 
-  if (productInCart) {
-    if (productInCart.q + 1 > inStockCount) return productInCart
+  const id = createID(productID, size);
+  const currentCartItem = cartItems.get().find(item => item.id === id);
+
+  if (currentCartItem) {
+    if (currentCartItem.q + 1 > size.inStockCount) return currentCartItem;
 
     cartItems.set(cartItems.get().map(item => {
-      if (item.id === productID) {
+      if (item.id === id) {
         return { ...item, q: item.q += 1 }
       }
-      return item
+      return item;
     }))
 
-    return productInCart
+    return currentCartItem;
   }
 
-  const newItem = { id: productID, q: 1 }
-  cartItems.set([...cartItems.get(), newItem])
-  return newItem
-})
+  const newItem = { id, q: 1 }
 
-export const removeOne = action(cartItems, 'removeOne', (cartItems, { id: productID }: Product) => {
-  const productInCart = cartItems.get().find(item => item.id === productID)
+  cartItems.set([...cartItems.get(), newItem]);
 
-  if (productInCart) {
-    if (productInCart.q === 1) {
-      cartItems.set(cartItems.get().filter(item => item.id !== productID))
+  return newItem;
+});
+
+export const removeOne = action(cartItems, 'removeOne', (cartItems, { productID, size }: Payload) => {
+  if (!size) return;
+
+  const id = createID(productID, size);
+  const currentCartItem = cartItems.get().find(item => item.id === id);
+
+  if (currentCartItem) {
+    if (currentCartItem.q === 1) {
+      cartItems.set(cartItems.get().filter(item => item.id !== id));
     } else {
       cartItems.set(cartItems.get().map(item => {
-        if (item.id === productID) {
+        if (item.id === id) {
           return { ...item, q: item.q -= 1 }
         }
-        return item
+        return item;
       }))
     }
 
-    return productInCart
+    return currentCartItem;
   }
 
-  return null
-})
+  return null;
+});
 
 export const clear = action(cartItems, 'clear', cartItems => {
-  cartItems.set([])
-  return cartItems.get()
-})
+  cartItems.set([]);
+  return cartItems.get();
+});
+
+export function createID(productID: string, size: Size) {
+  return `${productID}:${size.value.id}`
+};
 
 export const queryString = computed(cartItems, store => {
-  if (store.length === 0) return ""
+  if (store.length === 0) return "";
 
-  const ids = store.map(item => item.id).join(',')
+  const ids = store.map(item => item.id).join(',');
 
-  return `?items=${ids}`
+  return `?items=${ids}`;
 });
 
 queryString.listen(value => {

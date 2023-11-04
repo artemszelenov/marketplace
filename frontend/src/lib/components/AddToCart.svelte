@@ -1,36 +1,40 @@
 <script lang="ts">
   import type { z } from "zod";
   import type { ProductResult } from "$lib/schema";
+  import type { Size } from "$lib/stores/cart";
   type Product = z.infer<typeof ProductResult>;
 
-  import { cartItems, addOne, removeOne } from "$lib/stores/cart";
+  import { cartItems, addOne, removeOne, createID } from "$lib/stores/cart";
 
   import Button from "./UI/Button.svelte";
   import Icon from "./UI/Icon.svelte";
 
   export let product: Product;
+  export let size: Size | undefined;
   export let variant: "full" | "compact" = "full";
   export let cartButtonStyle: "primary" | "link" = "link";
 
-  $: productInCart =
-    $cartItems && $cartItems.find((item) => item.id === product.id);
+  console.log("size", size);
+
+  $: currentCartItem =
+    size && $cartItems.find((item) => item.id === createID(product.id, size!));
 </script>
 
-{#if product.inStockCount > 0}
+{#if product.sizes.some(({ inStockCount }) => inStockCount > 0)}
   <div class="-mt-1.5 -mr-2">
-    {#if productInCart}
+    {#if currentCartItem && size}
       <div class="flex items-center" class:justify-between={variant === "full"}>
         <p class="text-sm font-semibold mr-4">
-          {productInCart.q + " шт."}
+          {currentCartItem.q + " шт."}
         </p>
 
         <div class="flex items-center">
-          {#if productInCart.q === 1}
+          {#if currentCartItem.q === 1}
             <Button
               title="Удалить"
               variant="iconLink"
               extraClasses="text-red"
-              onClick={() => removeOne(product)}
+              onClick={() => removeOne({ productID: product.id, size })}
             >
               <Icon name="delete" class="w-7" />
             </Button>
@@ -38,13 +42,13 @@
             <Button
               title="Убрать"
               variant="iconLink"
-              onClick={() => removeOne(product)}
+              onClick={() => removeOne({ productID: product.id, size })}
             >
               <Icon name="minus" class="w-7" />
             </Button>
           {/if}
 
-          {#if productInCart.q === product.inStockCount}
+          {#if currentCartItem.q === size.inStockCount}
             <Button title="Больше нет в наличии" variant="iconLink" disabled>
               <Icon name="info" class="w-7" />
             </Button>
@@ -52,7 +56,7 @@
             <Button
               title="Добавить еще"
               variant="iconLink"
-              onClick={() => addOne(product)}
+              onClick={() => addOne({ productID: product.id, size })}
             >
               <Icon name="plus" class="w-7" />
             </Button>
@@ -65,7 +69,8 @@
           <Button
             title="Добавить в корзину"
             variant="iconLink"
-            onClick={() => addOne(product)}
+            disabled={!size}
+            onClick={() => addOne({ productID: product.id, size })}
           >
             <Icon name="cart" class="w-7" />
           </Button>
@@ -74,11 +79,15 @@
             title="Добавить в корзину"
             variant="iconPrimary"
             extraClasses="w-full"
-            onClick={() => addOne(product)}
+            disabled={!size}
+            onClick={() => addOne({ productID: product.id, size })}
           >
             <Icon name="cart" class="w-7" />
             <span class="text-base font-medium">В корзину</span>
           </Button>
+        {/if}
+        {#if !size}
+          <p>Сначала выберите размер</p>
         {/if}
       </div>
     {/if}

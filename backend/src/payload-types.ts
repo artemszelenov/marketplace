@@ -9,9 +9,14 @@
 export interface Config {
   collections: {
     users: User;
-    products: Product;
-    media: Media;
     orders: Order;
+    products: Product;
+    categories: Category;
+    'shoe-sizes': ShoeSize;
+    'clothing-sizes': ClothingSize;
+    media: Media;
+    'payload-preferences': PayloadPreference;
+    'payload-migrations': PayloadMigration;
   };
   globals: {};
 }
@@ -36,10 +41,12 @@ export interface User {
   hash?: string;
   loginAttempts?: number;
   lockUntil?: string;
-  password?: string;
+  password: string;
 }
 export interface Product {
   id: string;
+  type: 'shoes' | 'clothes' | 'accessories';
+  categories?: string[] | Category[];
   publishedDate?: string;
   gallery?: {
     image: string | Media;
@@ -48,7 +55,26 @@ export interface Product {
   title: string;
   description: string;
   defaultPrice: number;
-  inStockCount: number;
+  sizes?: {
+    size:
+      | {
+          relationTo: 'shoe-sizes';
+          value: string | ShoeSize;
+        }
+      | {
+          relationTo: 'clothing-sizes';
+          value: string | ClothingSize;
+        };
+    inStockCount: number;
+    id?: string;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+export interface Category {
+  id: string;
+  title: string;
+  key: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -98,6 +124,25 @@ export interface Media {
     };
   };
 }
+export interface ShoeSize {
+  id: string;
+  heelToe?: string;
+  eu?: string;
+  uk?: string;
+  updatedAt: string;
+  createdAt: string;
+}
+export interface ClothingSize {
+  id: string;
+  title?: string;
+  chestSm?: string;
+  waistSm?: string;
+  hipSm?: string;
+  inseamSm?: string;
+  heightSm?: string;
+  updatedAt: string;
+  createdAt: string;
+}
 export interface Order {
   id: string;
   orderedBy?: {
@@ -113,4 +158,35 @@ export interface Order {
   }[];
   updatedAt: string;
   createdAt: string;
+}
+export interface PayloadPreference {
+  id: string;
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
+  key?: string;
+  value?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+export interface PayloadMigration {
+  id: string;
+  name?: string;
+  batch?: number;
+  updatedAt: string;
+  createdAt: string;
+}
+
+
+declare module 'payload' {
+  export interface GeneratedTypes extends Config {}
 }

@@ -3,8 +3,6 @@
   import type { ProductResult } from "$lib/schema";
   type Product = z.infer<typeof ProductResult>;
 
-  import AddToCart from "./AddToCart.svelte";
-
   export let product: Product;
 
   let activeImageID = 0;
@@ -48,6 +46,4 @@
   </h1>
 
   <p class="text-sm">{price.toLocaleString("ru-RU") + " руб."}</p>
-
-  <AddToCart {product} variant="full" />
 </article>

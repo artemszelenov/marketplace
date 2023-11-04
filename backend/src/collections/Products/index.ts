@@ -26,18 +26,31 @@ const Products: CollectionConfig = {
   },
   fields: [
     {
-      name: 'publishedDate',
-      type: 'date',
+      name: 'type',
+      type: 'select',
       label: {
-        ru: 'Дата публикации'
+        ru: 'Тип товара'
       },
+      hasMany: false,
+      unique: true,
       admin: {
         position: 'sidebar',
-        date: {
-          pickerAppearance: 'dayOnly',
-          displayFormat: 'd MMM yyy'
-        },
       },
+      options: [
+        {
+          label: 'Обувь',
+          value: 'shoes'
+        },
+        {
+          label: 'Одежда',
+          value: 'clothes'
+        },
+        {
+          label: 'Аксессуары',
+          value: 'accessories'
+        }
+      ],
+      required: true
     },
     {
       name: 'categories',
@@ -49,6 +62,20 @@ const Products: CollectionConfig = {
       hasMany: true,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'publishedDate',
+      type: 'date',
+      label: {
+        ru: 'Дата публикации'
+      },
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'd MMM yyy'
+        },
       },
     },
     {
@@ -139,11 +166,12 @@ const Products: CollectionConfig = {
                 plural: 'Размеры',
               },
               minRows: 1,
+              unique: true,
               fields: [
                 {
                   name: 'size',
                   type: 'relationship',
-                  relationTo: 'sizes',
+                  relationTo: ['shoe-sizes', 'clothing-sizes'],
                   hasMany: false,
                   label: {
                     ru: 'Размер'

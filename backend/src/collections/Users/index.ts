@@ -59,6 +59,30 @@ const Users: CollectionConfig = {
       }
     },
     {
+      name: 'shoeSizeMetric',
+      type: 'select',
+      label: {
+        ru: 'Система размеров обуви'
+      },
+      hasMany: false,
+      defaultValue: 'eu',
+      options: [
+        {
+          label: 'EU',
+          value: 'eu'
+        },
+        {
+          label: 'UK',
+          value: 'uk'
+        }
+      ],
+      access: {
+        read: anyone,
+        create: anyone,
+        update: anyone
+      }
+    },
+    {
       name: 'purchases',
       label: 'Purchases',
       type: 'relationship',

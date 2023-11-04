@@ -10,6 +10,7 @@ declare global {
 				id: string
 				roles: string[]
 				cart: object
+				shoeSizeMetric: 'eu' | 'uk'
 			} | null
 			seo: {
 				title: string

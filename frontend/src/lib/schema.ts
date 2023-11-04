@@ -18,15 +18,19 @@ export const ImageResult = z
 export const ProductResult = z
   .object({
     id: z.string(),
+    type: z.enum(['shoes', 'clothes', 'accessories']),
     title: z.string(),
     description: z.string(),
-    inStockCount: z.number(),
     price: z.number(),
     gallery: z.array(ImageResult),
+    sizes: z.array(z.object({
+      inStockCount: z.number(),
+      value: z.any()
+    }))
   });
 
 export const StorageCartItemResult = z
   .object({
-    id: z.string(),
+    id: z.string(), // consists of two parts: {id of product}:{id of size}
     q: z.number()
   })

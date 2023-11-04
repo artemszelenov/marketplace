@@ -8,7 +8,8 @@ import Products from './collections/Products'
 import Media from './collections/Media'
 import Orders from './collections/Orders'
 import Categories from './collections/Categories'
-import Sizes from './collections/Sizes'
+import ShoeSizes from './collections/ShoeSizes'
+import ClothingSizes from './collections/ClothingSizes'
 
 let config: Config = {
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
@@ -25,7 +26,8 @@ let config: Config = {
     Orders,
     Products,
     Categories,
-    Sizes,
+    ShoeSizes,
+    ClothingSizes,
     Media,
   ],
   upload: {

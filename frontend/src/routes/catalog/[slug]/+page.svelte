@@ -1,9 +1,19 @@
-<script>
+<script lang="ts">
+  import type { Size } from "$lib/stores/cart";
+
   import AddToCart from "$lib/components/AddToCart.svelte";
 
   export let data;
 
-  const { title, description, gallery, price } = data.product;
+  const { title, description, gallery, price, sizes } = data.product;
+
+  let currentSize: Size | undefined = undefined;
+
+  function handleChangeSize(sizePayload: Size) {
+    return () => {
+      currentSize = sizePayload;
+    };
+  }
 </script>
 
 <div
@@ -38,9 +48,26 @@
       <div class="mt-5">
         <AddToCart
           product={data.product}
+          size={currentSize}
           cartButtonStyle="primary"
           variant="compact"
         />
+      </div>
+      <div class="mt-5">
+        <h2 class="text-xl font-semibold">Размеры</h2>
+        {#each sizes as size (size.value.id)}
+          <label class="inline-flex items-center" for={size.value.id}>
+            {size.value[data.user?.shoeSizeMetric ?? "eu"]}
+          </label>
+          <input
+            id={size.value.id}
+            type="radio"
+            name="size"
+            value={size.value.id}
+            disabled={!size.inStockCount}
+            on:change={handleChangeSize(size)}
+          />
+        {/each}
       </div>
       <p class="mt-5">{description}</p>
     </div>
