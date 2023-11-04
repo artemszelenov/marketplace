@@ -9,6 +9,10 @@ export default {
 			black: 'oklch(20% 0 0)',
 			white: 'oklch(100% 0 0)',
 			grey: 'oklch(55% 0 0)',
+			'grey-100': 'oklch(96% 0 0)',
+			'grey-200': 'oklch(90% 0 0)',
+			'grey-300': 'oklch(85% 0 0)',
+			'grey-400': 'oklch(80% 0 0)',
 			'light-grey': 'oklch(96% 0 0)',
 			red: 'oklch(55.17% 0.205 24.53)',
 			yellow: 'oklch(85% 0.19 90.38)',
@@ -28,16 +32,29 @@ export default {
 					'&:hover:not(:disabled)': {
 						'background-color': theme('colors[light-grey]')
 					},
-					'&:focus': {
-						'outline': `1px dashed ${theme('colors.black')}`
-					},
 					'&:active:not(:disabled)': {
 						'transform': 'translateY(2px)',
 						'background-color': theme('colors[light-grey]')
+					},
+					'&:focus': {
+						'outline': `1px dashed ${theme('colors.black')}`
 					}
 				},
+				'input[type="radio"]:not(:disabled) + label:hover': {
+					'background-color': theme('colors[light-grey]')
+				},
+				'input[type="radio"]:not(:disabled) + label:active': {
+					'transform': 'translateY(2px)',
+					'background-color': theme('colors[light-grey]')
+				},
+				'input[type="radio"]:focus + label': {
+					'outline': `1px dashed ${theme('colors.black')}`
+				},
+				'input[type="radio"]:checked + label': {
+					'border-color': theme('colors.black')
+				},
 				'button, input': {
-					'&:disabled': {
+					'&:disabled, &:disabled + label': {
 						'cursor': 'not-allowed',
 						'opacity': '0.3'
 					}
@@ -76,6 +93,17 @@ export default {
 							'visibility': 'visible'
 						}
 					}
+				},
+				'.visually-hidden': {
+					'clip': 'rect(0, 0, 0, 0)',
+					'white-space': 'nowrap',
+					'border-width': '0',
+					'width': '1px',
+					'height': '1px',
+					'margin': '-1px',
+					'padding': '0',
+					'position': 'absolute',
+					'overflow': 'hidden'
 				}
 			})
 
@@ -87,7 +115,7 @@ export default {
 						'right': '10px',
 						'content': `'*'`
 					}
-				},
+				}
 			})
 		})
 	]

@@ -14,8 +14,6 @@
   export let variant: "full" | "compact" = "full";
   export let cartButtonStyle: "primary" | "link" = "link";
 
-  console.log("size", size);
-
   $: currentCartItem =
     size && $cartItems.find((item) => item.id === createID(product.id, size!));
 </script>
@@ -82,14 +80,16 @@
             disabled={!size}
             onClick={() => addOne({ productID: product.id, size })}
           >
-            <Icon name="cart" class="w-7" />
+            <!-- <Icon name="cart" class="w-7" /> -->
             <span class="text-base font-medium">В корзину</span>
           </Button>
         {/if}
-        {#if !size}
-          <p>Сначала выберите размер</p>
-        {/if}
       </div>
+      {#if !size}
+        <p class="mt-1 text-sm text-grey">
+          Чтобы добавить этот товар в корзину выберите один из размеров ниже
+        </p>
+      {/if}
     {/if}
   </div>
 {:else}

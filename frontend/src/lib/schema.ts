@@ -25,7 +25,9 @@ export const ProductResult = z
     gallery: z.array(ImageResult),
     sizes: z.array(z.object({
       inStockCount: z.number(),
-      value: z.any()
+      value: z.object({
+        id: z.string()
+      })
     }))
   });
 

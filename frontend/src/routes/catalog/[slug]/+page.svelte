@@ -2,12 +2,20 @@
   import type { Size } from "$lib/stores/cart";
 
   import AddToCart from "$lib/components/AddToCart.svelte";
+  import { cartItems, addOne, removeOne, createID } from "$lib/stores/cart";
 
   export let data;
 
-  const { title, description, gallery, price, sizes } = data.product;
+  const { title, description, gallery, price, sizes, id } = data.product;
 
   let currentSize: Size | undefined = undefined;
+  const productInCart = $cartItems.find((item) => item.id.split(":")[0] === id);
+
+  if (productInCart) {
+    currentSize = sizes.find(
+      (size) => size.value.id === productInCart.id.split(":")[1]
+    );
+  }
 
   function handleChangeSize(sizePayload: Size) {
     return () => {
@@ -44,7 +52,9 @@
   >
     <div class="sticky top-3">
       <h1 class="text-3xl font-semibold">{title}</h1>
+
       <p class="text-xl mt-2">{price.toLocaleString("ru-RU") + " руб."}</p>
+
       <div class="mt-5">
         <AddToCart
           product={data.product}
@@ -53,22 +63,38 @@
           variant="compact"
         />
       </div>
+
       <div class="mt-5">
         <h2 class="text-xl font-semibold">Размеры</h2>
-        {#each sizes as size (size.value.id)}
-          <label class="inline-flex items-center" for={size.value.id}>
-            {size.value[data.user?.shoeSizeMetric ?? "eu"]}
-          </label>
-          <input
-            id={size.value.id}
-            type="radio"
-            name="size"
-            value={size.value.id}
-            disabled={!size.inStockCount}
-            on:change={handleChangeSize(size)}
-          />
-        {/each}
+
+        <div
+          class="grid grid-cols-4 gap-3 mt-3"
+          role="radiogroup"
+          aria-labelledby="sizes-label-{id}"
+        >
+          <p id="sizes-label-{id}" class="visually-hidden">Выберите размер</p>
+
+          {#each sizes as size (size.value.id)}
+            <input
+              id={size.value.id}
+              class="visually-hidden"
+              type="radio"
+              name="size"
+              value={size.value.id}
+              checked={!!currentSize}
+              disabled={!size.inStockCount}
+              on:change={handleChangeSize(size)}
+            />
+            <label
+              class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
+              for={size.value.id}
+            >
+              {size.value[data.user?.shoeSizeMetric ?? "eu"]}
+            </label>
+          {/each}
+        </div>
       </div>
+
       <p class="mt-5">{description}</p>
     </div>
   </div>

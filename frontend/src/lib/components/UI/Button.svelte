@@ -10,7 +10,7 @@
     primary:
       "inline-flex justify-center items-center px-9 py-1.5 text-sm select-none border rounded outline-offset-2",
     iconPrimary:
-      "inline-flex justify-center items-center gap-2 px-9 py-1.5 text-sm select-none border-2 rounded outline-offset-2",
+      "inline-flex justify-center items-center gap-2 px-9 py-3 text-sm select-none border rounded outline-offset-2",
     link: "inline-flex justify-center items-center text-sm select-none rounded",
     iconLink:
       "inline-flex justify-center items-center gap-2 px-1 py-1 text-sm select-none rounded",
