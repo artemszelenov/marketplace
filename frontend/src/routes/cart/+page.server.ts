@@ -9,7 +9,7 @@ type CartData = {
 }
 
 export async function load({ url, fetch }) {
-  const ids = url.searchParams.get("items");
+  const cartItems = url.searchParams.get("items");
 
   const data: CartData = {
     cartItems: [],
@@ -18,10 +18,36 @@ export async function load({ url, fetch }) {
     }
   }
 
-  if (ids) {
-    const products = await getCartItems(fetch, ids);
+  if (cartItems) {
+    const groupedCartItems = cartItems.split(',').reduce((acc, item) => {
+      const [productID, sizeID] = item.split(':');
 
-    data.cartItems = products;
+      if (acc[productID]) {
+        acc[productID].push(sizeID);
+      } else {
+        acc[productID] = [sizeID];
+      }
+
+      return acc;
+    }, {});
+
+    const uniqueProductsIDs = Object.keys(groupedCartItems).join(',');
+  
+    const productsData = await getCartItems(fetch, uniqueProductsIDs);
+
+    const items = [];
+
+    Object.keys(groupedCartItems).forEach(productID => {
+      const sizes = groupedCartItems[productID];
+      const product = productsData.find(p => p.id === productID);
+
+      sizes.forEach(sizeID => {
+        const size = product.sizes.find(s => s.value.id === sizeID);
+        items.push({ ...product, size, cartItemToken: `${product.id}:${sizeID}` });
+      });
+    });
+
+    data.cartItems = items;
   }
 
   return data;

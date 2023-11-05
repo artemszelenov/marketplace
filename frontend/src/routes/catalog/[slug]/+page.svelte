@@ -2,11 +2,11 @@
   import type { Size } from "$lib/stores/cart";
 
   import AddToCart from "$lib/components/AddToCart.svelte";
-  import { cartItems, addOne, removeOne, createID } from "$lib/stores/cart";
+  import { cartItems } from "$lib/stores/cart";
 
   export let data;
 
-  const { title, description, gallery, price, sizes, id } = data.product;
+  const { title, description, gallery, price, sizes, id, type } = data.product;
 
   let currentSize: Size | undefined = undefined;
   const productInCart = $cartItems.find((item) => item.id.split(":")[0] === id);
@@ -21,6 +21,12 @@
     return () => {
       currentSize = sizePayload;
     };
+  }
+
+  function sizeTitle(size: Size) {
+    return type === "shoes"
+      ? size.value[data.user?.shoeSizeMetric ?? "eu"]
+      : size.value.title;
   }
 </script>
 
@@ -88,8 +94,9 @@
             <label
               class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
               for={size.value.id}
+              title={size.inStockCount ? "Выбрать размер" : "Нет в наличии"}
             >
-              {size.value[data.user?.shoeSizeMetric ?? "eu"]}
+              {sizeTitle(size)}
             </label>
           {/each}
         </div>

@@ -14,11 +14,13 @@
 
   $: {
     cartItems = initialCartItems.filter((initCartItem) =>
-      $store.some((storeItem) => initCartItem.id === storeItem.id)
+      $store.some((storeItem) => initCartItem.cartItemToken === storeItem.id)
     );
 
     total = cartItems.reduce((acc, item) => {
-      const quantity = $store.find((storeItem) => storeItem.id === item.id)!.q;
+      const quantity = $store.find(
+        (storeItem) => storeItem.id === item.cartItemToken
+      )!.q;
       acc += item.price * quantity;
       return acc;
     }, 0);
@@ -30,9 +32,9 @@
 <div class="grid grid-cols-2 mt-5">
   <div>
     <ul class="space-y-7">
-      {#each cartItems as product (product.id)}
+      {#each cartItems as product (product.size.value.id)}
         <li>
-          <CartItem {product} />
+          <CartItem {product} size={product.size} />
         </li>
       {/each}
     </ul>
@@ -44,7 +46,7 @@
     </p>
 
     <p class="mt-4 text-xl font-semibold">
-      <span class="">Итого:</span>
+      <span>Итого:</span>
       <span>{total.toLocaleString("ru-RU") + " руб."}</span>
     </p>
 

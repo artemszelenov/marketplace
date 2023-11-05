@@ -40,7 +40,7 @@
   </ul>
 
   <h1 class="mt-3 font-semibold">
-    <a href="/catalog/{id}" rel="prefetch-intent">
+    <a href="/catalog/{id}">
       {title}
     </a>
   </h1>
