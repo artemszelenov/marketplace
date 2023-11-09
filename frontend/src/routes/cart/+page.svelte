@@ -14,14 +14,12 @@
 
   $: {
     cartItems = initialCartItems.filter((initCartItem) =>
-      $store.some((storeItem) => initCartItem.cartItemToken === storeItem.id)
+      $store.some((storeItem) => initCartItem.id === storeItem.id)
     );
 
     total = cartItems.reduce((acc, item) => {
-      const quantity = $store.find(
-        (storeItem) => storeItem.id === item.cartItemToken
-      )!.q;
-      acc += item.price * quantity;
+      const quantity = $store.find((storeItem) => storeItem.id === item.id)!.q;
+      acc += item.product.price * quantity;
       return acc;
     }, 0);
   }
@@ -32,9 +30,9 @@
 <div class="grid grid-cols-2 mt-5">
   <div>
     <ul class="space-y-7">
-      {#each cartItems as product (product.size.value.id)}
+      {#each cartItems as { product, size } (size.value.id)}
         <li>
-          <CartItem {product} size={product.size} />
+          <CartItem {product} {size} />
         </li>
       {/each}
     </ul>

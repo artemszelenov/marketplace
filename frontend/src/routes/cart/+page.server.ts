@@ -1,12 +1,15 @@
-import type { Product } from "$lib/server/cms/api/cart";
-import { getCartItems } from "$lib/server/cms/api/cart";
+import type { z } from "zod";
+import type { CartItemResult } from "$lib/schema";
+type CartItem = z.infer<typeof CartItemResult>
 
 type CartData = {
-  cartItems: Product[],
+  cartItems: CartItem[],
   seo: {
     title: string
   }
 }
+
+import { getCartItems } from "$lib/server/cms/api/cart";
 
 export async function load({ url, fetch }) {
   const cartItems = url.searchParams.get("items");
@@ -19,31 +22,37 @@ export async function load({ url, fetch }) {
   }
 
   if (cartItems) {
-    const groupedCartItems = cartItems.split(',').reduce((acc, item) => {
-      const [productID, sizeID] = item.split(':');
+    const groupedCartItems = cartItems
+      .split(',')
+      .reduce((acc, item) => {
+        const [productID, sizeID] = item.split(':');
 
-      if (acc[productID]) {
-        acc[productID].push(sizeID);
-      } else {
-        acc[productID] = [sizeID];
-      }
+        if (acc[productID]) {
+          acc[productID].push(sizeID);
+        } else {
+          acc[productID] = [sizeID];
+        }
 
-      return acc;
-    }, {});
+        return acc;
+      }, {} as { [key: string]: string[] });
 
     const uniqueProductsIDs = Object.keys(groupedCartItems).join(',');
   
     const productsData = await getCartItems(fetch, uniqueProductsIDs);
 
-    const items = [];
+    const items: CartItem[] = [];
 
     Object.keys(groupedCartItems).forEach(productID => {
       const sizes = groupedCartItems[productID];
       const product = productsData.find(p => p.id === productID);
 
+      if (!product) return
+
       sizes.forEach(sizeID => {
         const size = product.sizes.find(s => s.value.id === sizeID);
-        items.push({ ...product, size, cartItemToken: `${product.id}:${sizeID}` });
+        if (size) {
+          items.push({ product, size, id: `${product.id}:${sizeID}` });
+        }
       });
     });
 

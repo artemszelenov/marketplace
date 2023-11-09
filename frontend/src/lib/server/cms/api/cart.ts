@@ -18,5 +18,5 @@ export async function getCartItems(query: typeof fetch, productsIDs: string): Pr
   const json = await res.json();
   const products = json.docs as ProductDoc[];
 
-  return products.map(buildProduct);
+  return products.map(buildProduct) ?? [];
 }

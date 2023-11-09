@@ -15,6 +15,17 @@ export const ImageResult = z
     }),
   });
 
+export const SizeResult = z
+  .object({
+    inStockCount: z.number(),
+    value: z.intersection(
+      z.object({
+        id: z.string()
+      }),
+      z.record(z.string())
+    )
+  });
+
 export const ProductResult = z
   .object({
     id: z.string(),
@@ -23,12 +34,14 @@ export const ProductResult = z
     description: z.string(),
     price: z.number(),
     gallery: z.array(ImageResult),
-    sizes: z.array(z.object({
-      inStockCount: z.number(),
-      value: z.object({
-        id: z.string()
-      })
-    }))
+    sizes: z.array(SizeResult)
+  });
+
+export const CartItemResult = z
+  .object({
+    id: z.string(), // consists of two parts: {id of product}:{id of size}
+    product: ProductResult,
+    size: SizeResult
   });
 
 export const StorageCartItemResult = z

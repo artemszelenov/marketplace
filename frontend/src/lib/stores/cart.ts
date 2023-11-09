@@ -5,7 +5,8 @@ type StorageCartItem = z.infer<typeof StorageCartItemResult>
 export type Size = {
   inStockCount: number,
   value: {
-    id: string
+    id: string,
+    [key: string]: string
   }
 }
 
