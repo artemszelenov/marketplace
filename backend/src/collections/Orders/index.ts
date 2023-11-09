@@ -24,10 +24,9 @@ const Orders: CollectionConfig = {
     update: admins,
     delete: admins,
   },
-  hooks: {
-    afterChange: [syncUser],
-  },
-  timestamps: true,
+  // hooks: {
+  //   afterChange: [syncUser],
+  // },
   fields: [
     {
       name: 'orderedBy',
