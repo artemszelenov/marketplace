@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload/types'
 import { admins } from '../../access/admins'
 import { adminsAndOrderedBy } from './access/adminsAndOrderedBy'
 import { syncUser } from './hooks/syncUser'
+import { syncProducts } from './hooks/syncProducts'
 
 const Orders: CollectionConfig = {
   slug: 'orders',
@@ -24,9 +25,9 @@ const Orders: CollectionConfig = {
     update: admins,
     delete: admins,
   },
-  // hooks: {
-  //   afterChange: [syncUser],
-  // },
+  hooks: {
+    afterChange: [syncUser, syncProducts]
+  },
   fields: [
     {
       name: 'orderedBy',
@@ -63,6 +64,12 @@ const Orders: CollectionConfig = {
           name: 'product',
           type: 'relationship',
           relationTo: 'products',
+          hasMany: false,
+        },
+        {
+          name: 'size',
+          type: 'relationship',
+          relationTo: ['shoe-sizes', 'clothing-sizes'],
           hasMany: false,
         },
         // keep a static copy of these fields as they appear at the time of the order

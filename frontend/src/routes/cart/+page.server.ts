@@ -1,5 +1,5 @@
+import type { Order } from "$lib/schema";
 import { getCartItems } from "$lib/server/cms/api/cart";
-import { fail, redirect } from "@sveltejs/kit";
 import * as cms from "$lib/server/cms/api/order";
 
 export async function load({ url, fetch }) {
@@ -14,10 +14,11 @@ export async function load({ url, fetch }) {
 }
 
 export const actions = {
-  proceedOrder: async ({ request, cookies, locals, fetch }) => {
+  proceedOrder: async ({ request, locals, fetch }) => {
     const data = await request.formData();
-    const currentCartInputData = data.get("current-cart") as string;
-    const currentCart = JSON.parse(currentCartInputData) as Array<{ id: string, q: number }>;
-    // cms.proceedOrder(fetch)
+    const orderData = data.get("order") as string;
+    const order = JSON.parse(orderData) as Order;
+   
+    cms.proceedOrder(fetch, { order, user: locals.user! });
   }
 }

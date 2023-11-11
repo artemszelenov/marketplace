@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Size } from "$lib/stores/cart";
+  import type { Size } from "$lib/schema";
 
   import AddToCart from "$lib/components/AddToCart.svelte";
   import { cartItems } from "$lib/stores/cart";
@@ -13,7 +13,7 @@
 
   if (productInCart) {
     currentSize = sizes.find(
-      (size) => size.value.id === productInCart.id.split(":")[1]
+      (size) => size.id === productInCart.id.split(":")[1]
     );
   }
 
@@ -25,8 +25,8 @@
 
   function sizeTitle(size: Size) {
     return type === "shoes"
-      ? size.value[data.user?.shoeSizeMetric ?? "eu"]
-      : size.value.title;
+      ? size.size.value[data.user?.shoeSizeMetric ?? "eu"]
+      : size.size.value.title;
   }
 </script>
 
@@ -80,20 +80,20 @@
         >
           <p id="sizes-label-{id}" class="visually-hidden">Выберите размер</p>
 
-          {#each sizes as size (size.value.id)}
+          {#each sizes as size (size.id)}
             <input
-              id={size.value.id}
+              id={size.id}
               class="visually-hidden"
               type="radio"
               name="size"
-              value={size.value.id}
+              value={size.id}
               checked={!!currentSize}
               disabled={!size.inStockCount}
               on:change={handleChangeSize(size)}
             />
             <label
               class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
-              for={size.value.id}
+              for={size.id}
               title={size.inStockCount ? "Выбрать размер" : "Нет в наличии"}
             >
               {sizeTitle(size)}

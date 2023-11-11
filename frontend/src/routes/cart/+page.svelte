@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { OrderItem, Order } from "$lib/schema";
   import { page } from "$app/stores";
   import CartItem from "$lib/components/CartItem.svelte";
   import AuthForm from "$lib/components/AuthForm.svelte";
@@ -7,21 +8,49 @@
 
   export let data;
 
-  const { cartItems: initialCartItems } = data;
+  const { cartItems } = data;
 
-  let cartItems = initialCartItems;
+  let orderItems: OrderItem[] = [];
   let total = 0;
+  let order: Order = {
+    items: orderItems,
+    total,
+  };
 
   $: {
-    cartItems = initialCartItems.filter((initCartItem) =>
-      $store.some((storeItem) => initCartItem.id === storeItem.id)
-    );
+    orderItems = cartItems
+      .filter((initCartItem) =>
+        $store.some((storeItem) => initCartItem.id === storeItem.id)
+      )
+      .map((initCartItem) => {
+        const { q } = $store.find(
+          (storeItem) => initCartItem.id === storeItem.id
+        )!;
+        return {
+          ...initCartItem,
+          quantity: q,
+        };
+      });
 
-    total = cartItems.reduce((acc, item) => {
-      const quantity = $store.find((storeItem) => storeItem.id === item.id)!.q;
-      acc += item.product.price * quantity;
+    total = orderItems.reduce((acc, item) => {
+      acc += item.product.price * item.quantity;
       return acc;
     }, 0);
+
+    order = {
+      items: orderItems.map(({ quantity, product, size, id }) => ({
+        id,
+        quantity,
+        product: {
+          title: product.title,
+        },
+        size: {
+          valueID: size.size.value.id,
+          relationTo: size.size.relationTo,
+        },
+      })),
+      total,
+    };
   }
 </script>
 
@@ -36,7 +65,7 @@
   {:else}
     <div>
       <ul class="space-y-7">
-        {#each cartItems as { product, size } (size.value.id)}
+        {#each cartItems as { product, size } (size.id)}
           <li>
             <CartItem {product} {size} />
           </li>
@@ -55,11 +84,7 @@
       </p>
 
       <form method="POST" action="?/proceedOrder" class="mt-4">
-        <input
-          type="hidden"
-          name="current-cart"
-          value={JSON.stringify($store)}
-        />
+        <input type="hidden" name="order" value={JSON.stringify(order)} />
 
         <Button
           variant="primary"

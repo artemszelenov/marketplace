@@ -6,7 +6,7 @@
 
 <div class="flex gap=5">
   <aside class="w-[250px] shrink-0">
-    <h2 class="text-xl font-semibold">{user?.name ?? "Аноним"}</h2>
+    <h2 class="text-xl font-semibold">{user?.name}</h2>
 
     <nav class="mt-5 -ml-2">
       <a class="block w-full px-2 py-2" href="/">Мои заказы</a>

@@ -10,7 +10,7 @@
   const { gallery, id, title, price } = product;
 </script>
 
-<article class="actions-show-on-hover">
+<article>
   <img
     class="aspect-square rounded object-cover"
     src={gallery[activeImageID].src}
@@ -22,24 +22,29 @@
     loading="eager"
   />
 
-  <ul class="flex mt-1 space-x-1 overflow-x-auto">
+  <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
     {#each gallery as { thumbnail }, index}
       <li class="w-8 shrink-0">
-        <img
-          class="rounded cursor-pointer"
-          src={thumbnail.src}
-          alt={thumbnail.alt}
-          width={thumbnail.width}
-          height={thumbnail.height}
-          decoding="async"
-          loading="lazy"
+        <button
+          type="button"
+          class="block"
           on:click={() => (activeImageID = index)}
-        />
+        >
+          <img
+            class="rounded cursor-pointer"
+            src={thumbnail.src}
+            alt={thumbnail.alt}
+            width={thumbnail.width}
+            height={thumbnail.height}
+            decoding="async"
+            loading="lazy"
+          />
+        </button>
       </li>
     {/each}
   </ul>
 
-  <h1 class="mt-3 font-semibold">
+  <h1 class="mt-1 font-semibold">
     <a href="/catalog/{id}">
       {title}
     </a>

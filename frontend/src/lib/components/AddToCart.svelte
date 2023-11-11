@@ -1,8 +1,5 @@
 <script lang="ts">
-  import type { z } from "zod";
-  import type { ProductResult } from "$lib/schema";
-  import type { Size } from "$lib/stores/cart";
-  type Product = z.infer<typeof ProductResult>;
+  import type { Product, Size } from "$lib/schema";
 
   import { cartItems, addOne, removeOne, createID } from "$lib/stores/cart";
 

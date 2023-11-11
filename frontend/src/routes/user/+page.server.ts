@@ -1,6 +1,12 @@
 import { fail, redirect } from "@sveltejs/kit";
 import * as cms from "$lib/server/cms/api/auth";
 
+export async function load({ locals }) {
+  if (!locals.user) {
+    throw redirect(303, "/");
+  }
+}
+
 export const actions = {
   login: async ({ request, cookies, locals, fetch }) => {
     const data = await request.formData();

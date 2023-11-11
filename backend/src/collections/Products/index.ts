@@ -166,7 +166,7 @@ const Products: CollectionConfig = {
                 plural: 'Размеры',
               },
               minRows: 1,
-              unique: true,
+              unique: true, // пофиксить, сейчас не уникальные
               fields: [
                 {
                   name: 'size',
@@ -176,7 +176,8 @@ const Products: CollectionConfig = {
                   label: {
                     ru: 'Размер'
                   },
-                  required: true
+                  required: true,
+                  unique: true,
                 },
                 {
                   name: 'inStockCount',

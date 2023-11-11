@@ -48,7 +48,7 @@ export async function getCartItems(query: typeof fetch, cartItemsIDs?: string | 
     if (!product) return
 
     sizes.forEach(sizeID => {
-      const size = product.sizes.find(s => s.value.id === sizeID);
+      const size = product.sizes.find(({ id }) => id === sizeID);
       if (size) {
         items.push({ product, size, id: `${product.id}:${sizeID}` });
       }

@@ -1,14 +1,4 @@
-import type { z } from "zod";
-import type { StorageCartItemResult } from "$lib/schema";
-type StorageCartItem = z.infer<typeof StorageCartItemResult>
-
-export type Size = {
-  inStockCount: number,
-  value: {
-    id: string,
-    [key: string]: string
-  }
-}
+import type { StorageCartItem, Size } from "$lib/schema";
 
 type Payload = {
   productID: string,
@@ -79,7 +69,7 @@ export const clear = action(cartItems, 'clear', cartItems => {
 });
 
 export function createID(productID: string, size: Size) {
-  return `${productID}:${size.value.id}`
+  return `${productID}:${size.id}`
 };
 
 export const queryString = computed(cartItems, store => {

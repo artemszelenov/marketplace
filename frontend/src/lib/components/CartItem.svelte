@@ -1,12 +1,10 @@
 <script lang="ts">
-  import type { z } from "zod";
-  import type { ProductResult } from "$lib/schema";
-  import type { Size } from "$lib/stores/cart";
+  import type { Product, Size } from "$lib/schema";
 
   import { page } from "$app/stores";
   import AddToCart from "./AddToCart.svelte";
 
-  export let product: z.infer<typeof ProductResult>;
+  export let product: Product;
   export let size: Size;
 
   let activeImageID = 0;
@@ -15,8 +13,8 @@
 
   const sizeTitle =
     type === "shoes"
-      ? size.value[$page.data.user?.shoeSizeMetric ?? "eu"]
-      : size.value.title;
+      ? size.size.value[$page.data.user?.shoeSizeMetric ?? "eu"]
+      : size.size.value.title;
 </script>
 
 <article class="flex space-x-5 actions-show-on-hover">
