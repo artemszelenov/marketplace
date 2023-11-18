@@ -3,7 +3,6 @@ import type { CollectionConfig } from 'payload/types'
 import { admins } from '../../access/admins'
 import { adminsAndOrderedBy } from './access/adminsAndOrderedBy'
 import { syncUser } from './hooks/syncUser'
-import { syncProducts } from './hooks/syncProducts'
 
 const Orders: CollectionConfig = {
   slug: 'orders',
@@ -17,7 +16,8 @@ const Orders: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'createdAt',
-    defaultColumns: ['createdAt']
+    defaultColumns: ['createdAt'],
+    group: 'Заказы'
   },
   access: {
     read: adminsAndOrderedBy,
@@ -26,9 +26,17 @@ const Orders: CollectionConfig = {
     delete: admins,
   },
   hooks: {
-    afterChange: [syncUser, syncProducts]
+    afterChange: [syncUser]
   },
   fields: [
+    {
+      name: 'delivered',
+      type: 'checkbox',
+    },
+    {
+      name: 'total',
+      type: 'number',
+    },
     {
       name: 'orderedBy',
       type: 'group',
@@ -42,11 +50,6 @@ const Orders: CollectionConfig = {
           relationTo: 'users',
           hasMany: false,
         },
-        // keep a static copy of these fields as they appear at the time of the order
-        {
-          name: 'name',
-          type: 'text',
-        },
         {
           name: 'email',
           type: 'text',
@@ -54,34 +57,10 @@ const Orders: CollectionConfig = {
       ],
     },
     {
-      name: 'items',
-      type: 'array',
-      admin: {
-        readOnly: true,
-      },
-      fields: [
-        {
-          name: 'product',
-          type: 'relationship',
-          relationTo: 'products',
-          hasMany: false,
-        },
-        {
-          name: 'size',
-          type: 'relationship',
-          relationTo: ['shoe-sizes', 'clothing-sizes'],
-          hasMany: false,
-        },
-        // keep a static copy of these fields as they appear at the time of the order
-        {
-          name: 'title',
-          type: 'text',
-        },
-        {
-          name: 'quantity',
-          type: 'number',
-        },
-      ],
+      name: 'orderItems',
+      type: 'relationship',
+      relationTo: 'order-items',
+      hasMany: true,
     },
   ],
 }

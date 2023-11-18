@@ -7,6 +7,7 @@ import Users from './collections/Users'
 import Products from './collections/Products'
 import Media from './collections/Media'
 import Orders from './collections/Orders'
+import OrderItems from './collections/OrderItems'
 import Categories from './collections/Categories'
 import ShoeSizes from './collections/ShoeSizes'
 import ClothingSizes from './collections/ClothingSizes'
@@ -24,6 +25,7 @@ let config: Config = {
   collections: [
     Users,
     Orders,
+    OrderItems,
     Products,
     Categories,
     ShoeSizes,
