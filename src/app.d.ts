@@ -1,14 +1,15 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 import type { z } from "zod";
-import type { UserResult } from "$lib/schema";
-type User = z.infer<typeof UserResult>;
+import type PocketBase from "pocketbase";
+import type { User } from "$lib/schema";
 
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
 			user: User | null
+			pb: PocketBase
 			seo: {
 				title: string
 			}
@@ -21,7 +22,7 @@ declare global {
 export {};
 
 interface ImportMetaEnv {
-  readonly PUBLIC_BACKEND_URL: string
+  readonly PUBLIC_POCKETBASE_URL: string
 }
 
 interface ImportMeta {

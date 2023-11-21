@@ -1,16 +1,18 @@
-import { me } from "$lib/server/cms/api/auth";
+import { PUBLIC_POCKETBASE_URL } from "$env/static/public";
+import PocketBase from "pocketbase";
+import type { User } from "$lib/schema";
 
 export async function handle({ event, resolve }) {
-  const token = event.cookies.get("payload-token");
-  let user = null;
+  event.locals.pb = new PocketBase(PUBLIC_POCKETBASE_URL);
+  event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || "");
+  event.locals.user = null;
 
-  if (token) {
-    const meResponse = await me(event.fetch, { token });
-    const json = await meResponse.json();
-    user = json.user;
+  if (event.locals.pb.authStore.isValid) {
+    event.locals.user = event.locals.pb.authStore.model as User;
   }
 
-  event.locals.user = user;
-
-  return resolve(event);
+  const response = await resolve(event);
+  // TODO: make secure on prod
+  response.headers.set('Set-Cookie', event.locals.pb.authStore.exportToCookie({ secure: false }));
+	return response;
 };

@@ -14,6 +14,12 @@ export const actions = {
     const passwordInput = data.get("password");
     const redirectTo = data.get("redirect-to");
 
+    // try {
+
+    // } catch (err) {
+    //   return fail(422, { errors });
+    // }
+
     if (emailInput && passwordInput) {
       const res = await cms.login(fetch, {
         email: emailInput.toString(),

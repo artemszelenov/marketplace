@@ -1,13 +1,10 @@
-import { getProducts } from '$lib/server/cms/api/products';
-import { buildProduct } from '$lib/utils/products';
-
-export async function load({ fetch }) {
-  const docs = await getProducts(fetch);
-
-  const products = docs.map(buildProduct);
+export async function load({ locals }) {
+  const teasers = await locals.pb
+    .collection('product_teasers')
+    .getFullList();
 
   return {
-    products,
+    teasers,
     seo: {
       title: "Каталог"
     }

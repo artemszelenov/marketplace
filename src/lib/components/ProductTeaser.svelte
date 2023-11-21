@@ -1,7 +1,5 @@
 <script lang="ts">
-  import type { z } from "zod";
-  import type { ProductResult } from "$lib/schema";
-  type Product = z.infer<typeof ProductResult>;
+  import type { Product } from "$lib/schema";
 
   export let product: Product;
 
@@ -11,7 +9,7 @@
 </script>
 
 <article>
-  <img
+  <!-- <img
     class="aspect-square rounded object-cover"
     src={gallery[activeImageID].src}
     alt={gallery[activeImageID].alt}
@@ -20,9 +18,9 @@
     srcset={gallery[activeImageID].srcset}
     decoding="async"
     loading="eager"
-  />
+  /> -->
 
-  <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
+  <!-- <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
     {#each gallery as { thumbnail }, index}
       <li class="w-8 shrink-0">
         <button
@@ -42,7 +40,7 @@
         </button>
       </li>
     {/each}
-  </ul>
+  </ul> -->
 
   <h1 class="mt-1 font-semibold">
     <a href="/catalog/{id}">

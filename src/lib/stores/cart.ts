@@ -1,8 +1,8 @@
-import type { StorageCartItem, Size } from "$lib/schema";
+import type { StorageCartItem } from "$lib/schema";
 
 type Payload = {
-  productID: string,
-  size?: Size
+  stock_item_id: string
+  count: number
 }
 
 import { action, computed } from "nanostores";
@@ -13,18 +13,15 @@ export const cartItems = persistentAtom<StorageCartItem[]>('cart_items', [], {
   decode: JSON.parse
 });
 
-export const addOne = action(cartItems, 'addOne', (cartItems, { productID, size }: Payload) => {
-  if (!size) return;
-
-  const id = createID(productID, size);
-  const currentCartItem = cartItems.get().find(item => item.id === id);
+export const addOne = action(cartItems, 'addOne', (cartItems, payload: Payload) => {
+  const currentCartItem = cartItems.get().find(item => item.stock_item_id === payload.stock_item_id);
 
   if (currentCartItem) {
-    if (currentCartItem.q + 1 > size.inStockCount) return currentCartItem;
+    if (currentCartItem.quantity + 1 > payload.count) return currentCartItem;
 
     cartItems.set(cartItems.get().map(item => {
-      if (item.id === id) {
-        return { ...item, q: item.q += 1 }
+      if (item.stock_item_id === payload.stock_item_id) {
+        return { ...item, quantity: item.quantity += 1 }
       }
       return item;
     }))
@@ -32,26 +29,23 @@ export const addOne = action(cartItems, 'addOne', (cartItems, { productID, size 
     return currentCartItem;
   }
 
-  const newItem = { id, q: 1 }
+  const newItem = { stock_item_id: payload.stock_item_id, quantity: 1 }
 
   cartItems.set([...cartItems.get(), newItem]);
 
   return newItem;
 });
 
-export const removeOne = action(cartItems, 'removeOne', (cartItems, { productID, size }: Payload) => {
-  if (!size) return;
-
-  const id = createID(productID, size);
-  const currentCartItem = cartItems.get().find(item => item.id === id);
+export const removeOne = action(cartItems, 'removeOne', (cartItems, payload: Payload) => {
+  const currentCartItem = cartItems.get().find(item => item.stock_item_id === payload.stock_item_id);
 
   if (currentCartItem) {
-    if (currentCartItem.q === 1) {
-      cartItems.set(cartItems.get().filter(item => item.id !== id));
+    if (currentCartItem.quantity === 1) {
+      cartItems.set(cartItems.get().filter(item => item.stock_item_id !== payload.stock_item_id));
     } else {
       cartItems.set(cartItems.get().map(item => {
-        if (item.id === id) {
-          return { ...item, q: item.q -= 1 }
+        if (item.stock_item_id === payload.stock_item_id) {
+          return { ...item, quantity: item.quantity -= 1 }
         }
         return item;
       }))
@@ -68,14 +62,10 @@ export const clear = action(cartItems, 'clear', cartItems => {
   return cartItems.get();
 });
 
-export function createID(productID: string, size: Size) {
-  return `${productID}:${size.id}`
-};
-
 export const queryString = computed(cartItems, store => {
   if (store.length === 0) return "";
 
-  const ids = store.map(item => item.id).join(',');
+  const ids = store.map(item => item.stock_item_id).join(',');
 
   return `?items=${ids}`;
 });

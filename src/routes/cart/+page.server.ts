@@ -10,7 +10,7 @@ export async function load({ url, fetch }) {
     seo: {
       title: "Корзина"
     }
-  };
+  }
 }
 
 export const actions = {
