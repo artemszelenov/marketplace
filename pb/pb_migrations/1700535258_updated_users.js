@@ -1,20 +1,20 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((db) => {
   const dao = new Dao(db)
-  const collection = dao.findCollectionByNameOrId("xm6bh11t1lp04tn")
+  const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
 
   // update
   collection.schema.addField(new SchemaField({
     "system": false,
-    "id": "bmmaunrp",
-    "name": "product",
+    "id": "pomkvjfu",
+    "name": "preferred_size_metric",
     "type": "relation",
     "required": false,
     "presentable": false,
     "unique": false,
     "options": {
-      "collectionId": "3n9p0uyhgeoqdd0",
-      "cascadeDelete": true,
+      "collectionId": "hatflxx7dllaea7",
+      "cascadeDelete": false,
       "minSelect": null,
       "maxSelect": 1,
       "displayFields": null
@@ -24,19 +24,19 @@ migrate((db) => {
   return dao.saveCollection(collection)
 }, (db) => {
   const dao = new Dao(db)
-  const collection = dao.findCollectionByNameOrId("xm6bh11t1lp04tn")
+  const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
 
   // update
   collection.schema.addField(new SchemaField({
     "system": false,
-    "id": "bmmaunrp",
-    "name": "product",
+    "id": "pomkvjfu",
+    "name": "preferred_size_metric",
     "type": "relation",
-    "required": false,
+    "required": true,
     "presentable": false,
     "unique": false,
     "options": {
-      "collectionId": "3n9p0uyhgeoqdd0",
+      "collectionId": "hatflxx7dllaea7",
       "cascadeDelete": false,
       "minSelect": null,
       "maxSelect": 1,

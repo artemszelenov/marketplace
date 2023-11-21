@@ -1,12 +1,20 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((db) => {
   const dao = new Dao(db)
-  const collection = dao.findCollectionByNameOrId("3n9p0uyhgeoqdd0")
+  const collection = dao.findCollectionByNameOrId("1bbf8wbkacn5czw")
+
+  // remove
+  collection.schema.removeField("exdwyve2")
+
+  return dao.saveCollection(collection)
+}, (db) => {
+  const dao = new Dao(db)
+  const collection = dao.findCollectionByNameOrId("1bbf8wbkacn5czw")
 
   // add
   collection.schema.addField(new SchemaField({
     "system": false,
-    "id": "qs3myj7f",
+    "id": "exdwyve2",
     "name": "visible",
     "type": "bool",
     "required": false,
@@ -14,14 +22,6 @@ migrate((db) => {
     "unique": false,
     "options": {}
   }))
-
-  return dao.saveCollection(collection)
-}, (db) => {
-  const dao = new Dao(db)
-  const collection = dao.findCollectionByNameOrId("3n9p0uyhgeoqdd0")
-
-  // remove
-  collection.schema.removeField("qs3myj7f")
 
   return dao.saveCollection(collection)
 })
