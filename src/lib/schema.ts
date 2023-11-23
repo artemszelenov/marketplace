@@ -7,7 +7,10 @@ export const UserResult = z
     name: z.string(),
     email: z.string().email(),
     verified: z.boolean(),
-    preferred_size_metric: z.string(),
+    preferred_shoe_size_metric: z.object({
+      title: z.string(),
+      value: z.enum(["eu", "uk"])
+    }),
   });
 
 export type User = z.infer<typeof UserResult>
@@ -15,6 +18,7 @@ export type User = z.infer<typeof UserResult>
 export const ProductResult = z
   .object({
     id: z.string(),
+    type: z.enum(["shoes", "pants"]),
     title: z.string(),
     description: z.string(),
     price: z.number(),
@@ -22,6 +26,36 @@ export const ProductResult = z
   });
 
 export type Product = z.infer<typeof ProductResult>
+
+export const ProductTeaserResult = z
+  .object({
+    id: z.string(),
+    title: z.string(),
+    price: z.number(),
+    gallery: z.array(z.string())
+  });
+
+export type ProductTeaser = z.infer<typeof ProductTeaserResult>
+
+export const StockItemResult = z
+  .object({
+    id: z.string(),
+    product_id: z.string(),
+    size_group_id: z.string(),
+    count: z.number(),
+    details: z.record(z.string())
+  });
+
+export type StockItem = z.infer<typeof StockItemResult>
+
+export const CartItemResult = z
+  .object({
+    id: z.string(),
+    product_id: z.string(),
+    count: z.number()
+  });
+
+export type CartItem = z.infer<typeof CartItemResult>
 
 export const OrderItemResult = z
   .object({
@@ -32,14 +66,6 @@ export const OrderItemResult = z
   });
 
 export type OrderItem = z.infer<typeof OrderItemResult>
-
-export const StorageCartItemResult = z
-  .object({
-    stock_item_id: z.string(),
-    quantity: z.number()
-  });
-
-export type StorageCartItem = z.infer<typeof StorageCartItemResult>
 
 export const OrderResult = z
   .object({

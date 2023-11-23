@@ -1,32 +1,25 @@
 <script lang="ts">
   import AddToCart from "$lib/components/AddToCart.svelte";
   import { cartItems } from "$lib/stores/cart";
+  import type { CartItem, StockItem } from "$lib/schema";
 
   export let data;
 
-  const { title, description, gallery, price, id } = data.product;
-  const {  } = data.stock_items;
+  const { type, title, description, gallery, price, id: product_id } = data.product;
 
-  // let currentSize;
-  // const productInCart = $cartItems.find((item) => item.id.split(":")[0] === id);
+  let currentStockItem: CartItem | undefined = $cartItems.find(item => item.product_id === product_id);
 
-  // if (productInCart) {
-  //   currentSize = sizes.find(
-  //     (size) => size.id === productInCart.id.split(":")[1]
-  //   );
-  // }
+  function handleChangeSize(sizePayload: CartItem) {
+    return () => {
+      currentStockItem = sizePayload;
+    };
+  }
 
-  // function handleChangeSize(sizePayload: Size) {
-  //   return () => {
-  //     currentSize = sizePayload;
-  //   };
-  // }
-
-  // function sizeTitle(size: Size) {
-  //   return type === "shoes"
-  //     ? size.size.value[data.user?.preferred_size_metric ?? "eu"]
-  //     : size.size.value.title;
-  // }
+  function sizeTitle(size: StockItem) {
+    return type === "shoes"
+      ? size.details[size.size_group_id][data.user?.preferred_shoe_size_metric.value ?? "eu"].title
+      : size.details[size.size_group_id].international.title;
+  }
 </script>
 
 <div
@@ -57,14 +50,19 @@
 
       <p class="text-xl mt-2">{price.toLocaleString("ru-RU") + " руб."}</p>
 
-      <div class="mt-5">
-        <AddToCart
-          product={data.product}
-          size={currentSize}
-          cartButtonStyle="primary"
-          variant="compact"
-        />
-      </div>
+      {#if currentStockItem}
+        <div class="mt-5">
+          <AddToCart
+            stockItem={currentStockItem}
+            cartButtonStyle="primary"
+            variant="compact"
+          />
+        </div>
+      {:else}
+        <p class="mt-1 text-sm text-grey">
+          Чтобы добавить этот товар в корзину выберите один из размеров ниже
+        </p>
+      {/if}
 
       <div class="mt-5">
         <h2 class="text-xl font-semibold">Размеры</h2>
@@ -72,25 +70,25 @@
         <div
           class="grid grid-cols-4 gap-3 mt-3"
           role="radiogroup"
-          aria-labelledby="sizes-label-{id}"
+          aria-labelledby="sizes-label-{product_id}"
         >
-          <p id="sizes-label-{id}" class="visually-hidden">Выберите размер</p>
+          <p id="sizes-label-{product_id}" class="visually-hidden">Выберите размер</p>
 
-          {#each sizes as size (size.id)}
+          {#each data.stock_items as size (size.id)}
             <input
               id={size.id}
               class="visually-hidden"
               type="radio"
               name="size"
               value={size.id}
-              checked={!!currentSize}
-              disabled={!size.inStockCount}
-              on:change={handleChangeSize(size)}
+              checked={currentStockItem?.id === size.id}
+              disabled={size.count === 0}
+              on:change={handleChangeSize({ count: size.count, id: size.id, product_id: size.product_id })}
             />
             <label
               class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
               for={size.id}
-              title={size.inStockCount ? "Выбрать размер" : "Нет в наличии"}
+              title={size.count > 0 ? "Выбрать размер" : "Нет в наличии"}
             >
               {sizeTitle(size)}
             </label>
@@ -98,7 +96,7 @@
         </div>
       </div>
 
-      <p class="mt-5">{description}</p>
+      <p class="mt-5">{@html description}</p>
     </div>
   </div>
 </div>
