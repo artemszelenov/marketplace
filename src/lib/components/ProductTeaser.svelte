@@ -9,38 +9,37 @@
 </script>
 
 <article>
-  <!-- <img
-    class="aspect-square rounded object-cover"
-    src={gallery[activeImageID].src}
-    alt={gallery[activeImageID].alt}
-    width={gallery[activeImageID].width}
-    height={gallery[activeImageID].height}
-    srcset={gallery[activeImageID].srcset}
+  <img
+    class="block aspect-square rounded object-cover"
+    src={gallery[activeImageID]}
+    alt={title}
+    width="300"
+    height="300"
     decoding="async"
     loading="eager"
-  /> -->
+  />
 
-  <!-- <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
-    {#each gallery as { thumbnail }, index}
-      <li class="w-8 shrink-0">
+  <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
+    {#each gallery as thumbnail, index}
+      <li class="shrink-0">
         <button
           type="button"
           class="block"
           on:click={() => (activeImageID = index)}
         >
           <img
-            class="rounded cursor-pointer"
-            src={thumbnail.src}
-            alt={thumbnail.alt}
-            width={thumbnail.width}
-            height={thumbnail.height}
+            class="w-11 rounded cursor-pointer"
+            src={thumbnail}
+            alt={title}
+            width="100"
+            height="100"
             decoding="async"
             loading="lazy"
           />
         </button>
       </li>
     {/each}
-  </ul> -->
+  </ul>
 
   <h1 class="mt-1 font-semibold">
     <a href="/catalog/{id}">

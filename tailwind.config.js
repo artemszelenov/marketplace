@@ -78,9 +78,9 @@ export default {
 						'background-color': theme('colors[light-grey]')
 					},
 				},
-				'img': {
-					'aspect-ratio': 'attr(width) / attr(height)'
-				},
+				// 'img': {
+				// 	'aspect-ratio': 'attr(width) / attr(height)'
+				// },
 				'p a[href]': {
 					'text-decoration': 'underline',
 					'text-underline-offset': '0.2em'

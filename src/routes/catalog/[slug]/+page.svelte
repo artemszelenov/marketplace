@@ -1,33 +1,32 @@
 <script lang="ts">
-  import type { Size } from "$lib/schema";
-
   import AddToCart from "$lib/components/AddToCart.svelte";
   import { cartItems } from "$lib/stores/cart";
 
   export let data;
 
-  const { title, description, gallery, price, sizes, id, type } = data.product;
+  const { title, description, gallery, price, id } = data.product;
+  const {  } = data.stock_items;
 
-  let currentSize: Size | undefined = undefined;
-  const productInCart = $cartItems.find((item) => item.id.split(":")[0] === id);
+  // let currentSize;
+  // const productInCart = $cartItems.find((item) => item.id.split(":")[0] === id);
 
-  if (productInCart) {
-    currentSize = sizes.find(
-      (size) => size.id === productInCart.id.split(":")[1]
-    );
-  }
+  // if (productInCart) {
+  //   currentSize = sizes.find(
+  //     (size) => size.id === productInCart.id.split(":")[1]
+  //   );
+  // }
 
-  function handleChangeSize(sizePayload: Size) {
-    return () => {
-      currentSize = sizePayload;
-    };
-  }
+  // function handleChangeSize(sizePayload: Size) {
+  //   return () => {
+  //     currentSize = sizePayload;
+  //   };
+  // }
 
-  function sizeTitle(size: Size) {
-    return type === "shoes"
-      ? size.size.value[data.user?.shoeSizeMetric ?? "eu"]
-      : size.size.value.title;
-  }
+  // function sizeTitle(size: Size) {
+  //   return type === "shoes"
+  //     ? size.size.value[data.user?.preferred_size_metric ?? "eu"]
+  //     : size.size.value.title;
+  // }
 </script>
 
 <div
@@ -35,15 +34,12 @@
 >
   <div class="lg:col-span-4 lg:row-end-1">
     <ul class="grid gap-4">
-      {#each gallery as { src, width, height, alt, srcset }}
+      {#each gallery as src}
         <li>
           <img
             class="rounded"
             {src}
-            {alt}
-            {width}
-            {height}
-            {srcset}
+            alt={title}
             decoding="async"
             loading="eager"
             sizes="100vw"
