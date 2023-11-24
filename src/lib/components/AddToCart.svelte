@@ -1,19 +1,21 @@
 <script lang="ts">
-  import type { StockItem } from "$lib/schema";
+  import type { CartItem } from "$lib/schema";
 
   import { cartItems, addOne, removeOne } from "$lib/stores/cart";
 
   import Button from "./UI/Button.svelte";
   import Icon from "./UI/Icon.svelte";
 
-  export let stockItem: StockItem;
+  export let cartItem: CartItem;
   export let variant: "full" | "compact" = "full";
   export let cartButtonStyle: "primary" | "link" = "link";
 
-  $: currentCartItem = stockItem && $cartItems.find(item => item.id === stockItem.id);
+  console.log(cartItem)
+
+  $: currentCartItem = $cartItems.find(item => item.id === cartItem.id);
 </script>
 
-{#if stockItem.count > 0}
+{#if cartItem.count > 0}
   <div class="-mt-1.5 -mr-2">
     {#if currentCartItem}
       <div class="flex items-center" class:justify-between={variant === "full"}>
@@ -27,7 +29,7 @@
               title="Удалить"
               variant="iconLink"
               extraClasses="text-red"
-              onClick={() => removeOne(stockItem)}
+              onClick={() => removeOne(cartItem)}
             >
               <Icon name="delete" class="w-7" />
             </Button>
@@ -35,13 +37,13 @@
             <Button
               title="Убрать"
               variant="iconLink"
-              onClick={() => removeOne(stockItem)}
+              onClick={() => removeOne(cartItem)}
             >
               <Icon name="minus" class="w-7" />
             </Button>
           {/if}
 
-          {#if currentCartItem.count === stockItem.count}
+          {#if currentCartItem.count === cartItem.count}
             <Button title="Больше нет в наличии" variant="iconLink" disabled>
               <Icon name="info" class="w-7" />
             </Button>
@@ -49,7 +51,7 @@
             <Button
               title="Добавить еще"
               variant="iconLink"
-              onClick={() => addOne(stockItem)}
+              onClick={() => addOne(cartItem)}
             >
               <Icon name="plus" class="w-7" />
             </Button>
@@ -62,8 +64,7 @@
           <Button
             title="Добавить в корзину"
             variant="iconLink"
-            disabled={!stockItem}
-            onClick={() => addOne(stockItem)}
+            onClick={() => addOne(cartItem)}
           >
             <Icon name="cart" class="w-7" />
           </Button>
@@ -72,8 +73,7 @@
             title="Добавить в корзину"
             variant="iconPrimary"
             extraClasses="w-full"
-            disabled={!stockItem}
-            onClick={() => addOne(stockItem)}
+            onClick={() => addOne(cartItem)}
           >
             <!-- <Icon name="cart" class="w-7" /> -->
             <span class="text-base font-medium">В корзину</span>

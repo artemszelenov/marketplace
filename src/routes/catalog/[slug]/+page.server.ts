@@ -20,6 +20,12 @@ export async function load({ params, locals }) {
       filter: stock_item_records.map(({ expand }) => `group = "${expand!.size_group.id}"`).join(' || '),
       expand: "metric, group"
     });
+  
+  const product_variants_records = await locals.pb
+    .collection('products')
+    .getFullList({
+      filter: `group = "${product_record.group}" && id != "${product_record.id}" && visible = true`
+    });
 
   const product: Product = {
     id: product_record.id,
@@ -59,9 +65,18 @@ export async function load({ params, locals }) {
     });
   });
 
+  const product_variants = product_variants_records.map(variant => {
+    return {
+      id: variant.id,
+      title: variant.title,
+      image: locals.pb.files.getUrl(variant, variant.gallery[0])
+    }
+  });
+
   return {
     product,
     stock_items,
+    product_variants,
     seo: {
       title: product.title
     }
