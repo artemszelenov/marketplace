@@ -5,13 +5,20 @@
 
   export let data;
 
-  let currentCartItem: CartItem | undefined = $cartItems.find(item => item.product_id === data.product.id);
+  let currentStockItem: StockItem | undefined = undefined;
 
-  function handleChangeSize({ count, id, product_id }: StockItem) {
-    console.log(count)
+  $: {
+    currentStockItem = data.stock_items.find(
+      stock_item => stock_item.id === $cartItems.find(
+        cart_item => cart_item.id === stock_item.id
+      )?.id
+    )
+  }
+
+  function handleChangeSize(stockItem: StockItem) {
     return () => {
-      currentCartItem = { count, id, product_id }
-    };
+      currentStockItem = stockItem
+    }
   }
 
   function sizeTitle({ details, size_group_id }: StockItem) {
@@ -49,10 +56,10 @@
 
       <p class="text-xl mt-2">{data.product.price.toLocaleString("ru-RU") + " руб."}</p>
 
-      {#if currentCartItem}
+      {#if currentStockItem}
         <div class="mt-5">
           <AddToCart
-            cartItem={currentCartItem}
+            stockItem={currentStockItem}
             cartButtonStyle="primary"
             variant="compact"
           />
@@ -80,7 +87,7 @@
               type="radio"
               name="size"
               value={size.id}
-              checked={currentCartItem?.id === size.id}
+              checked={currentStockItem?.id === size.id}
               disabled={size.count === 0}
               on:change={handleChangeSize(size)}
             />

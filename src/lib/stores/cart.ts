@@ -1,6 +1,6 @@
-import type { CartItem } from "$lib/schema";
+import type { StockItem, CartItem } from "$lib/schema";
 
-type Payload = CartItem
+type Payload = StockItem
 
 import { action, computed } from "nanostores";
 import { persistentAtom } from "@nanostores/persistent";
