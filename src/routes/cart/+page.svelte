@@ -8,7 +8,7 @@
 
   export let data;
 
-  const { cartItems } = data;
+  const { cart_items } = data;
 
   let orderItems: OrderItem[] = [];
   let total = 0;
@@ -16,48 +16,12 @@
     items: orderItems,
     total,
   };
-
-  $: {
-    orderItems = cartItems
-      .filter((initCartItem) =>
-        $store.some((storeItem) => initCartItem.id === storeItem.id)
-      )
-      .map((initCartItem) => {
-        const { q } = $store.find(
-          (storeItem) => initCartItem.id === storeItem.id
-        )!;
-        return {
-          ...initCartItem,
-          quantity: q,
-        };
-      });
-
-    total = orderItems.reduce((acc, item) => {
-      acc += item.product.price * item.quantity;
-      return acc;
-    }, 0);
-
-    order = {
-      items: orderItems.map(({ quantity, product, size, id }) => ({
-        id,
-        quantity,
-        product: {
-          title: product.title,
-        },
-        size: {
-          valueID: size.size.value.id,
-          relationTo: size.size.relationTo,
-        },
-      })),
-      total,
-    };
-  }
 </script>
 
 <h1 class="text-2xl font-bold">Корзина</h1>
 
 <div class="grid grid-cols-2 mt-5">
-  {#if cartItems.length === 0}
+  {#if cart_items.length === 0}
     <p>
       В корзине пусто. Добавьте, что-нибудь из
       <a href="/catalog">каталога</a>
@@ -65,9 +29,9 @@
   {:else}
     <div>
       <ul class="space-y-7">
-        {#each cartItems as { product, size } (size.id)}
+        {#each cart_items as cart_item (cart_item.id)}
           <li>
-            <CartItem {product} {size} />
+            <CartItem cartItem={cart_item} />
           </li>
         {/each}
       </ul>

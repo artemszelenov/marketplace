@@ -1,7 +1,8 @@
 <script lang="ts">
   import AddToCart from "$lib/components/AddToCart.svelte";
   import { cartItems } from "$lib/stores/cart";
-  import type { CartItem, StockItem } from "$lib/schema";
+  import { sizeTitle } from "$lib/format/stockItem";
+  import type { StockItem } from "$lib/schema";
 
   export let data;
 
@@ -19,12 +20,6 @@
     return () => {
       currentStockItem = stockItem
     }
-  }
-
-  function sizeTitle({ details, size_group_id }: StockItem) {
-    return data.product.type === "shoes"
-      ? details[size_group_id][data.user?.preferred_shoe_size_metric.value ?? "eu"].title
-      : details[size_group_id].international.title;
   }
 </script>
 
@@ -96,33 +91,35 @@
               for={size.id}
               title={size.count > 0 ? "Выбрать размер" : "Нет в наличии"}
             >
-              {sizeTitle(size)}
+              {sizeTitle({ stock_item: size, product_type: data.product.type, user: data.user })}
             </label>
           {/each}
         </div>
       </div>
 
-      <div class="mt-5">
-        <h2 class="text-xl font-semibold">Другие варианты цветов</h2>
+      {#if data.product_variants.length > 0}
+        <div class="mt-5">
+          <h2 class="text-xl font-semibold">Другие варианты цветов</h2>
 
-        <ul class="flex mt-3 -mx-2 px-2 space-x-2 overflow-x-auto">
-          {#each data.product_variants as variant (variant.id)}
-            <li>
-              <a href="/catalog/{variant.id}">
-                <img
-                  class="rounded"
-                  width="80"
-                  height="80"
-                  src={variant.image}
-                  alt={variant.title}
-                  decoding="async"
-                  loading="lazy"
-                />
-              </a>
-            </li>
-          {/each}
-        </ul>
-      </div>
+          <ul class="flex mt-3 -mx-2 px-2 space-x-2 overflow-x-auto">
+            {#each data.product_variants as variant (variant.id)}
+              <li>
+                <a href="/catalog/{variant.id}">
+                  <img
+                    class="rounded"
+                    width="80"
+                    height="80"
+                    src={variant.image}
+                    alt={variant.title}
+                    decoding="async"
+                    loading="lazy"
+                  />
+                </a>
+              </li>
+            {/each}
+          </ul>
+        </div>
+      {/if}
 
       <p class="mt-5">{@html data.product.description}</p>
     </div>

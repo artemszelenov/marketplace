@@ -1,30 +1,20 @@
 <script lang="ts">
-  import type { Product, Size } from "$lib/schema";
+  import type { CartItem } from "$lib/schema";
 
-  import { page } from "$app/stores";
+  import { sizeTitle } from "$lib/format/stockItem";
   import AddToCart from "./AddToCart.svelte";
+  import { page } from "$app/stores";
 
-  export let product: Product;
-  export let size: Size;
+  export let cartItem: CartItem;
 
-  let activeImageID = 0;
-
-  const { gallery, id, title, price, type } = product;
-
-  const sizeTitle =
-    type === "shoes"
-      ? size.size.value[$page.data.user?.shoeSizeMetric ?? "eu"]
-      : size.size.value.title;
+  const { id, title, price, image, type } = cartItem;
 </script>
 
 <article class="flex space-x-5 actions-show-on-hover">
   <img
     class="w-28 aspect-square rounded object-cover"
-    src={gallery[activeImageID].src}
-    alt={gallery[activeImageID].alt}
-    width={gallery[activeImageID].width}
-    height={gallery[activeImageID].height}
-    srcset={gallery[activeImageID].srcset}
+    src={image}
+    alt={title}
     decoding="async"
     loading="eager"
   />
@@ -39,11 +29,11 @@
     <p class="text-sm">Цена: {price.toLocaleString("ru-RU") + " руб."}</p>
 
     <p class="text-sm">
-      Размер: {sizeTitle}
+      Размер: {sizeTitle({ stock_item: cartItem.stock_item, product_type: type, user: $page.data.user })}
     </p>
 
     <div class="mt-auto">
-      <AddToCart variant="compact" {size} {product} />
+      <AddToCart stockItem={cartItem.stock_item} variant="compact" />
     </div>
   </div>
 </article>

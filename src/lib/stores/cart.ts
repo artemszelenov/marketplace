@@ -1,11 +1,11 @@
-import type { StockItem, CartItem } from "$lib/schema";
+import type { StorageCartItem } from "$lib/schema";
 
-type Payload = StockItem
+type Payload = StorageCartItem
 
 import { action, computed } from "nanostores";
 import { persistentAtom } from "@nanostores/persistent";
 
-export const cartItems = persistentAtom<CartItem[]>("cart_items", [], {
+export const cartItems = persistentAtom<StorageCartItem[]>("cart_items", [], {
   encode: JSON.stringify,
   decode: JSON.parse
 });
@@ -26,7 +26,11 @@ export const addOne = action(cartItems, 'addOne', (cartItems, payload: Payload) 
     return currentCartItem;
   }
 
-  const newItem = { ...payload, count: 1 }
+  const newItem = {
+    id: payload.id,
+    product_id: payload.product_id,
+    count: 1
+  }
 
   cartItems.set([...cartItems.get(), newItem]);
 

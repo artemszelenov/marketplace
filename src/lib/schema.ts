@@ -43,16 +43,33 @@ export const StockItemResult = z
     product_id: z.string(),
     size_group_id: z.string(),
     count: z.number(),
-    details: z.record(z.string())
+    details: z.record(
+      z.string(), z.record(
+        z.enum(["eu", "uk", "unknown_metric"]), z.object({
+          title: z.string()
+        })
+      ))
   });
 
 export type StockItem = z.infer<typeof StockItemResult>
 
-export const CartItemResult = z
+export const StorageCartItemResult = z
   .object({
     id: z.string(),
     product_id: z.string(),
     count: z.number()
+  });
+
+export type StorageCartItem = z.infer<typeof StorageCartItemResult>
+
+export const CartItemResult = z
+  .object({
+    id: z.string(),
+    type: z.enum(["shoes", "pants"]),
+    title: z.string(),
+    price: z.number(),
+    image: z.string(),
+    stock_item: StockItemResult
   });
 
 export type CartItem = z.infer<typeof CartItemResult>

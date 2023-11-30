@@ -1,31 +1,13 @@
+import type PocketBase from "pocketbase";
 import type { Product, StockItem } from "$lib/schema"
 
 export async function load({ params, locals }) {
-  const product_record = await locals.pb
-    .collection('products')
-    .getOne(params.slug, {
-      expand: "type"
-    });
-
-  const stock_item_records = await locals.pb
-    .collection('stock_items')
-    .getFullList({
-      filter: `product = "${product_record.id}"`,
-      expand: "size_group"
-    });
-
-  const sizes_details_records = await locals.pb
-    .collection('sizes')
-    .getFullList({
-      filter: stock_item_records.map(({ expand }) => `group = "${expand!.size_group.id}"`).join(' || '),
-      expand: "metric, group"
-    });
-  
-  const product_variants_records = await locals.pb
-    .collection('products')
-    .getFullList({
-      filter: `group = "${product_record.group}" && id != "${product_record.id}" && visible = true`
-    });
+  const {
+    product_record,
+    stock_item_records,
+    sizes_details_records,
+    product_variants_records
+  } = await getRecords(locals.pb, params.slug);
 
   const product: Product = {
     id: product_record.id,
@@ -55,9 +37,11 @@ export async function load({ params, locals }) {
 
         if (!stock_item) return
 
-        stock_item.details[size_details.expand?.group.id] = {
-          ...(stock_item.details[size_details.expand?.group.id] ?? {}),
-          [size_details.expand?.metric.value ?? "unknown_metric"]: {
+        const group_id = size_details.expand?.group.id;
+
+        stock_item.details[group_id] = {
+          ...(stock_item.details[group_id] ?? {}),
+          [size_details.expand?.metric?.value ?? "unknown_metric"]: {
             title: size_details.title
           }
         }
@@ -80,5 +64,40 @@ export async function load({ params, locals }) {
     seo: {
       title: product.title
     }
+  }
+}
+
+async function getRecords(pb: PocketBase, product_slug: string) {
+  const product_record = await pb
+    .collection('products')
+    .getOne(product_slug, {
+      expand: "type"
+    });
+
+  const stock_item_records = await pb
+    .collection('stock_items')
+    .getFullList({
+      filter: `product = "${product_record.id}"`,
+      expand: "size_group"
+    });
+
+  const sizes_details_records = await pb
+    .collection('sizes')
+    .getFullList({
+      filter: stock_item_records.map(({ expand }) => `group = "${expand!.size_group.id}"`).join(' || '),
+      expand: "metric, group"
+    });
+  
+  const product_variants_records = await pb
+    .collection('products')
+    .getFullList({
+      filter: `group = "${product_record.group}" && id != "${product_record.id}" && visible = true`
+    });
+
+  return {
+    product_record,
+    stock_item_records,
+    sizes_details_records,
+    product_variants_records
   }
 }
