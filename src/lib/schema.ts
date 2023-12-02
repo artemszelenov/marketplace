@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UserResult = z
+export const UserSchema = z
   .object({
     id: z.string(),
     username: z.string(),
@@ -13,9 +13,9 @@ export const UserResult = z
     }),
   });
 
-export type User = z.infer<typeof UserResult>
+export type User = z.infer<typeof UserSchema>
 
-export const ProductResult = z
+export const ProductSchema = z
   .object({
     id: z.string(),
     type: z.enum(["shoes", "pants"]),
@@ -25,9 +25,9 @@ export const ProductResult = z
     gallery: z.array(z.string())
   });
 
-export type Product = z.infer<typeof ProductResult>
+export type Product = z.infer<typeof ProductSchema>
 
-export const ProductTeaserResult = z
+export const ProductTeaserSchema = z
   .object({
     id: z.string(),
     title: z.string(),
@@ -35,9 +35,9 @@ export const ProductTeaserResult = z
     gallery: z.array(z.string())
   });
 
-export type ProductTeaser = z.infer<typeof ProductTeaserResult>
+export type ProductTeaser = z.infer<typeof ProductTeaserSchema>
 
-export const StockItemResult = z
+export const StockItemSchema = z
   .object({
     id: z.string(),
     product_id: z.string(),
@@ -51,43 +51,49 @@ export const StockItemResult = z
       ))
   });
 
-export type StockItem = z.infer<typeof StockItemResult>
+export type StockItem = z.infer<typeof StockItemSchema>
 
-export const StorageCartItemResult = z
+export const StorageCartItemSchema = z
   .object({
     id: z.string(),
     product_id: z.string(),
     count: z.number()
   });
 
-export type StorageCartItem = z.infer<typeof StorageCartItemResult>
+export type StorageCartItem = z.infer<typeof StorageCartItemSchema>
 
-export const CartItemResult = z
+export const CartItemProductSchema = z
   .object({
-    id: z.string(),
     type: z.enum(["shoes", "pants"]),
     title: z.string(),
     price: z.number(),
     image: z.string(),
-    stock_item: StockItemResult
   });
 
-export type CartItem = z.infer<typeof CartItemResult>
+export type CartItemProduct = z.infer<typeof CartItemProductSchema>
 
-export const OrderItemResult = z
+export const CartItemSchema = z
+  .object({
+    product: CartItemProductSchema,
+    stock_item: StockItemSchema
+  });
+
+export type CartItem = z.infer<typeof CartItemSchema>
+
+export const OrderItemSchema = z
   .object({
     id: z.string(),
-    product: ProductResult,
+    product: ProductSchema,
     size: z.string(), // поменять
     quantity: z.number()
   });
 
-export type OrderItem = z.infer<typeof OrderItemResult>
+export type OrderItem = z.infer<typeof OrderItemSchema>
 
-export const OrderResult = z
+export const OrderSchema = z
   .object({
-    items: z.array(OrderItemResult),
+    items: z.array(OrderItemSchema),
     total: z.number()
   });
 
-export type Order = z.infer<typeof OrderResult>
+export type Order = z.infer<typeof OrderSchema>

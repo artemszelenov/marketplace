@@ -29,9 +29,9 @@
   {:else}
     <div>
       <ul class="space-y-7">
-        {#each cart_items as cart_item (cart_item.id)}
+        {#each cart_items as { product, stock_item } (stock_item.id)}
           <li>
-            <CartItem cartItem={cart_item} />
+            <CartItem {product} {stock_item} />
           </li>
         {/each}
       </ul>

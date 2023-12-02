@@ -29,12 +29,14 @@ export async function load({ locals, url }) {
         const product = stock_item.expand!.product;
 
         return {
-          id: stock_item.id,
-          type: product.expand?.type.value ?? 'unknown_type',
-          title: product.title,
-          price: product.price,
-          image: locals.pb.files.getUrl(product, product.gallery[0]),
+          product: {
+            type: product.expand?.type.value ?? 'unknown_type',
+            title: product.title,
+            price: product.price,
+            image: locals.pb.files.getUrl(product, product.gallery[0])
+          },
           stock_item: {
+            id: stock_item.id,
             product_id: stock_item.product,
             size_group_id: stock_item.size_group,
             count: stock_item.count,
@@ -47,7 +49,7 @@ export async function load({ locals, url }) {
       sizes_details_records.forEach(size_details => {
         stock_item_records.forEach(stock_item_record => {
           if (stock_item_record.size_group === size_details.expand?.group.id) {
-            const cart_item = cart_items.find(({ id }) => stock_item_record.id === id);
+            const cart_item = cart_items.find(cart_item => stock_item_record.id === cart_item.stock_item.id);
     
             if (!cart_item) return
     

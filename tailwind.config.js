@@ -114,9 +114,9 @@ export default {
 			addComponents({
 				'.cart-is-not-empty-indicator': {
 					'&::after': {
-						'position': 'absolute',
-						'top': '2px',
-						'right': '10px',
+						'position': 'relative',
+						'top': '-5px',
+						'right': '-5px',
 						'content': `'*'`
 					}
 				}
