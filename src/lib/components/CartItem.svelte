@@ -1,9 +1,8 @@
 <script lang="ts">
   import type { StockItem, CartItemProduct } from "$lib/schema";
 
-  import { sizeTitle } from "$lib/format/stockItem";
+  import { retrieveSizeTitle } from "$lib/helpers/retrieveSizeTitle";
   import AddToCart from "./AddToCart.svelte";
-  import { page } from "$app/stores";
 
   export let product: CartItemProduct;
   export let stock_item: StockItem;
@@ -20,7 +19,7 @@
 
   <div class="grow flex flex-col">
     <h1 class="font-semibold">
-      <a href="/catalog/{stock_item.product_id}">
+      <a href="/catalog/{stock_item.product_id}?size={stock_item.id}">
         {product.title}
       </a>
     </h1>
@@ -28,7 +27,7 @@
     <p class="text-sm">Цена: {product.price.toLocaleString("ru-RU") + " руб."}</p>
 
     <p class="text-sm">
-      Размер: {sizeTitle({ stock_item: stock_item, product_type: product.type, user: $page.data.user })}
+      Размер: {retrieveSizeTitle({ stock_item: stock_item, product_type: product.type })}
     </p>
 
     <div class="mt-auto">

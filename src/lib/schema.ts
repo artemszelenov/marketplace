@@ -4,13 +4,9 @@ export const UserSchema = z
   .object({
     id: z.string(),
     username: z.string(),
-    name: z.string(),
+    name: z.string().optional(),
     email: z.string().email(),
-    verified: z.boolean(),
-    preferred_shoe_size_metric: z.object({
-      title: z.string(),
-      value: z.enum(["eu", "uk"])
-    }),
+    verified: z.boolean()
   });
 
 export type User = z.infer<typeof UserSchema>
@@ -45,22 +41,13 @@ export const StockItemSchema = z
     count: z.number(),
     details: z.record(
       z.string(), z.record(
-        z.enum(["eu", "uk", "unknown_metric"]), z.object({
+        z.enum(["eu", "uk", "us", "unknown_metric"]), z.object({
           title: z.string()
         })
       ))
   });
 
 export type StockItem = z.infer<typeof StockItemSchema>
-
-export const StorageCartItemSchema = z
-  .object({
-    id: z.string(),
-    product_id: z.string(),
-    count: z.number()
-  });
-
-export type StorageCartItem = z.infer<typeof StorageCartItemSchema>
 
 export const CartItemProductSchema = z
   .object({
@@ -97,3 +84,22 @@ export const OrderSchema = z
   });
 
 export type Order = z.infer<typeof OrderSchema>
+
+// Storage schemas
+
+export const StorageCartItemSchema = z
+  .object({
+    id: z.string(),
+    product_id: z.string(),
+    count: z.number()
+  });
+
+export type StorageCartItem = z.infer<typeof StorageCartItemSchema>
+
+export const StoragePreferredShoesSizeMetricSchema = z
+  .object({
+    title: z.string(),
+    value: z.enum(["eu", "uk", "us"])
+  });
+
+export type StoragePreferredShoesSizeMetric = z.infer<typeof StoragePreferredShoesSizeMetricSchema>

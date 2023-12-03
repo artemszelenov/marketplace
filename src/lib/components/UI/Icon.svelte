@@ -1,5 +1,6 @@
 <script lang="ts">
   export let name: keyof typeof icons;
+  export let viewBox: string | undefined = "0 0 512 512";
 
   let icons = {
     delete: {
@@ -30,7 +31,8 @@
     },
     cart: {
       svg: `
-        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 256v128M320 320H192M80 176a16 16 0 00-16 16v216c0 30.24 25.76 56 56 56h272c30.24 0 56-24.51 56-54.75V192a16 16 0 00-16-16zM160 176v-32a96 96 0 0196-96h0a96 96 0 0196 96v32" />
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M320 264l-89.6 112-38.4-44.88" />
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M80 176a16 16 0 00-16 16v216c0 30.24 25.76 56 56 56h272c30.24 0 56-24.51 56-54.75V192a16 16 0 00-16-16zM160 176v-32a96 96 0 0196-96h0a96 96 0 0196 96v32" />
       `,
     },
   } as const;
@@ -38,6 +40,6 @@
   let displayIcon = icons[name];
 </script>
 
-<svg class={$$props.class} viewBox="0 0 512 512" aria-hidden="true">
+<svg class={$$props.class} {viewBox} aria-hidden="true">
   {@html displayIcon.svg}
 </svg>

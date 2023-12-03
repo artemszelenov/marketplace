@@ -1,14 +1,21 @@
 import { PUBLIC_POCKETBASE_URL } from "$env/static/public";
 import PocketBase from "pocketbase";
-import type { User } from "$lib/schema";
 
 export async function handle({ event, resolve }) {
   event.locals.pb = new PocketBase(PUBLIC_POCKETBASE_URL);
   event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || "");
-  event.locals.user = null;
 
   if (event.locals.pb.authStore.isValid) {
-    event.locals.user = event.locals.pb.authStore.model as User;
+    const logged_in_user = event.locals.pb.authStore.model!;
+    event.locals.user = {
+      id: logged_in_user.id,
+      username: logged_in_user.username,
+      name: logged_in_user.name,
+      email: logged_in_user.email,
+      verified: logged_in_user.verified
+    };
+  } else {
+    event.locals.user = null;
   }
 
   const response = await resolve(event);

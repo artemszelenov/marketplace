@@ -73,7 +73,6 @@
             extraClasses="w-full"
             onClick={() => addOne(stockItem)}
           >
-            <!-- <Icon name="cart" class="w-7" /> -->
             <span class="text-base font-medium">В корзину</span>
           </Button>
         {/if}

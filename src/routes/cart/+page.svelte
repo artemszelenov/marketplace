@@ -8,13 +8,25 @@
 
   export let data;
 
-  const { cart_items } = data;
+  $: cart_items = data.cart_items.filter(
+    data_cart_item => $store.find(
+      store_cart_item => store_cart_item.id === data_cart_item.stock_item.id
+    )
+  );
 
   let orderItems: OrderItem[] = [];
-  let total = 0;
+  
+  $: total = data.cart_items.reduce((accum, { product, stock_item }) => {
+    const store_cart_item = $store.find(store_cart_item => store_cart_item.id === stock_item.id);
+    if (store_cart_item) {
+      return accum += product.price * store_cart_item.count
+    }
+    return accum
+  }, 0);
+
   let order: Order = {
     items: orderItems,
-    total,
+    total
   };
 </script>
 

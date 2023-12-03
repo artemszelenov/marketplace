@@ -1,7 +1,7 @@
 import type PocketBase from "pocketbase";
 import type { Product, StockItem } from "$lib/schema"
 
-export async function load({ params, locals }) {
+export async function load({ params, locals, url }) {
   const {
     product_record,
     stock_item_records,
@@ -60,6 +60,7 @@ export async function load({ params, locals }) {
   return {
     product,
     stock_items,
+    current_stock_item_id: url.searchParams.get('size'),
     product_variants,
     seo: {
       title: product.title

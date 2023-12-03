@@ -1,26 +1,14 @@
 <script lang="ts">
   import AddToCart from "$lib/components/AddToCart.svelte";
-  import { cartItems } from "$lib/stores/cart";
-  import { sizeTitle } from "$lib/format/stockItem";
-  import type { StockItem } from "$lib/schema";
+  import Icon from "$lib/components/UI/Icon.svelte";
+  import { retrieveSizeTitle } from "$lib/helpers/retrieveSizeTitle";
+  import { cartItems as store } from "$lib/stores/cart";
 
   export let data;
 
-  let currentStockItem: StockItem | undefined = undefined;
-
-  $: {
-    currentStockItem = data.stock_items.find(
-      stock_item => stock_item.id === $cartItems.find(
-        cart_item => cart_item.id === stock_item.id
-      )?.id
-    )
-  }
-
-  function handleChangeSize(stockItem: StockItem) {
-    return () => {
-      currentStockItem = stockItem
-    }
-  }
+  $: current_stock_item = data.stock_items.find(
+    stock_item => stock_item.id === data.current_stock_item_id
+  );
 </script>
 
 <div
@@ -51,50 +39,48 @@
 
       <p class="text-xl mt-2">{data.product.price.toLocaleString("ru-RU") + " руб."}</p>
 
-      {#if currentStockItem}
+      {#if current_stock_item}
         <div class="mt-5">
           <AddToCart
-            stockItem={currentStockItem}
+            stockItem={current_stock_item}
             cartButtonStyle="primary"
             variant="compact"
           />
         </div>
       {:else}
         <p class="mt-1 text-sm text-grey">
-          Чтобы добавить этот товар в корзину выберите один из размеров ниже
+          Выберите один из размеров ниже
         </p>
       {/if}
 
       <div class="mt-5">
         <h2 class="text-xl font-semibold">Размеры</h2>
 
-        <div
-          class="grid grid-cols-4 gap-3 mt-3"
-          role="radiogroup"
-          aria-labelledby="sizes-label-{data.product.id}"
-        >
-          <p id="sizes-label-{data.product.id}" class="visually-hidden">Выберите размер</p>
-
+        <nav class="grid grid-cols-4 gap-3 mt-3">
           {#each data.stock_items as size (size.id)}
-            <input
-              id={size.id}
-              class="visually-hidden"
-              type="radio"
-              name="size"
-              value={size.id}
-              checked={currentStockItem?.id === size.id}
-              disabled={size.count === 0}
-              on:change={handleChangeSize(size)}
-            />
-            <label
-              class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
-              for={size.id}
-              title={size.count > 0 ? "Выбрать размер" : "Нет в наличии"}
-            >
-              {sizeTitle({ stock_item: size, product_type: data.product.type, user: data.user })}
-            </label>
+            {#if size.count > 0}
+              <a
+                href="/catalog/{size.product_id}?size={size.id}"
+                class="relative px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
+                class:border-black={current_stock_item?.id === size.id}
+                title="Выбрать размер"
+              >
+                {retrieveSizeTitle({ stock_item: size, product_type: data.product.type })}
+
+                {#if $store.find(item => item.id === size.id)}
+                  <Icon name="cart" class="w-5 bg-white absolute -top-2 -right-2 rounded" viewBox="0 0 512 520" />
+                {/if}
+              </a>
+            {:else}
+              <div
+                class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
+                title="Нет в наличии"
+              >
+                {retrieveSizeTitle({ stock_item: size, product_type: data.product.type })}
+              </div>
+            {/if}
           {/each}
-        </div>
+        </nav>
       </div>
 
       {#if data.product_variants.length > 0}

@@ -15,13 +15,13 @@
       title: "Вход",
       submitUrl: "/user?/login",
       submitText: "Войти",
-      toggleText: "Еще не регистрировались?",
+      toggleText: "Зарегистрироваться",
     },
     registration: {
       title: "Регистрация",
       submitUrl: "/user?/register",
       submitText: "Зарегистрироваться",
-      toggleText: "Вернуться ко входу",
+      toggleText: "Войти",
     },
   };
 

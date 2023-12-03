@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Product } from "$lib/schema";
+  import type { ProductTeaser } from "$lib/schema";
 
-  export let product: Product;
+  export let product: ProductTeaser;
 
   let activeImageID = 0;
 
