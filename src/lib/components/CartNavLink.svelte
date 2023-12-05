@@ -1,13 +1,12 @@
 <script lang="ts">
-  import { cartItems, queryString } from "$lib/stores/cart";
+  import { cartItems } from "$lib/stores/cart";
 
-  $: cartIsEmpty = $cartItems.length === 0;
+  $: cart_items_count = $cartItems.length;
 </script>
 
 <a
-  href="/cart{$queryString}"
-  class="relative px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
-  class:cart-is-not-empty-indicator={!cartIsEmpty}
+  href="/cart"
+  class="px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
 >
-  Корзина
+  {`Корзина (${cart_items_count})`}
 </a>

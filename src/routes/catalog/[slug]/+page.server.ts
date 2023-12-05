@@ -60,7 +60,7 @@ export async function load({ params, locals, url }) {
   return {
     product,
     stock_items,
-    current_stock_item_id: url.searchParams.get('size'),
+    current_stock_item_id: url.searchParams.get('stock_item'),
     product_variants,
     seo: {
       title: product.title

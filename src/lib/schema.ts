@@ -67,29 +67,9 @@ export const CartItemSchema = z
 
 export type CartItem = z.infer<typeof CartItemSchema>
 
-export const OrderItemSchema = z
-  .object({
-    id: z.string(),
-    product: ProductSchema,
-    size: z.string(), // поменять
-    quantity: z.number()
-  });
-
-export type OrderItem = z.infer<typeof OrderItemSchema>
-
-export const OrderSchema = z
-  .object({
-    items: z.array(OrderItemSchema),
-    total: z.number()
-  });
-
-export type Order = z.infer<typeof OrderSchema>
-
-// Storage schemas
-
 export const StorageCartItemSchema = z
   .object({
-    id: z.string(),
+    id: z.string(), // stock_item_id
     product_id: z.string(),
     count: z.number()
   });
@@ -103,3 +83,11 @@ export const StoragePreferredShoesSizeMetricSchema = z
   });
 
 export type StoragePreferredShoesSizeMetric = z.infer<typeof StoragePreferredShoesSizeMetricSchema>
+
+export const OrderSchema = z
+  .object({
+    items: z.array(StorageCartItemSchema),
+    paid_total: z.number(),
+  });
+
+export type Order = z.infer<typeof OrderSchema>

@@ -1,5 +1,7 @@
 <script lang="ts">
   import AddToCart from "$lib/components/AddToCart.svelte";
+  import { page } from "$app/stores";
+  import AddToCartForm from "$lib/components/AddToCartForm.svelte";
   import Icon from "$lib/components/UI/Icon.svelte";
   import { retrieveSizeTitle } from "$lib/helpers/retrieveSizeTitle";
   import { cartItems as store } from "$lib/stores/cart";
@@ -41,11 +43,15 @@
 
       {#if current_stock_item}
         <div class="mt-5">
-          <AddToCart
+          <AddToCartForm
+            stock_item={current_stock_item}
+            referrer={$page.url.href}
+          />
+          <!-- <AddToCart
             stockItem={current_stock_item}
             cartButtonStyle="primary"
             variant="compact"
-          />
+          /> -->
         </div>
       {:else}
         <p class="mt-1 text-sm text-grey">
@@ -57,17 +63,17 @@
         <h2 class="text-xl font-semibold">Размеры</h2>
 
         <nav class="grid grid-cols-4 gap-3 mt-3">
-          {#each data.stock_items as size (size.id)}
-            {#if size.count > 0}
+          {#each data.stock_items as stock_item (stock_item.id)}
+            {#if stock_item.count > 0}
               <a
-                href="/catalog/{size.product_id}?size={size.id}"
+                href="/catalog/{stock_item.product_id}?stock_item={stock_item.id}"
                 class="relative px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
-                class:border-black={current_stock_item?.id === size.id}
+                class:border-black={current_stock_item?.id === stock_item.id}
                 title="Выбрать размер"
               >
-                {retrieveSizeTitle({ stock_item: size, product_type: data.product.type })}
+                {retrieveSizeTitle({ stock_item, product_type: data.product.type })}
 
-                {#if $store.find(item => item.id === size.id)}
+                {#if $store.find(item => item.id === stock_item.id)}
                   <Icon name="cart" class="w-5 bg-white absolute -top-2 -right-2 rounded" viewBox="0 0 512 520" />
                 {/if}
               </a>
@@ -76,7 +82,7 @@
                 class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
                 title="Нет в наличии"
               >
-                {retrieveSizeTitle({ stock_item: size, product_type: data.product.type })}
+                {retrieveSizeTitle({ stock_item, product_type: data.product.type })}
               </div>
             {/if}
           {/each}

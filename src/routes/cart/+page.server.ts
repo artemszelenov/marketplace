@@ -1,5 +1,5 @@
-import { error } from '@sveltejs/kit';
-import type { CartItem, Product } from "$lib/schema"
+import { error, fail, redirect } from '@sveltejs/kit';
+import type { CartItem } from "$lib/schema"
 
 export async function load({ locals, url }) {
   try {
@@ -81,9 +81,45 @@ export async function load({ locals, url }) {
 }
 
 export const actions = {
-  proceedOrder: async ({ request, locals, fetch }) => {
-    const data = await request.formData();
-    const orderData = data.get("order") as string;
-    const order = JSON.parse(orderData);
+  add: async ({ request, cookies, locals }) => {
+    const body = Object.fromEntries(await request.formData());
+
+    const cart_id = cookies.get('pb_cart')
+
+    if (cart_id) {
+      const cart_item = await locals.pb.collection('cart_items')
+        .getFirstListItem(`stock_item = "${body['stock-item']}" && cart = "${cart_id}"`, {
+          expand: "stock_item"
+        });
+
+      if (cart_item.quantity + 1 >= cart_item.stock_item.count) {
+        return fail(422, { errors: [new Error("На складе недостаточно товара")] });
+      } else {
+        await locals.pb.collection('cart_items')
+          .update(cart_item.id, {
+            quantity: cart_item.quantity + 1
+          });
+      }
+
+      throw redirect(303, body.referrer);
+    }
+
+    const new_cart = await locals.pb.collection('carts')
+      .create({
+        user: locals.user?.id,
+      });
+
+    await locals.pb.collection('cart_items')
+      .create({
+        stock_item: body['stock-item'],
+        quantity: Number(body.quantity),
+        cart: new_cart.id
+      });
+
+    cookies.set('pb_cart', new_cart.id);
+
+    return {
+      success: true
+    }
   }
 }

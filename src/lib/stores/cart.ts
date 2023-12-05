@@ -62,19 +62,4 @@ export const clear = action(cartItems, 'clear', cartItems => {
   cartItems.set([]);
   return cartItems.get();
 });
-
-export const queryString = computed(cartItems, store => {
-  if (store.length === 0) return "";
-
-  const ids = store.map(item => item.id).join(',');
-
-  return `?items=${ids}`;
-});
-
-queryString.listen(value => {
-  const { origin, pathname } = window.location
-  if (pathname === "/cart") {
-    window.history.replaceState({}, "", origin + pathname + value);
-  }
-});
   

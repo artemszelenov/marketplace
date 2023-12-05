@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { OrderItem, Order } from "$lib/schema";
+  import type { Order } from "$lib/schema";
   import { page } from "$app/stores";
   import CartItem from "$lib/components/CartItem.svelte";
   import AuthForm from "$lib/components/AuthForm.svelte";
   import Button from "$lib/components/UI/Button.svelte";
-  import { cartItems as store, queryString } from "$lib/stores/cart";
+  import { cartItems as store } from "$lib/stores/cart";
 
   export let data;
 
@@ -13,8 +13,6 @@
       store_cart_item => store_cart_item.id === data_cart_item.stock_item.id
     )
   );
-
-  let orderItems: OrderItem[] = [];
   
   $: total = data.cart_items.reduce((accum, { product, stock_item }) => {
     const store_cart_item = $store.find(store_cart_item => store_cart_item.id === stock_item.id);
@@ -25,8 +23,8 @@
   }, 0);
 
   let order: Order = {
-    items: orderItems,
-    total
+    items: store.get(),
+    paid_total: total,
   };
 </script>
 
@@ -59,29 +57,9 @@
         <span>{total.toLocaleString("ru-RU") + " руб."}</span>
       </p>
 
-      <form method="POST" action="?/proceedOrder" class="mt-4">
-        <input type="hidden" name="order" value={JSON.stringify(order)} />
-
-        <Button
-          variant="primary"
-          extraClasses="w-full"
-          title="Подтвердить заказ"
-          type="submit"
-          disabled={!$page.data.user}
-        >
-          Подтвердить заказ
-        </Button>
-      </form>
-
-      {#if !$page.data.user}
-        <p class="mt-2 text-sm">
-          Вам нужно зарегистрироваться или войти, чтобы продолжить
-        </p>
-
-        <div class="mt-4">
-          <AuthForm redirectTo="/cart{$queryString}" />
-        </div>
-      {/if}
+      <p class="mt-4">
+        <a href="/checkout">Оформить заказ</a>
+      </p>
     </div>
   {/if}
 </div>
