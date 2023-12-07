@@ -19,7 +19,9 @@ export async function handle({ event, resolve }) {
   }
 
   const response = await resolve(event);
+
   // TODO: make secure on prod
-  response.headers.set('Set-Cookie', event.locals.pb.authStore.exportToCookie({ secure: false }));
+  response.headers.append('set-cookie', event.locals.pb.authStore.exportToCookie({ secure: false }));
+
 	return response;
 };

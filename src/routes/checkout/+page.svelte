@@ -2,9 +2,8 @@
   import type { Order } from "$lib/schema";
   import { page } from "$app/stores";
   import CartItem from "$lib/components/CartItem.svelte";
-  import AuthForm from "$lib/components/AuthForm.svelte";
+  import AuthForm from "$lib/components/forms/AuthForm.svelte";
   import Button from "$lib/components/UI/Button.svelte";
-  import { cartItems as store } from "$lib/stores/cart";
 
   export let data;
 
@@ -15,7 +14,7 @@
 
 <div class="grid grid-cols-2 mt-5">
   <div>
-    <!-- <AuthForm redirectTo="/cart" /> -->
+    <AuthForm redirectTo="/cart" />
     <p>адрес и доставка</p>
     <p>получатель</p>
     <p>оплата</p>

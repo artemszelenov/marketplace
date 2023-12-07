@@ -1,10 +1,6 @@
 <script lang="ts">
-  import AddToCart from "$lib/components/AddToCart.svelte";
-  import { page } from "$app/stores";
-  import AddToCartForm from "$lib/components/AddToCartForm.svelte";
-  import Icon from "$lib/components/UI/Icon.svelte";
+  import AddToCartForm from "$lib/components/forms/AddToCartForm.svelte";
   import { retrieveSizeTitle } from "$lib/helpers/retrieveSizeTitle";
-  import { cartItems as store } from "$lib/stores/cart";
 
   export let data;
 
@@ -44,14 +40,8 @@
       {#if current_stock_item}
         <div class="mt-5">
           <AddToCartForm
-            stock_item={current_stock_item}
-            referrer={$page.url.href}
+            stock_item_id={current_stock_item.id}
           />
-          <!-- <AddToCart
-            stockItem={current_stock_item}
-            cartButtonStyle="primary"
-            variant="compact"
-          /> -->
         </div>
       {:else}
         <p class="mt-1 text-sm text-grey">
@@ -73,9 +63,9 @@
               >
                 {retrieveSizeTitle({ stock_item, product_type: data.product.type })}
 
-                {#if $store.find(item => item.id === stock_item.id)}
+                <!-- {#if $store.find(item => item.id === stock_item.id)}
                   <Icon name="cart" class="w-5 bg-white absolute -top-2 -right-2 rounded" viewBox="0 0 512 520" />
-                {/if}
+                {/if} -->
               </a>
             {:else}
               <div

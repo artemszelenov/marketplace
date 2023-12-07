@@ -1,8 +1,7 @@
 <script lang="ts">
   import "../app.css";
 
-  import { page } from "$app/stores";
-  import CartNavLink from "$lib/components/CartNavLink.svelte";
+  export let data;
 
   const nav = [
     {
@@ -17,7 +16,7 @@
 </script>
 
 <svelte:head>
-  <title>{`${$page.data.seo.title} | 6:52`}</title>
+  <title>{`${data.seo.title} | 6:52`}</title>
 </svelte:head>
 
 <header class="w-full bg-white border-b border-dashed text-xs">
@@ -44,13 +43,18 @@
         </a>
       {/each}
 
-      {#if $page.data.user}
+      {#if data.user}
         <a class="px-2 py-2 text-sm text-black lg:px-6 md:px-3" href="/user">
           Мой аккаунт
         </a>
       {/if}
 
-      <CartNavLink />
+      <a
+        href="/cart"
+        class="px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
+      >
+        {`Корзина ${data.cart_items_count ? `(${data.cart_items_count})` : ""}`}
+      </a>
     </nav>
   </div>
 </header>

@@ -1,9 +1,12 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { CartItem } from "$lib/schema"
+import type { ClientResponseError } from "pocketbase";
 
 export async function load({ locals, url }) {
   try {
     let cart_items: CartItem[] = [];
+
+    // TODO: rebuild to cart_item.expand.product
 
     const itemsIds = url.searchParams.get("items");
 
@@ -84,42 +87,62 @@ export const actions = {
   add: async ({ request, cookies, locals }) => {
     const body = Object.fromEntries(await request.formData());
 
-    const cart_id = cookies.get('pb_cart')
+    const cart_id = cookies.get("pb_cart");
 
-    if (cart_id) {
-      const cart_item = await locals.pb.collection('cart_items')
+    // create new card if does not exsist with first cart_item
+    if (!cart_id) {
+      const new_cart = await locals.pb
+        .collection("carts")
+        .create({
+          user: locals.user?.id,
+        });
+
+      await locals.pb
+        .collection("cart_items")
+        .create({
+          stock_item: body["stock-item"],
+          quantity: Number(body.quantity),
+          cart: new_cart.id
+        });
+
+      cookies.set("pb_cart", new_cart.id, { path: "/" });
+
+      return {
+        success: true
+      }
+    }
+
+    try {
+      // if cart_item already exsists in cart
+      const cart_item = await locals.pb
+        .collection("cart_items")
         .getFirstListItem(`stock_item = "${body['stock-item']}" && cart = "${cart_id}"`, {
           expand: "stock_item"
         });
 
-      if (cart_item.quantity + 1 >= cart_item.stock_item.count) {
-        return fail(422, { errors: [new Error("На складе недостаточно товара")] });
+      if (cart_item.quantity + 1 >= cart_item.expand?.stock_item.count) {
+        return fail(422, { errors: ["На складе недостаточно товара"] });
       } else {
-        await locals.pb.collection('cart_items')
+        await locals.pb
+          .collection("cart_items")
           .update(cart_item.id, {
             quantity: cart_item.quantity + 1
           });
       }
-
-      throw redirect(303, body.referrer);
+    } catch (err) {
+      const error = err as ClientResponseError;
+      // if cart_item does not exsist yet in cart
+      if (error.status === 404) {
+        await locals.pb
+          .collection("cart_items")
+          .create({
+            stock_item: body["stock-item"],
+            quantity: Number(body.quantity),
+            cart: cart_id
+          });
+      }
     }
 
-    const new_cart = await locals.pb.collection('carts')
-      .create({
-        user: locals.user?.id,
-      });
-
-    await locals.pb.collection('cart_items')
-      .create({
-        stock_item: body['stock-item'],
-        quantity: Number(body.quantity),
-        cart: new_cart.id
-      });
-
-    cookies.set('pb_cart', new_cart.id);
-
-    return {
-      success: true
-    }
+    throw redirect(303, body?.from?.toString() ?? "/");    
   }
 }

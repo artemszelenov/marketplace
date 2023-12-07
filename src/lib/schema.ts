@@ -67,15 +67,6 @@ export const CartItemSchema = z
 
 export type CartItem = z.infer<typeof CartItemSchema>
 
-export const StorageCartItemSchema = z
-  .object({
-    id: z.string(), // stock_item_id
-    product_id: z.string(),
-    count: z.number()
-  });
-
-export type StorageCartItem = z.infer<typeof StorageCartItemSchema>
-
 export const StoragePreferredShoesSizeMetricSchema = z
   .object({
     title: z.string(),
@@ -86,7 +77,6 @@ export type StoragePreferredShoesSizeMetric = z.infer<typeof StoragePreferredSho
 
 export const OrderSchema = z
   .object({
-    items: z.array(StorageCartItemSchema),
     paid_total: z.number(),
   });
 

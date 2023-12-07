@@ -20,7 +20,7 @@ export const actions = {
       return fail(422, { errors: [error.data] });
     }
 
-    throw redirect(303, body['redirect-to']?.toString() ?? "/user");
+    throw redirect(303, body.referrer?.toString() ?? "/user");
   },
   register: async ({ request, locals }) => {
     const body = Object.fromEntries(await request.formData());
@@ -43,7 +43,7 @@ export const actions = {
       return fail(422, { errors: [error.data] });
     }
 
-    throw redirect(303, body['redirect-to']?.toString() ?? "/user");
+    throw redirect(303, body.referrer?.toString() ?? "/user");
   },
   logout: async ({ locals }) => {
     locals.pb.authStore.clear();

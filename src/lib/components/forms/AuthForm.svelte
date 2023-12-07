@@ -3,7 +3,7 @@
   import { enhance } from "$app/forms";
   import { invalidate } from "$app/navigation";
 
-  import Button from "./UI/Button.svelte";
+  import Button from "../UI/Button.svelte";
 
   export let redirectTo = window.location.href;
 

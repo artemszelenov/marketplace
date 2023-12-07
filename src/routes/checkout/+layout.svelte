@@ -1,12 +1,9 @@
 <script lang="ts">
-  import "../app.css";
-
-  import { page } from "$app/stores";
-  import CartNavLink from "$lib/components/CartNavLink.svelte";
+  export let data;
 </script>
 
 <svelte:head>
-  <title>{`${$page.data.seo.title} | 6:52`}</title>
+  <title>{`${data.seo.title} | 6:52`}</title>
 </svelte:head>
 
 <header class="w-full bg-white border-b border-dashed text-xs">
@@ -27,7 +24,12 @@
     <nav
       class="flex-col items-center flex-grow hidden md:pb-0 md:flex md:justify-end md:flex-row"
     >
-      <CartNavLink />
+      <a
+        href="/cart"
+        class="px-2 py-2 text-sm text-black lg:px-6 md:px-3 hover:text-grey-600"
+      >
+        {`Корзина ${data.cart_items_count ? `(${data.cart_items_count})` : ""}`}
+      </a>
     </nav>
   </div>
 </header>
