@@ -1,8 +1,13 @@
-@import "@fontsource/noto-sans-mono";
-@import "@fontsource/noto-sans-mono/500.css";
-@import "@fontsource/noto-sans-mono/600.css";
-@import "@fontsource/noto-sans-mono/700.css";
+@import "@fontsource/inter";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
 
 @tailwind base;
+
+body {
+  @apply bg-neutral-100;
+}
+
 @tailwind components;
 @tailwind utilities;

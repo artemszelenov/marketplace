@@ -5,16 +5,20 @@ export async function handle({ event, resolve }) {
   event.locals.pb = new PocketBase(PUBLIC_POCKETBASE_URL);
   event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || "");
 
-  if (event.locals.pb.authStore.isValid) {
-    const logged_in_user = event.locals.pb.authStore.model!;
-    event.locals.user = {
-      id: logged_in_user.id,
-      username: logged_in_user.username,
-      name: logged_in_user.name,
-      email: logged_in_user.email,
-      verified: logged_in_user.verified
-    };
-  } else {
+  try {
+    if (event.locals.pb.authStore.isValid) {
+      await event.locals.pb.collection("users").authRefresh();
+      const logged_in_user = event.locals.pb.authStore.model!;
+      event.locals.user = {
+        id: logged_in_user.id,
+        username: logged_in_user.username,
+        name: logged_in_user.name,
+        email: logged_in_user.email,
+        verified: logged_in_user.verified
+      };
+    }
+  } catch (_) {
+    event.locals.pb.authStore.clear();
     event.locals.user = null;
   }
 

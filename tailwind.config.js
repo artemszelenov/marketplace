@@ -1,26 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-import defaultTheme from 'tailwindcss/defaultTheme'
+import harmonyPalette from "@evilmartians/harmony/tailwind"
 import plugin from 'tailwindcss/plugin'
 
 export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
-		colors: {
-			black: 'oklch(20% 0 0)',
-			white: 'oklch(100% 0 0)',
-			grey: 'oklch(55% 0 0)',
-			'grey-100': 'oklch(96% 0 0)',
-			'grey-200': 'oklch(90% 0 0)',
-			'grey-300': 'oklch(85% 0 0)',
-			'grey-400': 'oklch(80% 0 0)',
-			'light-grey': 'oklch(96% 0 0)',
-			red: 'oklch(55.17% 0.205 24.53)',
-			yellow: 'oklch(85% 0.19 90.38)',
-			transparent: 'transparent'
-		},
+		colors: harmonyPalette,
 		extend: {
 			fontFamily: {
-				sans: ['Noto Sans Mono', ...defaultTheme.fontFamily.sans]
+				sans: ['Inter', 'Helvetica Neue', 'Helvetica', 'Arial Nova', 'Arial', 'system-ui']
 			}
 		},
 	},
@@ -28,7 +16,6 @@ export default {
 		plugin(({ addComponents, addUtilities, addBase, theme }) => {
 			addBase({
 				'a[href], button': {
-					'border-radius': theme('spacing[0.5]'),
 					'&:hover:not(:disabled)': {
 						'background-color': theme('colors[light-grey]')
 					},

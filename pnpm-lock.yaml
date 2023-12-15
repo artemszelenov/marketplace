@@ -5,9 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@fontsource/noto-sans-mono':
-    specifier: ^5.0.15
-    version: 5.0.15
+  '@evilmartians/harmony':
+    specifier: ^1.2.0
+    version: 1.2.0
+  '@fontsource/inter':
+    specifier: ^5.0.16
+    version: 5.0.16
   '@nanostores/persistent':
     specifier: ^0.9.1
     version: 0.9.1(nanostores@0.9.4)
@@ -266,13 +269,17 @@ packages:
     dev: true
     optional: true
 
+  /@evilmartians/harmony@1.2.0:
+    resolution: {integrity: sha512-Ua8gpC+28Eo9D2/xynTrrZIrSawgtobwtRLLYq4wH8N19qoMspWZ1vqfsDDVPgQFa+iHsVAk/SbdmoPAj6OH1g==}
+    dev: false
+
   /@fastify/busboy@2.0.0:
     resolution: {integrity: sha512-JUFJad5lv7jxj926GPgymrWQxxjPYuJNiNjNMzqT+HiuP6Vl3dk5xzG+8sTX96np0ZAluvaMzPsjhHZ5rNuNQQ==}
     engines: {node: '>=14'}
     dev: true
 
-  /@fontsource/noto-sans-mono@5.0.15:
-    resolution: {integrity: sha512-ijRwRAfFq3xyVzHnVMp21o2aUSqpVZR88MEqEKucdmMVerPYVOlANStmxHLyRKj1Q0uWbGFMfdyZNmjebS0xmA==}
+  /@fontsource/inter@5.0.16:
+    resolution: {integrity: sha512-qF0aH5UiZvCmneX5orJbVRoc2VTyLTV3X/7laMp03Qt28L+B9tFlZODOGUL64wDWc69YVdi1LeJB0cIgd51lvw==}
     dev: false
 
   /@jridgewell/gen-mapping@0.3.3:

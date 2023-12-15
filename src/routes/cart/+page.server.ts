@@ -1,6 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { CartItem } from "$lib/schema"
-import type { ClientResponseError } from "pocketbase";
+import { ClientResponseError } from "pocketbase";
+import type { ClientResponseError as ClientResponseErrorType } from "pocketbase";
 
 export async function load({ locals, url }) {
   try {
@@ -130,9 +131,9 @@ export const actions = {
           });
       }
     } catch (err) {
-      const error = err as ClientResponseError;
+      const error = err as ClientResponseErrorType;
       // if cart_item does not exsist yet in cart
-      if (error.status === 404) {
+      if (error instanceof ClientResponseError && error.status === 404) {
         await locals.pb
           .collection("cart_items")
           .create({

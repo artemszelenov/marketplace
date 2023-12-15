@@ -17,7 +17,7 @@
       {#each data.product.gallery as src}
         <li>
           <img
-            class="aspect-square rounded"
+            class="aspect-square rounded-2xl"
             {src}
             alt={data.product.title}
             decoding="async"
@@ -33,32 +33,32 @@
     class="mx-auto lg:col-span-3 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 max-w-2xl mt-14 sm:mt-16"
   >
     <div class="sticky top-3">
-      <h1 class="text-3xl font-semibold">{data.product.title}</h1>
+      <h1 class="text-3xl uppercase text-gray-900 font-bold">{data.product.title}</h1>
 
-      <p class="text-xl mt-2">{data.product.price.toLocaleString("ru-RU") + " руб."}</p>
+      <p class="text-lg font-medium text-gray-900 mt-2">{data.product.price.toLocaleString("ru-RU") + " ₽"}</p>
 
       {#if current_stock_item}
-        <div class="mt-5">
+        <div class="mt-4">
           <AddToCartForm
             stock_item_id={current_stock_item.id}
           />
         </div>
       {:else}
-        <p class="mt-1 text-sm text-grey">
+        <p class="mt-1 text-sm text-gray">
           Выберите один из размеров ниже
         </p>
       {/if}
 
-      <div class="mt-5">
-        <h2 class="text-xl font-semibold">Размеры</h2>
+      <div class="mt-7">
+        <h2 class="text-xl font-bold text-gray-900">Размеры</h2>
 
-        <nav class="grid grid-cols-4 gap-3 mt-3">
+        <nav class="grid grid-cols-5 gap-3 mt-3">
           {#each data.stock_items as stock_item (stock_item.id)}
             {#if stock_item.count > 0}
               <a
                 href="/catalog/{stock_item.product_id}?stock_item={stock_item.id}"
-                class="relative px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-pointer"
-                class:border-black={current_stock_item?.id === stock_item.id}
+                class="relative px-2 py-2 text-s text-center font-bold border border-gray-900 rounded-lg outline-offset-2 cursor-pointer"
+                class:border-gray-900={current_stock_item?.id === stock_item.id}
                 title="Выбрать размер"
               >
                 {retrieveSizeTitle({ stock_item, product_type: data.product.type })}
@@ -81,7 +81,7 @@
 
       {#if data.product_variants.length > 0}
         <div class="mt-5">
-          <h2 class="text-xl font-semibold">Другие варианты цветов</h2>
+          <h2 class="text-xl font-bold text-gray-900">Другие варианты цветов</h2>
 
           <ul class="flex mt-3 -mx-2 px-2 space-x-2 overflow-x-auto">
             {#each data.product_variants as variant (variant.id)}
