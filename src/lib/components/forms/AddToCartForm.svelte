@@ -3,7 +3,7 @@
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
 
-  export let stock_item_id: string;
+  export let stock_item_id: string | undefined;
 
   let errors: string[] = [];
 
@@ -24,12 +24,12 @@
     class="flex items-center gap-2 text-white text-xs uppercase"
     type="submit"
     title="Добавить в корзину"
+    disabled={!stock_item_id}
   >
-    <div
-      class="bg-gray-900 rounded-full px-5 py-2 tracking-wide"
-    >
+    <div class="bg-gray-900 rounded-full px-5 py-2 tracking-wide">
       Добавить в корзину
     </div>
+
     <div
       class="flex items-center justify-center rounded-full bg-gray-900 w-[32px] h-[32px]"
     >

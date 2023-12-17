@@ -13,7 +13,7 @@
   };
 </script>
 
-<h1 class="text-2xl font-bold">Корзина</h1>
+<h1 class="text-2xl font-bold text-gray-900">Корзина</h1>
 
 <div class="grid grid-cols-2 mt-5">
   {#if data.cart_items.length === 0}
@@ -24,9 +24,9 @@
   {:else}
     <div>
       <ul class="space-y-7">
-        {#each data.cart_items as { product, stock_item } (stock_item.id)}
+        {#each data.cart_items as cart_item (cart_item.id)}
           <li>
-            <CartItem {product} {stock_item} />
+            <CartItem {cart_item} />
           </li>
         {/each}
       </ul>
@@ -39,7 +39,7 @@
 
       <p class="mt-4 text-xl font-semibold">
         <span>Итого:</span>
-        <span>{total.toLocaleString("ru-RU") + " руб."}</span>
+        <span>{total.toLocaleString("ru-RU") + " ₽"}</span>
       </p>
 
       <p class="mt-4">

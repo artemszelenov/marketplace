@@ -1,37 +1,34 @@
 <script lang="ts">
-  import type { StockItem, CartItemProduct } from "$lib/schema";
+  import RemoveFromCartForm from "./forms/RemoveFromCartForm.svelte";
+  import type { CartItem } from "$lib/schema";
 
-  import { retrieveSizeTitle } from "$lib/helpers/retrieveSizeTitle";
-  import AddToCart from "./AddToCart.svelte";
-
-  export let product: CartItemProduct;
-  export let stock_item: StockItem;
+  export let cart_item: CartItem;
 </script>
 
 <article class="flex space-x-5 actions-show-on-hover">
   <img
     class="w-28 aspect-square rounded object-cover"
-    src={product.image}
-    alt={product.title}
+    src={cart_item.product.image}
+    alt={cart_item.product.title}
     decoding="async"
     loading="eager"
   />
 
   <div class="grow flex flex-col">
     <h1 class="font-semibold">
-      <a href="/catalog/{stock_item.product_id}?size={stock_item.id}">
-        {product.title}
+      <a href="/catalog/{cart_item.product?.id}?size={cart_item.stock_item.id}">
+        {cart_item.product.title}
       </a>
     </h1>
 
-    <p class="text-sm">Цена: {product.price.toLocaleString("ru-RU") + " руб."}</p>
+    <p class="text-sm">Цена: {cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</p>
 
     <p class="text-sm">
-      Размер: {retrieveSizeTitle({ stock_item: stock_item, product_type: product.type })}
+      Размер: 
     </p>
 
     <div class="mt-auto">
-      <AddToCart stockItem={stock_item} variant="compact" />
+      <RemoveFromCartForm cart_item_id={cart_item.id} />
     </div>
   </div>
 </article>

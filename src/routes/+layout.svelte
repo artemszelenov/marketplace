@@ -27,7 +27,7 @@
   <title>{`${data.seo.title} | 6:52`}</title>
 </svelte:head>
 
-<header>
+<header class="bg-neutral-100">
   <div
     class="flex flex-col w-full mx-auto md:items-center md:justify-between md:flex-row md:px-12 px-8 py-4 max-w-7xl lg:px-12"
   >
@@ -57,7 +57,7 @@
       {/if}
 
       <a
-        href="/"
+        href="/cart"
         class="px-2 py-2 text-gray-900 lg:px-3 md:px-3 hover:text-gray-800"
       >
         <div class="relative">
@@ -73,13 +73,13 @@
   </div>
 </header>
 
-<main>
+<main class="bg-neutral-100 relative z-10 shadow-2xl">
   <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
     <slot />
   </div>
 </main>
 
-<footer class="text-white bg-gray-900">
+<footer class="text-white bg-gray-900 sticky bottom-0">
   <div
     class="flex flex-col w-full mx-auto md:items-center md:justify-center md:flex-row md:px-12 md:py-20 px-8 py-4 max-w-7xl lg:px-12"
   >

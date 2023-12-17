@@ -5,7 +5,7 @@ export async function load({ params, locals, url }) {
   const {
     product_record,
     stock_item_records,
-    sizes_details_records,
+    sizes_records,
     product_variants_records
   } = await getRecords(locals.pb, params.slug);
 
@@ -17,37 +17,30 @@ export async function load({ params, locals, url }) {
     description: product_record.description,
     gallery: product_record.gallery.map((file_name: string) => {
       return locals.pb.files.getUrl(product_record, file_name);
-    })
+    }),
+    image: locals.pb.files.getUrl(product_record, product_record.gallery[0])
   }
 
   const stock_items: StockItem[] = stock_item_records.map(item => {
     return {
       id: item.id,
       product_id: item.product,
-      size_group_id: item.size_group,
       count: item.count,
-      details: {}
+      metrics: {}
     }
   });
 
-  sizes_details_records.forEach(size_details => {
-    stock_item_records.forEach(stock_item_record => {
-      if (stock_item_record.size_group === size_details.expand?.group.id) {
-        const stock_item = stock_items.find(({ id }) => stock_item_record.id === id);
+  for (const size_record of sizes_records) {
+    for (const stock_item_record of stock_item_records) {
+      if (stock_item_record.size_group === size_record.expand?.group.id) {
+        const stock_item = stock_items.find(stock_item => stock_item_record.id === stock_item.id);
 
-        if (!stock_item) return
-
-        const group_id = size_details.expand?.group.id;
-
-        stock_item.details[group_id] = {
-          ...(stock_item.details[group_id] ?? {}),
-          [size_details.expand?.metric?.value ?? "unknown_metric"]: {
-            title: size_details.title
-          }
+        if (stock_item) {
+          stock_item.metrics[size_record.expand?.metric?.value] = size_record.title;
         }
       }
-    });
-  });
+    }
+  }
 
   const product_variants = product_variants_records.map(variant => {
     return {
@@ -82,7 +75,7 @@ async function getRecords(pb: PocketBase, product_slug: string) {
       expand: "size_group"
     });
 
-  const sizes_details_records = await pb
+  const sizes_records = await pb
     .collection('sizes')
     .getFullList({
       filter: stock_item_records.map(({ expand }) => `group = "${expand!.size_group.id}"`).join(' || '),
@@ -98,7 +91,7 @@ async function getRecords(pb: PocketBase, product_slug: string) {
   return {
     product_record,
     stock_item_records,
-    sizes_details_records,
+    sizes_records,
     product_variants_records
   }
 }
