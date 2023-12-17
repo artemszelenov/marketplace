@@ -1,3 +1,4 @@
+import { StockItemsMetricsSchema } from "$lib/schema"
 import type PocketBase from "pocketbase";
 import type { Product, StockItem } from "$lib/schema"
 
@@ -34,9 +35,10 @@ export async function load({ params, locals, url }) {
     for (const stock_item_record of stock_item_records) {
       if (stock_item_record.size_group === size_record.expand?.group.id) {
         const stock_item = stock_items.find(stock_item => stock_item_record.id === stock_item.id);
+        const metric_value = StockItemsMetricsSchema.parse(size_record.expand?.metric.value);
 
         if (stock_item) {
-          stock_item.metrics[size_record.expand?.metric?.value] = size_record.title;
+          stock_item.metrics[metric_value] = size_record.title;
         }
       }
     }

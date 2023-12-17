@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export const SHOES_METRICS = ["eu", "uk", "us"] as const;
+export const GLOBAL_METRICS = ["intl"] as const;
+export const ALL_METRICS = [...SHOES_METRICS, ...GLOBAL_METRICS] as const;
+
 export const UserSchema = z
   .object({
     id: z.string(),
@@ -11,10 +15,12 @@ export const UserSchema = z
 
 export type User = z.infer<typeof UserSchema>
 
+export const ProductTypeSchema = z.enum(["shoes", "pants"]);
+
 export const ProductSchema = z
   .object({
     id: z.string(),
-    type: z.enum(["shoes", "pants"]),
+    type: ProductTypeSchema,
     title: z.string(),
     description: z.string(),
     price: z.number(),
@@ -34,14 +40,16 @@ export const ProductTeaserSchema = z
 
 export type ProductTeaser = z.infer<typeof ProductTeaserSchema>
 
+export const StockItemsMetricsSchema = z.enum(ALL_METRICS)
+
 export const StockItemSchema = z
   .object({
     id: z.string(),
     product_id: z.string(),
     count: z.number(),
     metrics: z.record(
-      z.enum(["eu", "uk", "us"]), z.string()
-    )
+        StockItemsMetricsSchema, z.string()
+      )
   });
 
 export type StockItem = z.infer<typeof StockItemSchema>
@@ -49,13 +57,14 @@ export type StockItem = z.infer<typeof StockItemSchema>
 export const CartItemSchema = z
   .object({
     id: z.string(),
+    quantity: z.number(),
     product: ProductSchema,
     stock_item: StockItemSchema
   });
 
 export type CartItem = z.infer<typeof CartItemSchema>
 
-export const StoragePreferredShoesSizeMetricSchema = z.enum(["eu", "uk", "us"]);
+export const StoragePreferredShoesSizeMetricSchema = z.enum(SHOES_METRICS);
 
 export type StoragePreferredShoesSizeMetric = z.infer<typeof StoragePreferredShoesSizeMetricSchema>
 

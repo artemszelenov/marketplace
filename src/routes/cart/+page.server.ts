@@ -1,8 +1,10 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { ClientResponseError } from "pocketbase";
-import type { CartItem } from "$lib/schema";
+import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
 
 export async function load({ locals, cookies }) {
+  await locals.pb.autoCancellation(false); // костыль, возможно надо убрать и оптимизировать
+
   try {
     let cart_items: CartItem[] = [];
 
@@ -13,10 +15,10 @@ export async function load({ locals, cookies }) {
         .collection("cart_items")
         .getFullList({
           filter: `cart = "${cart_id}"`,
-          expand: "stock_item, stock_item.product, stock_item.size_group"
+          expand: "stock_item, stock_item.product, stock_item.size_group, stock_item.product.type"
         });
 
-      const sizes_details_records = await locals.pb
+      const sizes_records = await locals.pb
         .collection("sizes")
         .getFullList({
           filter: cart_items_records
@@ -32,6 +34,7 @@ export async function load({ locals, cookies }) {
 
         return {
           id: cart_item.id,
+          quantity: cart_item.quantity,
           product: {
             id: product.id,
             type: product.expand?.type.value,
@@ -50,27 +53,20 @@ export async function load({ locals, cookies }) {
         }
       });
 
-      // оптимизировать
-      sizes_details_records.forEach(size_details => {
-        cart_items_records.forEach(cart_item_record => {
+      for (const size_record of sizes_records) {
+        for (const cart_item_record of cart_items_records) {
           const stock_item_record = cart_item_record.expand?.stock_item;
 
-          if (stock_item_record.size_group === size_details.expand?.group.id) {
+          if (stock_item_record.size_group === size_record.expand?.group.id) {
             const cart_item = cart_items.find(cart_item => stock_item_record.id === cart_item.stock_item.id);
+            const metric_value = StockItemsMetricsSchema.parse(size_record.expand?.metric.value);
     
-            if (!cart_item) return
-    
-            const group_id = size_details.expand!.group.id;
-    
-            cart_item.stock_item.metrics[group_id] = {
-              ...(cart_item.stock_item.metrics[group_id] ?? {}),
-              [size_details.expand?.metric?.value ?? "unknown_metric"]: {
-                title: size_details.title
-              }
+            if (cart_item) {
+              cart_item.stock_item.metrics[metric_value] = size_record.title;
             }
           }
-        });
-      });
+        }
+      }
     }
 
     return {

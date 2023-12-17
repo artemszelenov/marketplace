@@ -5,4 +5,4 @@ import { persistentAtom } from "@nanostores/persistent";
 
 export const preferredShoesSizeMetric = persistentAtom<StoragePreferredShoesSizeMetric>("preferred_shoes_size_metric:", "eu");
 
-export const AVAILABLE_METRICS = StoragePreferredShoesSizeMetricSchema.options;
+export const SHOES_METRICS = StoragePreferredShoesSizeMetricSchema.options;

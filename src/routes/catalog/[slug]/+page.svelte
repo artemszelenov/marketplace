@@ -1,12 +1,19 @@
 <script lang="ts">
   import AddToCartForm from "$lib/components/forms/AddToCartForm.svelte";
-  import { AVAILABLE_METRICS, preferredShoesSizeMetric } from "$lib/stores/preferredShoesSizeMetric";
+  import { SHOES_METRICS, preferredShoesSizeMetric } from "$lib/stores/preferredShoesSizeMetric";
+  import type { StockItem } from "$lib/schema";
 
   export let data;
 
   $: current_stock_item = data.stock_items.find(
     stock_item => stock_item.id === data.current_stock_item_id
   );
+
+  function getSizeTitleFrom(stock_item: StockItem) {
+    return data.product.type === "shoes"
+      ? stock_item.metrics[$preferredShoesSizeMetric]
+      : stock_item.metrics.intl
+  }
 </script>
 
 <div
@@ -55,7 +62,7 @@
             <h2 class="text-xl font-bold text-gray-900">Размеры</h2>
 
             <ul class="flex items-center">
-              {#each AVAILABLE_METRICS as metric}
+              {#each SHOES_METRICS as metric}
                 <li>
                   <button
                     class="text-gray-900 text-sm p-1 font-bold border border-gray-900 rounded"
@@ -81,14 +88,14 @@
                 class:border-gray-900={current_stock_item?.id === stock_item.id}
                 title="Выбрать размер"
               >
-                {stock_item.metrics[$preferredShoesSizeMetric]}
+                {getSizeTitleFrom(stock_item)}
               </a>
             {:else}
               <div
                 class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
                 title="Нет в наличии"
               >
-                {stock_item.metrics[$preferredShoesSizeMetric]}
+                {getSizeTitleFrom(stock_item)}
               </div>
             {/if}
           {/each}

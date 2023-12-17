@@ -1,8 +1,16 @@
 <script lang="ts">
   import RemoveFromCartForm from "./forms/RemoveFromCartForm.svelte";
-  import type { CartItem } from "$lib/schema";
+  import { preferredShoesSizeMetric } from "$lib/stores/preferredShoesSizeMetric";
+  import type { CartItem, StockItem } from "$lib/schema";
 
   export let cart_item: CartItem;
+
+  function getSizeTitleFrom(stock_item: StockItem) {
+    console.log(cart_item);
+    return cart_item.product.type === "shoes"
+      ? stock_item.metrics[$preferredShoesSizeMetric]
+      : stock_item.metrics.intl
+  }
 </script>
 
 <article class="flex space-x-5 actions-show-on-hover">
@@ -24,7 +32,7 @@
     <p class="text-sm">Цена: {cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</p>
 
     <p class="text-sm">
-      Размер: 
+      Размер: {getSizeTitleFrom(cart_item.stock_item)}
     </p>
 
     <div class="mt-auto">
