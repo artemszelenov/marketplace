@@ -35,6 +35,14 @@
       Размер: {getSizeTitleFrom(cart_item.stock_item)}
     </p>
 
+    <p class="text-sm">
+      Количество: {cart_item.quantity}
+    </p>
+
+    <p class="text-sm">
+      Цвет: 
+    </p>
+
     <div class="mt-auto">
       <RemoveFromCartForm cart_item_id={cart_item.id} />
     </div>

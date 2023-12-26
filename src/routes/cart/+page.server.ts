@@ -1,5 +1,4 @@
-import { error, fail, redirect } from '@sveltejs/kit';
-import { ClientResponseError } from "pocketbase";
+import { error, fail } from '@sveltejs/kit';
 import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
 
 export async function load({ locals, cookies }) {
@@ -87,10 +86,24 @@ export const actions = {
   add: async ({ request, cookies, locals }) => {
     const body = Object.fromEntries(await request.formData());
 
+    const stock_item_id = body['stock-item']?.toString();
     const cart_id = cookies.get("pb_cart");
 
-    // create new card if does not exsist with first cart_item
-    if (!cart_id) {
+    if (!stock_item_id) {
+      console.log('stock-item не передан');
+      return;
+    }
+
+    // new cart flow
+    try {
+      if (!cart_id) {
+        throw new Error('Creation of new cart and cart_item needed');// проверить на просто throw
+      }
+
+      await locals.pb
+        .collection("carts")
+        .getOne(cart_id); // throw if not found; see catch block
+    } catch (err) {
       const new_cart = await locals.pb
         .collection("carts")
         .create({
@@ -100,7 +113,7 @@ export const actions = {
       await locals.pb
         .collection("cart_items")
         .create({
-          stock_item: body["stock-item"],
+          stock_item: stock_item_id,
           quantity: Number(body.quantity),
           cart: new_cart.id
         });
@@ -108,40 +121,124 @@ export const actions = {
       cookies.set("pb_cart", new_cart.id, { path: "/" });
 
       return {
-        success: true
+        success: 'Товар успешно добавлен в корзину'
       }
     }
 
+    // exsisting cart flow
     try {
-      // if cart_item already exsists in cart
-      const cart_item = await locals.pb
+      const cart_item_record = await locals.pb
         .collection("cart_items")
-        .getFirstListItem(`stock_item = "${body['stock-item']}" && cart = "${cart_id}"`, {
+        .getFirstListItem(`stock_item = "${stock_item_id}" && cart = "${cart_id}"`, {
           expand: "stock_item"
         });
 
-      if (cart_item.quantity + 1 >= cart_item.expand?.stock_item.count) {
-        return fail(422, { errors: ["На складе недостаточно товара"] });
-      } else {
+      if (cart_item_record.quantity < cart_item_record.expand?.stock_item.count) {
         await locals.pb
           .collection("cart_items")
-          .update(cart_item.id, {
-            quantity: cart_item.quantity + 1
+          .update(cart_item_record.id, {
+            quantity: cart_item_record.quantity + 1
           });
+
+        return {
+          success: `Успешно. Количество в корзине: ${cart_item_record.quantity + 1}`
+        }
+      } else {
+        return fail(422, { errors: ["На складе недостаточно товара"] });
       }
     } catch (err) {
-      // if cart_item does not exsist in cart yet
-      if (err instanceof ClientResponseError && err.status === 404) {
-        await locals.pb
-          .collection("cart_items")
-          .create({
-            stock_item: body["stock-item"],
-            quantity: Number(body.quantity),
-            cart: cart_id
-          });
+      await locals.pb
+        .collection("cart_items")
+        .create({
+          stock_item: stock_item_id,
+          quantity: Number(body.quantity),
+          cart: cart_id
+        });
+
+      return {
+        success: 'Товар успешно добавлен в корзину'
       }
     }
 
-    throw redirect(303, body?.from?.toString() ?? "/");    
+    // try {
+    //   if (!cart_id) {
+    //     const new_cart = await locals.pb
+    //       .collection("carts")
+    //       .create({
+    //         user: locals.user?.id,
+    //       });
+
+    //     await locals.pb
+    //       .collection("cart_items")
+    //       .create({
+    //         stock_item: stock_item_id,
+    //         quantity: Number(body.quantity),
+    //         cart: new_cart.id
+    //       });
+
+    //     cookies.set("pb_cart", new_cart.id, { path: "/" });
+
+    //     return {
+    //       success: 'Товар успешно добавлен в корзину'
+    //     }
+    //   } else {
+    //     const current_cart_record = await locals.pb
+    //       .collection("carts")
+    //       .getOne(cart_id);
+
+    //     if (current_cart_record) {
+          
+    //     } else {
+    //       const new_cart = await locals.pb
+    //         .collection("carts")
+    //         .create({
+    //           user: locals.user?.id,
+    //         });
+
+    //       await locals.pb
+    //         .collection("cart_items")
+    //         .create({
+    //           stock_item: stock_item_id,
+    //           quantity: Number(body.quantity),
+    //           cart: new_cart.id
+    //         });
+
+    //       cookies.set("pb_cart", new_cart.id, { path: "/" });
+
+    //       return {
+    //         success: 'Товар успешно добавлен в корзину'
+    //       }
+    //     }
+    //   }
+    // } catch (err) {
+    //   console.log('Ошибка при добавлении товара', err);
+    //   return fail(422, { errors: ["Ошибка на сервере", "Не удалось добавить товар"] });
+    // }
+
+    // throw redirect(303, body?.from?.toString() ?? "/");
+  },
+  remove: async ({ request, locals }) => {
+    const body = Object.fromEntries(await request.formData());
+
+    const cart_item_id = body['cart-item']?.toString();
+
+    // обработать удаление корзины если удалили последний товар
+
+    try {
+      if (cart_item_id) {
+        await locals.pb
+          .collection('cart_items')
+          .delete(cart_item_id);
+  
+        return {
+          success: "Товар успешно удален"
+        }
+      } else {
+        console.log('cart-item не передан');
+      }
+    } catch (err) {
+      console.log('Ошибка при удалении товара', err);
+      return fail(422, { errors: ["Ошибка на сервере", "Не удалось удалить товар"] });
+    }
   }
 }

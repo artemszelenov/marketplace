@@ -28,7 +28,7 @@
 </svelte:head>
 
 <header class="bg-neutral-100">
-  <div
+  <nav
     class="flex flex-col w-full mx-auto md:items-center md:justify-between md:flex-row md:px-12 px-8 py-4 max-w-7xl lg:px-12"
   >
     <a href="/" class="text-neutral-100 bg-gray-900 px-2 py-1 rounded">
@@ -37,7 +37,7 @@
       </svg>
     </a>
 
-    <nav
+    <div
       class="flex-col items-center md:pb-0 md:flex md:flex-row"
     >
       {#each nav as { text, url }}
@@ -45,9 +45,9 @@
           {text}
         </a>
       {/each}
-    </nav>
+    </div>
 
-    <nav
+    <div
       class="flex-col items-center md:pb-0 md:flex md:flex-row"
     >
       {#if data.user}
@@ -69,8 +69,8 @@
           {/if}
         </div>
       </a>
-    </nav>
-  </div>
+    </div>
+  </nav>
 </header>
 
 <main class="bg-neutral-100 relative z-10 shadow-2xl">

@@ -13,14 +13,14 @@ export default {
 		},
 	},
 	plugins: [
-		plugin(({ addComponents, addUtilities, addBase, theme }) => {
+		plugin(({ addUtilities, addBase, theme }) => {
 			addBase({
 				'a[href], button': {
 					'&:hover:not(:disabled)': {
 						'background-color': theme('colors[light-grey]')
 					},
 					'&:active:not(:disabled)': {
-						'transform': 'translateY(2px)',
+						'transform': 'scale(0.95)',
 						'background-color': theme('colors[light-grey]')
 					},
 					'&:focus': {
@@ -31,7 +31,7 @@ export default {
 					'background-color': theme('colors[light-grey]')
 				},
 				'input[type="radio"]:not(:disabled) + label:active': {
-					'transform': 'translateY(2px)',
+					'transform': 'scale(0.95)',
 					'background-color': theme('colors[light-grey]')
 				},
 				'input[type="radio"]:focus + label': {
@@ -75,16 +75,6 @@ export default {
 			})
 
 			addUtilities({
-				'.actions-show-on-hover': {
-					'button': {
-						'visibility': 'hidden'
-					},
-					'&:hover': {
-						'button': {
-							'visibility': 'visible'
-						}
-					}
-				},
 				'.visually-hidden': {
 					'clip': 'rect(0, 0, 0, 0)',
 					'white-space': 'nowrap',
@@ -95,17 +85,6 @@ export default {
 					'padding': '0',
 					'position': 'absolute',
 					'overflow': 'hidden'
-				}
-			})
-
-			addComponents({
-				'.cart-is-not-empty-indicator': {
-					'&::after': {
-						'position': 'relative',
-						'top': '-5px',
-						'right': '-5px',
-						'content': `'*'`
-					}
 				}
 			})
 		})

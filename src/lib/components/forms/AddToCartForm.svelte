@@ -1,16 +1,22 @@
 <script lang="ts">
   import type { SubmitFunction } from "@sveltejs/kit";
+  import { invalidate } from '$app/navigation';
   import { enhance } from "$app/forms";
-  import { page } from "$app/stores";
 
   export let stock_item_id: string | undefined;
 
   let errors: string[] = [];
+  let success: string;
 
   const handleFormResult: SubmitFunction = function () {
     return async ({ result }) => {
       if (result.type === "failure") {
         errors = result.data?.errors ?? [];
+      }
+
+      if (result.type === "success") {
+        success = result.data?.success;
+        invalidate("layout:root");
       }
     };
   };
@@ -18,8 +24,9 @@
 
 <form action="/cart?/add" method="POST" use:enhance={handleFormResult}>
   <input type="hidden" name="stock-item" value={stock_item_id}>
+
   <input type="hidden" name="quantity" value="1">
-  <input type="hidden" name="from" value={$page.url.pathname + $page.url.search}>
+
   <button
     class="flex items-center gap-2 text-white text-xs uppercase"
     type="submit"
@@ -42,6 +49,10 @@
 
 {#if errors.length > 0}
   {#each errors as message}
-    <p class="text-red">{message}</p>
+    <p class="text-red-700">{message}</p>
   {/each}
+{/if}
+
+{#if success}
+  <p class="mt-1 text-teal-800">{success}</p>
 {/if}

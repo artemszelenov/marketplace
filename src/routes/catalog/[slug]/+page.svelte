@@ -62,10 +62,16 @@
             <h2 class="text-xl font-bold text-gray-900">Размеры</h2>
 
             <ul class="flex items-center">
-              {#each SHOES_METRICS as metric}
+              {#each SHOES_METRICS as metric, index}
                 <li>
                   <button
-                    class="text-gray-900 text-sm p-1 font-bold border border-gray-900 rounded"
+                    class="text-gray-900 text-xs px-1.5 font-bold border border-gray-900"
+                    class:rounded-l-full={index === 0}
+                    class:pl-2={index === 0}
+                    class:rounded-r-full={SHOES_METRICS.length - 1 === index}
+                    class:pr-2={SHOES_METRICS.length - 1 === index}
+                    class:ml-[-1px]={SHOES_METRICS.length - 1 !== index && index !== 0}
+                    class:mr-[-1px]={SHOES_METRICS.length - 1 !== index && index !== 0}
                     type="button"
                     on:click={() => preferredShoesSizeMetric.set(metric)}
                   >
@@ -104,7 +110,7 @@
 
       {#if data.product_variants.length > 0}
         <div class="mt-5">
-          <h2 class="text-xl font-bold text-gray-900">Другие варианты цветов</h2>
+          <h2 class="text-xl font-bold text-gray-900">Цвета</h2>
 
           <ul class="flex mt-3 -mx-2 px-2 space-x-2 overflow-x-auto">
             {#each data.product_variants as variant (variant.id)}

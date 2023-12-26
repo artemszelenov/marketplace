@@ -1,5 +1,5 @@
 export async function load({ locals, depends, cookies }) {
-  // depends("app:root-layout");
+  depends("layout:root");
 
   const cart_id = cookies.get("pb_cart");
 
