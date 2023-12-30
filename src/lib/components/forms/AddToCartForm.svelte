@@ -5,17 +5,16 @@
 
   export let stock_item_id: string | undefined;
 
-  let errors: string[] = [];
-  let success: string;
+  let feedback: { type: 'error' | 'success', message: string };
 
   const handleFormResult: SubmitFunction = function () {
     return async ({ result }) => {
       if (result.type === "failure") {
-        errors = result.data?.errors ?? [];
+        feedback = { type: 'error', message: result.data?.message }
       }
 
       if (result.type === "success") {
-        success = result.data?.success;
+        feedback = { type: 'success', message: result.data?.message }
         invalidate("layout:root");
       }
     };
@@ -47,12 +46,12 @@
   </button>
 </form>
 
-{#if errors.length > 0}
-  {#each errors as message}
-    <p class="text-red-700">{message}</p>
-  {/each}
-{/if}
-
-{#if success}
-  <p class="mt-1 text-teal-800">{success}</p>
+{#if feedback}
+  <p
+    class="mt-1"
+    class:text-teal-800={feedback.type === "success"}
+    class:text-red-700={feedback.type === "error"}
+  >
+    {feedback.message}
+  </p>
 {/if}

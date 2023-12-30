@@ -24,7 +24,7 @@
 </script>
 
 <svelte:head>
-  <title>{`${data.seo.title} | 6:52`}</title>
+  <title>{`${data.seo.title} - 6:52`}</title>
 </svelte:head>
 
 <header class="bg-neutral-100">

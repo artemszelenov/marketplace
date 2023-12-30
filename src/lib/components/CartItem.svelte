@@ -6,7 +6,6 @@
   export let cart_item: CartItem;
 
   function getSizeTitleFrom(stock_item: StockItem) {
-    console.log(cart_item);
     return cart_item.product.type === "shoes"
       ? stock_item.metrics[$preferredShoesSizeMetric]
       : stock_item.metrics.intl

@@ -1,5 +1,6 @@
 import { error, fail } from '@sveltejs/kit';
 import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
+import { ClientResponseError } from "pocketbase";
 
 export async function load({ locals, cookies }) {
   await locals.pb.autoCancellation(false); // костыль, возможно надо убрать и оптимизировать
@@ -87,22 +88,22 @@ export const actions = {
     const body = Object.fromEntries(await request.formData());
 
     const stock_item_id = body['stock-item']?.toString();
-    const cart_id = cookies.get("pb_cart");
+    const cart_id_cookie = cookies.get("pb_cart") ?? '';
 
     if (!stock_item_id) {
       console.log('stock-item не передан');
-      return;
+      throw error(400, {
+        message: 'stock-item не передан'
+      });
     }
 
     // new cart flow
-    try {
-      if (!cart_id) {
-        throw new Error('Creation of new cart and cart_item needed');// проверить на просто throw
-      }
+    let existing_cart_record
 
-      await locals.pb
+    try {
+      existing_cart_record = await locals.pb
         .collection("carts")
-        .getOne(cart_id); // throw if not found; see catch block
+        .getFirstListItem(`id = "${cart_id_cookie}"`); // throw if not found
     } catch (err) {
       const new_cart = await locals.pb
         .collection("carts")
@@ -121,124 +122,94 @@ export const actions = {
       cookies.set("pb_cart", new_cart.id, { path: "/" });
 
       return {
-        success: 'Товар успешно добавлен в корзину'
+        message: 'Товар успешно добавлен в корзину 1'
       }
     }
 
-    // exsisting cart flow
+    // existing cart flow
+    let cart_item_record
+
     try {
-      const cart_item_record = await locals.pb
+      cart_item_record = await locals.pb
         .collection("cart_items")
-        .getFirstListItem(`stock_item = "${stock_item_id}" && cart = "${cart_id}"`, {
+        .getFirstListItem(`stock_item = "${stock_item_id}" && cart = "${existing_cart_record.id}"`, {
           expand: "stock_item"
-        });
-
-      if (cart_item_record.quantity < cart_item_record.expand?.stock_item.count) {
-        await locals.pb
-          .collection("cart_items")
-          .update(cart_item_record.id, {
-            quantity: cart_item_record.quantity + 1
-          });
-
-        return {
-          success: `Успешно. Количество в корзине: ${cart_item_record.quantity + 1}`
-        }
-      } else {
-        return fail(422, { errors: ["На складе недостаточно товара"] });
-      }
+        }); // throw if not found
     } catch (err) {
       await locals.pb
         .collection("cart_items")
         .create({
           stock_item: stock_item_id,
           quantity: Number(body.quantity),
-          cart: cart_id
+          cart: existing_cart_record.id
         });
 
       return {
-        success: 'Товар успешно добавлен в корзину'
+        message: 'Товар успешно добавлен в корзину 2'
       }
     }
 
-    // try {
-    //   if (!cart_id) {
-    //     const new_cart = await locals.pb
-    //       .collection("carts")
-    //       .create({
-    //         user: locals.user?.id,
-    //       });
+    // item in stock
+    if (cart_item_record.quantity < cart_item_record.expand?.stock_item.count) {
+      await locals.pb
+        .collection("cart_items")
+        .update(cart_item_record.id, {
+          quantity: cart_item_record.quantity + 1
+        });
 
-    //     await locals.pb
-    //       .collection("cart_items")
-    //       .create({
-    //         stock_item: stock_item_id,
-    //         quantity: Number(body.quantity),
-    //         cart: new_cart.id
-    //       });
+      return {
+        message: `Успешно. Количество в корзине: ${cart_item_record.quantity + 1}`
+      }
+    }
 
-    //     cookies.set("pb_cart", new_cart.id, { path: "/" });
-
-    //     return {
-    //       success: 'Товар успешно добавлен в корзину'
-    //     }
-    //   } else {
-    //     const current_cart_record = await locals.pb
-    //       .collection("carts")
-    //       .getOne(cart_id);
-
-    //     if (current_cart_record) {
-          
-    //     } else {
-    //       const new_cart = await locals.pb
-    //         .collection("carts")
-    //         .create({
-    //           user: locals.user?.id,
-    //         });
-
-    //       await locals.pb
-    //         .collection("cart_items")
-    //         .create({
-    //           stock_item: stock_item_id,
-    //           quantity: Number(body.quantity),
-    //           cart: new_cart.id
-    //         });
-
-    //       cookies.set("pb_cart", new_cart.id, { path: "/" });
-
-    //       return {
-    //         success: 'Товар успешно добавлен в корзину'
-    //       }
-    //     }
-    //   }
-    // } catch (err) {
-    //   console.log('Ошибка при добавлении товара', err);
-    //   return fail(422, { errors: ["Ошибка на сервере", "Не удалось добавить товар"] });
-    // }
-
-    // throw redirect(303, body?.from?.toString() ?? "/");
+    return fail(422, { message: "На складе недостаточно товара" });
   },
-  remove: async ({ request, locals }) => {
+
+  remove: async ({ request, locals, cookies }) => {
     const body = Object.fromEntries(await request.formData());
 
     const cart_item_id = body['cart-item']?.toString();
+    const cart_id_cookie = cookies.get("pb_cart") ?? '';
 
-    // обработать удаление корзины если удалили последний товар
+    if (!cart_item_id) {
+      console.log('cart-item не передан');
+      throw error(400, {
+        message: 'cart-item не передан'
+      });
+    }
 
     try {
-      if (cart_item_id) {
+      await locals.pb
+        .collection('cart_items')
+        .delete(cart_item_id);
+
+      // delete cart if the last cart_item deleted
+      const cart_items_records = await locals.pb
+        .collection("cart_items")
+        .getFullList({
+          filter: `cart = "${cart_id_cookie}"`
+        });
+
+      if (cart_items_records.length === 0) {
         await locals.pb
-          .collection('cart_items')
-          .delete(cart_item_id);
-  
-        return {
-          success: "Товар успешно удален"
-        }
-      } else {
-        console.log('cart-item не передан');
+          .collection("carts")
+          .delete(cart_id_cookie);
+
+        cookies.delete("pb_cart");
+      }
+
+      return {
+        message: "Товар успешно удален"
       }
     } catch (err) {
-      console.log('Ошибка при удалении товара', err);
-      return fail(422, { errors: ["Ошибка на сервере", "Не удалось удалить товар"] });
+      if (err instanceof ClientResponseError) {
+        console.log('Pocketbase: Ошибка при удалении товара', err);
+        throw error(500, {
+          message: 'Pocketbase: ' + err.message
+        });
+      }
+      console.log('Неизвестная ошибка', err);
+      throw error(500);
     }
   }
 }

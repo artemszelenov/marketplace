@@ -1,12 +1,12 @@
 export async function load({ locals, depends, cookies }) {
   depends("layout:root");
 
-  const cart_id = cookies.get("pb_cart");
+  const cart_id_cookie = cookies.get("pb_cart");
 
   const cart_items = locals.pb
     .collection("cart_items")
     .getFullList({
-      filter: `cart = "${cart_id}"`
+      filter: `cart = "${cart_id_cookie}"`
     });
 
   return {
