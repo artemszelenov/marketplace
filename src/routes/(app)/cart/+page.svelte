@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Order } from "$lib/schema";
   import CartItem from "$lib/components/CartItem.svelte";
+  import Button from "$lib/components/UI/Button.svelte";
 
   export let data;
   
@@ -33,17 +34,22 @@
     </div>
 
     <div class="w-[25em]">
-      <p>
-        <span class="font-semibold">Доставка:</span>
+      <p class="text-xl font-semibold">
+        Стоимость без учета доставки
       </p>
 
       <p class="mt-4 text-xl font-semibold">
-        <span>Итого:</span>
-        <span>{total.toLocaleString("ru-RU") + " ₽"}</span>
+        {total.toLocaleString("ru-RU") + " ₽"}
       </p>
 
       <p class="mt-4">
-        <a href="/checkout">Оформить заказ</a>
+        <Button
+          as="link"
+          href="/checkout"
+          size="xs"
+        >
+          <span slot="text">Оформить заказ</span>
+        </Button>
       </p>
     </div>
   {/if}

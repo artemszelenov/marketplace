@@ -11,7 +11,7 @@ export async function load({ locals, depends, cookies }) {
 
   return {
     user: locals.user,
-    cart_items_count: cart_items.then(items => items.length),
+    cart_items_count: await cart_items.then(items => items.length),
     seo: {
       title: "Главная"
     }

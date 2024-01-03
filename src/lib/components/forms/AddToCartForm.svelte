@@ -2,6 +2,7 @@
   import type { SubmitFunction } from "@sveltejs/kit";
   import { invalidate } from '$app/navigation';
   import { enhance } from "$app/forms";
+  import Button from "$lib/components/UI/Button.svelte";
 
   export let stock_item_id: string | undefined;
 
@@ -26,24 +27,14 @@
 
   <input type="hidden" name="quantity" value="1">
 
-  <button
-    class="flex items-center gap-2 text-white text-xs uppercase"
-    type="submit"
+  <Button
     title="Добавить в корзину"
     disabled={!stock_item_id}
+    type="submit"
+    size="xs"
   >
-    <div class="bg-gray-900 rounded-full px-5 py-2 tracking-wide">
-      Добавить в корзину
-    </div>
-
-    <div
-      class="flex items-center justify-center rounded-full bg-gray-900 w-[32px] h-[32px]"
-    >
-      <svg class="w-4 h-4" width="21" height="20" viewBox="0 0 21 20" fill="none" aria-hidden="true">
-        <path d="M10.5 1.80627V18.9938M19.0938 10.4H1.90625" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>        
-    </div>
-  </button>
+    <span slot="text">Добавить в корзину</span>
+  </Button>
 </form>
 
 {#if feedback}

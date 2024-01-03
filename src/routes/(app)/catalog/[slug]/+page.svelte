@@ -90,7 +90,7 @@
             {#if stock_item.count > 0}
               <a
                 href="/catalog/{stock_item.product_id}?stock_item={stock_item.id}"
-                class="relative px-2 py-2 text-s text-center font-bold border border-gray-900 rounded-lg outline-offset-2 cursor-pointer"
+                class="relative px-2 py-1.5 text-s text-center font-bold border-2 border-gray-900 rounded-lg outline-offset-2 cursor-pointer"
                 class:border-gray-900={current_stock_item?.id === stock_item.id}
                 title="Выбрать размер"
               >
@@ -98,7 +98,7 @@
               </a>
             {:else}
               <div
-                class="px-2 py-2 text-s text-center font-medium border border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
+                class="px-2 py-1.5 text-s text-center font-medium border-2 border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
                 title="Нет в наличии"
               >
                 {getSizeTitleFrom(stock_item)}

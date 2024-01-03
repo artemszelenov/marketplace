@@ -122,7 +122,7 @@ export const actions = {
       cookies.set("pb_cart", new_cart.id, { path: "/" });
 
       return {
-        message: 'Товар успешно добавлен в корзину 1'
+        message: 'Товар успешно добавлен в корзину'
       }
     }
 
@@ -145,7 +145,7 @@ export const actions = {
         });
 
       return {
-        message: 'Товар успешно добавлен в корзину 2'
+        message: 'Товар успешно добавлен в корзину'
       }
     }
 

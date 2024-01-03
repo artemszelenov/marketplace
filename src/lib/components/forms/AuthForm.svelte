@@ -110,12 +110,12 @@
     </div>
   {/if}
 
-  <div class="flex items-start justify-between mt-6">
+  <!-- <div class="flex items-start justify-between mt-6">
     <Button
       title={steps[currentStep].toggleText}
       variant="link"
       extraClasses="underline underline-offset-2"
-      onClick={handleToggle}
+      handler={handleToggle}
     >
       {steps[currentStep].toggleText}
     </Button>
@@ -127,5 +127,5 @@
     >
       {steps[currentStep].submitText}
     </Button>
-  </div>
+  </div> -->
 </form>

@@ -68,10 +68,6 @@ export default {
 				// 'img': {
 				// 	'aspect-ratio': 'attr(width) / attr(height)'
 				// },
-				'p a[href]': {
-					'text-decoration': 'underline',
-					'text-underline-offset': '0.2em'
-				}
 			})
 
 			addUtilities({

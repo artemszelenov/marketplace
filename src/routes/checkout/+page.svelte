@@ -7,39 +7,40 @@
 
   export let data;
 
-  const cart_items = []
+  const cart_items = [];
 </script>
 
-<h1 class="text-2xl font-bold">Оформление заказа</h1>
-
-<div class="grid grid-cols-2 mt-5">
+<div class="grid grid-cols-[1fr_25em] gap-20 mt-5">
   <div>
-    <AuthForm redirectTo="/cart" />
-    <p>адрес и доставка</p>
+    <div class="flex items-center justify-between">
+      <p class="text-xl font-bold">Доставка</p>
+
+      <Button
+        size="xs"
+        title="ШАГ 1 ИЗ 3"
+      >
+        <span slot="text">ШАГ 1 ИЗ 3</span>
+        <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none">
+          <path d="M1.9375 8.23437L8.5 1.67187L15.0625 8.23438" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </Button>
+    </div>
+
     <p>получатель</p>
     <p>оплата</p>
   </div>
 
-  <div class="w-[25em]">
+  <div>
+    <p>
+      <span class="font-semibold">Ваш заказ</span>
+    </p>
+
+    <p>
+      <span class="font-semibold">Стоимость доставки</span>
+    </p>
+
     <p class="mt-4 text-xl font-semibold">
-      <span>Итого:</span>
-      <!-- <span>{total.toLocaleString("ru-RU") + " руб."}</span> -->
+      <span>Итого</span>
     </p>
-
-    <p>
-      <span class="font-semibold">Доставка:</span>
-    </p>
-
-    <p>
-      <span class="font-semibold">В вашей корзине:</span>
-    </p>
-
-    <ul class="space-y-7">
-      {#each cart_items as { product, stock_item } (stock_item.id)}
-        <li>
-          <CartItem {product} />
-        </li>
-      {/each}
-    </ul>
   </div>
 </div>
