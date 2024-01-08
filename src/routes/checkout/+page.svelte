@@ -3,12 +3,12 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import Button from "$lib/components/UI/Button.svelte";
+  import Select from "$lib/components/UI/Select.svelte";
   import { currentCity } from "$lib/stores/currentCity";
 
   export let data;
 
-  $: closest_cities = [];
-
+  let closest_cities: City[] = [];
   let map: any;
 
   onMount(() => {
@@ -64,13 +64,19 @@
       </header>
 
       <div class="mt-10">
-        <div id="map" style="aspect-ratio: 16 / 9;" />
+        <div id="map" class="aspect-video" />
 
         <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
+          <label for="tk" class="text-lg font-medium mt-2">ТК</label>
+
+          <Select name="tk" value="cdek" disabled>
+            <option value="cdek">CDEK</option>
+          </Select>
+
           <label for="city" class="text-lg font-medium mt-2">Город</label>
 
           <div>
-            <select name="city" id="city" value={$currentCity.postal_code}>
+            <Select name="city" value={$currentCity.postal_code}>
               <optgroup label="Города рядом с вами">
                 {#each closest_cities as { address, postal_code }}
                   <option value={postal_code.toString()}>{address}</option>
@@ -81,11 +87,11 @@
                   <option value={postal_code.toString()}>{address}</option>
                 {/each}
               </optgroup>
-            </select>
+            </Select>
 
             <button
               type="button"
-              class="flex mt-2 underline"
+              class="flex ml-4 mt-2 underline text-sm"
               on:click={getCurrentLocation}
             >
               <span>Определить город по моей локации</span>
@@ -116,7 +122,7 @@
       </header>
 
       <div class="mt-10">
-        <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7">
+        <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7" autocomplete="on">
           <label for="full_name" class="text-lg font-medium mt-2">Имя и Фамилия</label>
           <div>
             <input
