@@ -5,9 +5,10 @@
 
 <svelte:head>
   <title>{`${$page.data.seo.title} | 6:52`}</title>
+  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=basic" async></script>
 </svelte:head>
 
-<header class="flex flex-col gap-3 w-full mx-auto md:items-center md:justify-center md:flex-row md:px-12 px-8 py-4 max-w-7xl lg:px-12 bg-neutral-100">
+<header class="flex flex-col gap-3 w-full md:items-center md:justify-center md:flex-row md:px-12 px-8 py-4 lg:px-12 bg-neutral-100">
   <nav>
     <a href="/" class="block text-neutral-100 bg-gray-900 px-2 py-[0.3rem] rounded">
       <svg width="35" height="13" viewBox="0 0 35 13" fill="none" aria-hidden="true">
@@ -16,7 +17,7 @@
     </a>
   </nav>
 
-  <h1 class="text-xl font-bold">Оформление заказа</h1>
+  <h1 class="text-xl font-medium">Оформление заказа</h1>
 </header>
 
 <main class="bg-neutral-100">

@@ -14,7 +14,25 @@
   :is(a, button) svg {
     width: 100%;
   }
+
+  input {
+    @apply block w-full bg-white px-4 py-2.5 border rounded-full focus:outline focus:outline-gray-900 focus:outline-[3px] disabled:opacity-20;
+  }
 }
 
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .visually-hidden {
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    overflow: hidden;
+  }
+}

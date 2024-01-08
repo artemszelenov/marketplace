@@ -45,42 +45,6 @@ export default {
 						'cursor': 'not-allowed',
 						'opacity': '0.3'
 					}
-				},
-				'input': {
-					'background-color': theme('colors[white]'),
-					'border': `1px solid ${theme('colors[black]')}`,
-					'border-radius': theme('spacing[0.5]'),
-					'&:hover': {
-						'background-color': theme('colors[light-grey]')
-					},
-					'&:focus': {
-						'background-color': theme('colors[white]'),
-						'outline': `1px dashed ${theme('colors.black')}`,
-						'outline-offset': 2
-					},
-					'&:active': {
-						'background-color': theme('colors[white]')
-					},
-					'&:disabled': {
-						'background-color': theme('colors[light-grey]')
-					},
-				},
-				// 'img': {
-				// 	'aspect-ratio': 'attr(width) / attr(height)'
-				// },
-			})
-
-			addUtilities({
-				'.visually-hidden': {
-					'clip': 'rect(0, 0, 0, 0)',
-					'white-space': 'nowrap',
-					'border-width': '0',
-					'width': '1px',
-					'height': '1px',
-					'margin': '-1px',
-					'padding': '0',
-					'position': 'absolute',
-					'overflow': 'hidden'
 				}
 			})
 		})
