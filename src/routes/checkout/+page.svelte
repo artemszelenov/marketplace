@@ -8,7 +8,8 @@
 
   export let data;
 
-  let closest_cities: City[] = [];
+  let closest_cities: CdekCity[] = [];
+  let deliverypoints = []
   let map: any;
 
   onMount(() => {
@@ -19,23 +20,26 @@
             maximumAge: 24 * 3600
         });
 
-        map.on('locationfound', loc => {
+        map.on('locationfound', async loc => {
           map.setView(loc.latlng, 13);
 
-          data.cities.forEach(city => {
-            const lat = Math.abs(city.geo_lat - loc.latlng.lat);
-            const lng = Math.abs(city.geo_lon - loc.latlng.lng);
+          data.cdek_cities.forEach(city => {
+            const lat = Math.abs(city.latitude - loc.latlng.lat);
+            const lng = Math.abs(city.longitude - loc.latlng.lng);
 
-            if (lat < 1 && lng < 1) {
+            if (lat < 0.2 && lng < 0.2) {
               closest_cities = [...closest_cities, city];
             }
           });
 
           if (closest_cities.length > 0) {
             currentCity.set({
-              postal_code: closest_cities[0].postal_code.toString(),
-              latlng: JSON.stringify([closest_cities[0].geo_lat, closest_cities[0].geo_lon])
+              cdek_city_code: closest_cities[0].code.toString(),
+              latlng: JSON.stringify([closest_cities[0].latitude, closest_cities[0].longitude])
             });
+
+            deliverypoints = await fetch(`/api/cdek/deliverypoints/${$currentCity.cdek_city_code}`)
+              .then(res => res.json());
           }
         });
     });
@@ -76,15 +80,15 @@
           <label for="city" class="text-lg font-medium mt-2">Город</label>
 
           <div>
-            <Select name="city" value={$currentCity.postal_code}>
+            <Select name="city" value={$currentCity.cdek_city_code}>
               <optgroup label="Города рядом с вами">
-                {#each closest_cities as { address, postal_code }}
-                  <option value={postal_code.toString()}>{address}</option>
+                {#each closest_cities as { city, code }}
+                  <option value={code.toString()}>{city}</option>
                 {/each}
               </optgroup>
               <optgroup label="Все города">
-                {#each data.cities as { address, postal_code }}
-                  <option value={postal_code.toString()}>{address}</option>
+                {#each data.cdek_cities as { city, code }}
+                  <option value={code.toString()}>{city}</option>
                 {/each}
               </optgroup>
             </Select>

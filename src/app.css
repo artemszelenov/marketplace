@@ -21,10 +21,10 @@
 
   select {
     @apply appearance-none row-start-1 col-start-1 block w-full bg-white px-4 py-2.5 border rounded-full focus:outline focus:outline-gray-900 focus:outline-[3px] disabled:opacity-60;
+  }
 
-    &:disabled + svg {
-      @apply opacity-60;
-    }
+  select:disabled + svg {
+    @apply opacity-60;
   }
 }
 
