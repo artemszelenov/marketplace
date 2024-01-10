@@ -6,6 +6,11 @@
 @tailwind base;
 
 @layer base {
+  :root {
+    --accent-color: theme(colors.gray.900);
+    accent-color: var(--accent-color);
+  }
+
   p a[href]:not(.no-underline) {
     text-decoration: underline;
     text-underline-offset: 0.2em;

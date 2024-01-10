@@ -9,7 +9,7 @@
   export let data;
 
   let closest_cities: CdekCity[] = [];
-  let deliverypoints = []
+  let selected_office = null
   let map: any;
 
   onMount(() => {
@@ -20,33 +20,77 @@
             maximumAge: 24 * 3600
         });
 
-        map.on('locationfound', async loc => {
-          map.setView(loc.latlng, 13);
+        map.on('locationfound', onLocationFound);
 
-          data.cdek_cities.forEach(city => {
-            const lat = Math.abs(city.latitude - loc.latlng.lat);
-            const lng = Math.abs(city.longitude - loc.latlng.lng);
-
-            if (lat < 0.2 && lng < 0.2) {
-              closest_cities = [...closest_cities, city];
-            }
-          });
-
-          if (closest_cities.length > 0) {
-            currentCity.set({
-              cdek_city_code: closest_cities[0].code.toString(),
-              latlng: JSON.stringify([closest_cities[0].latitude, closest_cities[0].longitude])
-            });
-
-            deliverypoints = await fetch(`/api/cdek/deliverypoints/${$currentCity.cdek_city_code}`)
-              .then(res => res.json());
-          }
-        });
+        drawDeliveryPoints()
     });
   });
 
   function getCurrentLocation() {
     map.locate();
+  }
+
+  function onCityChange(event: Event) {
+    const city_code = Number((event.target as HTMLSelectElement).value);
+    const city = data.cdek_cities.find(({ code }) => code === city_code);
+    if (city) {
+      map.setView([city.latitude, city.longitude], 13);
+      currentCity.set({
+        cdek_city_code: city_code.toString(),
+        latlng: JSON.stringify([city.latitude, city.longitude])
+      });
+    }
+    drawDeliveryPoints()
+  }
+
+  function onLocationFound(loc: { latlng: { lat: number, lng: number } }) {
+    map.setView(loc.latlng, 13);
+
+    data.cdek_cities.forEach(city => {
+      const lat = Math.abs(city.latitude - loc.latlng.lat);
+      const lng = Math.abs(city.longitude - loc.latlng.lng);
+
+      if (lat < 0.2 && lng < 0.2) {
+        closest_cities = [...closest_cities, city];
+      }
+    });
+
+    if (closest_cities.length > 0) {
+      currentCity.set({
+        cdek_city_code: closest_cities[0].code.toString(),
+        latlng: JSON.stringify([closest_cities[0].latitude, closest_cities[0].longitude])
+      });
+
+      drawDeliveryPoints();
+    }
+  }
+
+  async function drawDeliveryPoints() {
+    fetch(`/api/cdek/deliverypoints/${$currentCity.cdek_city_code}`)
+      .then(res => res.json())
+      .then(data => {
+        const icon = DG.divIcon({
+          className: 'map-cdek-marker',
+          iconSize: [35, 35],
+        });
+
+        for (const deliverypoint of data) {
+          const marker = DG.marker([deliverypoint.location.latitude, deliverypoint.location.longitude], {
+            icon,
+            title: deliverypoint.name,
+            alt: deliverypoint.name,
+            riseOnHover: true,
+            payload: deliverypoint
+          });
+
+          marker.addTo(map);
+
+          marker.on('click', (data: any) => {
+            console.log(data);
+            selected_office = data.target.options.payload;
+          })
+        }
+      });
   }
 </script>
 
@@ -80,7 +124,7 @@
           <label for="city" class="text-lg font-medium mt-2">Город</label>
 
           <div>
-            <Select name="city" value={$currentCity.cdek_city_code}>
+            <Select name="city" value={$currentCity.cdek_city_code} onChange={onCityChange}>
               <optgroup label="Города рядом с вами">
                 {#each closest_cities as { city, code }}
                   <option value={code.toString()}>{city}</option>
@@ -105,7 +149,27 @@
             </button>
           </div>
 
-          <span class="text-lg font-medium mt-2">ПВЗ</span>
+          <p class="text-lg font-medium">ПВЗ</p>
+
+          {#if selected_office}
+            <p class="ml-4 text-lg">{selected_office.owner_code}</p>
+            <p class="text-base font-medium">Улица</p>
+            <p class="ml-4">{selected_office.location.address}</p>
+            <p class="text-base font-medium">Остановка</p>
+            <p class="ml-4">{selected_office.nearest_station}</p>
+            <p class="text-base font-medium">График работы</p>
+            <p class="ml-4">{selected_office.work_time}</p>
+            <p class="text-base font-medium">Контакты</p>
+            <p class="ml-4">
+              {#each selected_office.phones as { number }}
+                <a href="tel:{number}" class="block">{number}</a>
+              {/each}
+            </p>
+            <p class="text-base font-medium">Как добраться</p>
+            <p class="ml-4">{selected_office.address_comment}</p>
+          {:else}
+            <p class="ml-4">Выберите ПВЗ на карте</p>
+          {/if}
         </form>
       </div>
     </section>
@@ -198,3 +262,14 @@
     </p>
   </div>
 </div>
+
+<style>
+  :global(.map-cdek-marker) {
+    border-radius: 9999px;
+    background-image: url('/cdek-logo.svg');
+    background-color: var(--accent-color);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 70%;
+  }
+</style>

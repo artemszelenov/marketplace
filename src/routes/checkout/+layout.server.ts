@@ -31,7 +31,7 @@ export async function load({ fetch, cookies }) {
         return 1
       }
       return 0
-    }),
+    }) as CdekCity[],
     seo: {
       title: "Оформление заказа"
     }

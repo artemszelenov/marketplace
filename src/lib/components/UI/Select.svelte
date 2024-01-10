@@ -2,10 +2,11 @@
   export let name: string
   export let value: string
   export let disabled: boolean | undefined = false
+  export let onChange = (event: Event) => {}
 </script>
 
 <div class="grid">
-  <select {name} {disabled} {value} id={name}>
+  <select {name} {disabled} bind:value id={name} on:change={onChange}>
     <slot />
   </select>
 
