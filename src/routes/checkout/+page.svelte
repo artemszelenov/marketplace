@@ -9,10 +9,11 @@
   export let data;
 
   let closest_cities: CdekCity[] = [];
-  let selected_office = null
+  let selected_office = null;
+  let delivery_type: 'courier' | 'pickup' | undefined;
   let map: any;
 
-  onMount(() => {
+  $: if (delivery_type === 'pickup') {
     DG.then(() => {
         map = DG.map('map', {
             center: JSON.parse($currentCity.latlng),
@@ -20,48 +21,44 @@
             maximumAge: 24 * 3600
         });
 
-        map.on('locationfound', onLocationFound);
-
-        drawDeliveryPoints()
+        drawDeliveryPoints();
     });
-  });
+  }
 
-  function getCurrentLocation() {
-    map.locate();
+  function getCurrentPosition() {
+    window.navigator.geolocation.getCurrentPosition(({ coords }) => {
+      for (const city of data.cdek_cities) {
+        const lat = Math.abs(city.latitude - coords.latitude);
+        const lng = Math.abs(city.longitude - coords.longitude);
+
+        if (lat < 0.2 && lng < 0.2) {
+          closest_cities = [...closest_cities, city];
+        }
+      }
+
+      if (closest_cities.length > 0) {
+        currentCity.set({
+          cdek_city_code: closest_cities[0].code.toString(),
+          latlng: JSON.stringify([closest_cities[0].latitude, closest_cities[0].longitude])
+        });
+      }
+    });
   }
 
   function onCityChange(event: Event) {
     const city_code = Number((event.target as HTMLSelectElement).value);
     const city = data.cdek_cities.find(({ code }) => code === city_code);
+
     if (city) {
-      map.setView([city.latitude, city.longitude], 13);
       currentCity.set({
         cdek_city_code: city_code.toString(),
         latlng: JSON.stringify([city.latitude, city.longitude])
       });
-    }
-    drawDeliveryPoints()
-  }
 
-  function onLocationFound(loc: { latlng: { lat: number, lng: number } }) {
-    map.setView(loc.latlng, 13);
-
-    data.cdek_cities.forEach(city => {
-      const lat = Math.abs(city.latitude - loc.latlng.lat);
-      const lng = Math.abs(city.longitude - loc.latlng.lng);
-
-      if (lat < 0.2 && lng < 0.2) {
-        closest_cities = [...closest_cities, city];
+      if (map) {
+        map.setView([city.latitude, city.longitude], 13);
+        drawDeliveryPoints();
       }
-    });
-
-    if (closest_cities.length > 0) {
-      currentCity.set({
-        cdek_city_code: closest_cities[0].code.toString(),
-        latlng: JSON.stringify([closest_cities[0].latitude, closest_cities[0].longitude])
-      });
-
-      drawDeliveryPoints();
     }
   }
 
@@ -86,11 +83,18 @@
           marker.addTo(map);
 
           marker.on('click', (data: any) => {
-            console.log(data);
             selected_office = data.target.options.payload;
           })
         }
       });
+  }
+
+  function setCourierDeliveryTypeActive() {
+    delivery_type = 'courier'
+  }
+
+  function setPickupDeliveryTypeActive() {
+    delivery_type = 'pickup'
   }
 </script>
 
@@ -112,15 +116,7 @@
       </header>
 
       <div class="mt-10">
-        <div id="map" class="aspect-video" />
-
         <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
-          <label for="tk" class="text-lg font-medium mt-2">ТК</label>
-
-          <Select name="tk" value="cdek" disabled>
-            <option value="cdek">CDEK</option>
-          </Select>
-
           <label for="city" class="text-lg font-medium mt-2">Город</label>
 
           <div>
@@ -140,7 +136,7 @@
             <button
               type="button"
               class="flex ml-4 mt-2 underline text-sm"
-              on:click={getCurrentLocation}
+              on:click={getCurrentPosition}
             >
               <span>Определить город по моей локации</span>
               <svg viewBox="0 0 512 512" class="ml-1 w-[1lh] h-[1lh]" width="12" height="12">
@@ -149,26 +145,56 @@
             </button>
           </div>
 
-          <p class="text-lg font-medium">ПВЗ</p>
+          <label for="tk" class="text-lg font-medium mt-2">Транспортная компания</label>
 
-          {#if selected_office}
-            <p class="ml-4 text-lg">{selected_office.owner_code}</p>
-            <p class="text-base font-medium">Улица</p>
-            <p class="ml-4">{selected_office.location.address}</p>
-            <p class="text-base font-medium">Остановка</p>
-            <p class="ml-4">{selected_office.nearest_station}</p>
-            <p class="text-base font-medium">График работы</p>
-            <p class="ml-4">{selected_office.work_time}</p>
-            <p class="text-base font-medium">Контакты</p>
-            <p class="ml-4">
-              {#each selected_office.phones as { number }}
-                <a href="tel:{number}" class="block">{number}</a>
-              {/each}
-            </p>
-            <p class="text-base font-medium">Как добраться</p>
-            <p class="ml-4">{selected_office.address_comment}</p>
-          {:else}
-            <p class="ml-4">Выберите ПВЗ на карте</p>
+          <Select name="tk" value="cdek" disabled>
+            <option value="cdek">CDEK</option>
+          </Select>
+
+          <p class="text-lg font-medium">Способ доставки</p>
+
+          <div>
+            <fieldset>
+              <legend class="visually-hidden">Способ доставки</legend>
+              <label class="flex items-center">
+                <input type="radio" name="delivery_type" value="courier" on:change={setCourierDeliveryTypeActive}>
+                <span class="ml-2">Курьером до двери</span>
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="delivery_type" value="pickup" on:change={setPickupDeliveryTypeActive}>
+                <span class="ml-2">Самовывоз ПВЗ</span>
+              </label>
+            </fieldset>
+          </div>
+
+          {#if delivery_type === 'pickup'}
+            <div id="map" class="aspect-video col-span-2" />
+
+            <div class="col-span-2 grid grid-cols-[0.5fr_1fr] gap-y-4 gap-x-7">
+              <p class="text-lg font-medium">ПВЗ</p>
+
+              {#if selected_office}
+                <p class="ml-4 text-lg">{selected_office.owner_code}</p>
+                <p class="text-base font-medium">Улица</p>
+                <p class="ml-4">{selected_office.location.address}</p>
+                <p class="text-base font-medium">Остановка</p>
+                <p class="ml-4">{selected_office.nearest_station}</p>
+                <p class="text-base font-medium">График работы</p>
+                <p class="ml-4">{selected_office.work_time}</p>
+                <p class="text-base font-medium">Контакты</p>
+                <p class="ml-4">
+                  {#each selected_office.phones as { number }}
+                    <a href="tel:{number}" class="block">{number}</a>
+                  {/each}
+                </p>
+                {#if selected_office.address_comment}
+                  <p class="text-base font-medium">Как добраться</p>
+                  <p class="ml-4">{selected_office.address_comment}</p>
+                {/if}
+              {:else}
+                <p class="ml-4">Выберите ПВЗ на карте</p>
+              {/if}
+            </div>
           {/if}
         </form>
       </div>
@@ -255,6 +281,7 @@
 
     <p>
       <span class="font-semibold">Стоимость доставки</span>
+      <span class="font-semibold">500 ₽</span>
     </p>
 
     <p class="mt-4 text-xl font-semibold">
