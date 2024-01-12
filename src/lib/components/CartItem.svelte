@@ -12,9 +12,9 @@
   }
 </script>
 
-<article class="flex space-x-5 actions-show-on-hover">
+<article class="flex space-x-7 actions-show-on-hover">
   <img
-    class="w-28 aspect-square rounded object-cover"
+    class="max-w-36 aspect-square rounded object-cover"
     src={cart_item.product.image}
     alt={cart_item.product.title}
     decoding="async"
@@ -22,27 +22,34 @@
   />
 
   <div class="grow flex flex-col">
-    <h1 class="font-semibold">
+    <h1 class="text-lg font-semibold">
       <a href="/catalog/{cart_item.product?.id}?size={cart_item.stock_item.id}">
         {cart_item.product.title}
       </a>
     </h1>
 
-    <p class="text-sm">Цена: {cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</p>
+    <table class="w-56 mt-4">
+      <tbody>
+        <tr>
+          <td class="text-sm">Цена</td>
+          <td class="font-medium">{cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
+        </tr>
+        <tr>
+          <td class="text-sm">Размер</td>
+          <td class="font-medium">{getSizeTitleFrom(cart_item.stock_item)}</td>
+        </tr>
+        <tr>
+          <td class="text-sm">Количество</td>
+          <td class="font-medium">{cart_item.quantity}</td>
+        </tr>
+        <tr>
+          <td class="text-sm">Цвет</td>
+          <td class="font-medium">{cart_item.product.color}</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <p class="text-sm">
-      Размер: {getSizeTitleFrom(cart_item.stock_item)}
-    </p>
-
-    <p class="text-sm">
-      Количество: {cart_item.quantity}
-    </p>
-
-    <p class="text-sm">
-      Цвет: 
-    </p>
-
-    <div class="mt-auto">
+    <div class="mt-2 ml-auto">
       <RemoveFromCartForm cart_item_id={cart_item.id} />
     </div>
   </div>

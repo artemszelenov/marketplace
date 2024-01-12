@@ -15,7 +15,7 @@ export async function load({ locals, cookies }) {
         .collection("cart_items")
         .getFullList({
           filter: `cart = "${cart_id}"`,
-          expand: "stock_item, stock_item.product, stock_item.size_group, stock_item.product.type"
+          expand: "stock_item, stock_item.product, stock_item.size_group, stock_item.product.type, stock_item.product.color"
         });
 
       const sizes_records = await locals.pb
@@ -42,6 +42,7 @@ export async function load({ locals, cookies }) {
             price: product.price,
             description: '',
             gallery: [firstImageUrl],
+            color: product.expand?.color?.ru_title,
             image: firstImageUrl
           },
           stock_item: {
@@ -76,7 +77,7 @@ export async function load({ locals, cookies }) {
       }
     }
   } catch (err) {
-    console.log(`Ошибка на сервере`);
+    console.log(`Ошибка на сервере`, err);
 		throw error(500, {
 			message: 'Ошибка на сервере'
 		});
@@ -195,7 +196,7 @@ export const actions = {
           .collection("carts")
           .delete(cart_id_cookie);
 
-        cookies.delete("pb_cart");
+        cookies.delete("pb_cart", { path: "/" });
       }
 
       return {

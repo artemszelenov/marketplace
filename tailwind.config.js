@@ -13,7 +13,7 @@ export default {
 		},
 	},
 	plugins: [
-		plugin(({ addUtilities, addBase, theme }) => {
+		plugin(({ addBase, theme }) => {
 			addBase({
 				'a[href], button': {
 					'&:hover:not(:disabled)': {

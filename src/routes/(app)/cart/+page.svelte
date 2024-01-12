@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Order } from "$lib/schema";
   import CartItem from "$lib/components/CartItem.svelte";
   import Button from "$lib/components/UI/Button.svelte";
 
@@ -8,15 +7,11 @@
   $: total = data.cart_items.reduce((accum, cart_item) => {
     return accum += cart_item.product.price * cart_item.quantity
   }, 0);
-
-  let order: Order = {
-    paid_total: total,
-  };
 </script>
 
 <h1 class="text-2xl font-bold text-gray-900">Корзина</h1>
 
-<div class="grid grid-cols-2 mt-5">
+<div class="grid grid-cols-[1fr_30rem] gap-32 mt-10">
   {#if data.cart_items.length === 0}
     <p>
       В корзине пусто. Добавьте, что-нибудь из
@@ -24,7 +19,7 @@
     </p>
   {:else}
     <div>
-      <ul class="space-y-7">
+      <ul class="space-y-10">
         {#each data.cart_items as cart_item (cart_item.id)}
           <li>
             <CartItem {cart_item} />

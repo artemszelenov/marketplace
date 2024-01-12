@@ -17,8 +17,7 @@
     DG.then(() => {
         map = DG.map('map', {
             center: JSON.parse($currentCity.latlng),
-            zoom: 13,
-            maximumAge: 24 * 3600
+            zoom: 13
         });
 
         drawDeliveryPoints();
@@ -217,13 +216,14 @@
 
       <div class="mt-10">
         <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7" autocomplete="on">
-          <label for="full_name" class="text-lg font-medium mt-2">Имя и Фамилия</label>
+          <label for="full_name" class="text-lg font-medium mt-2">ФИО</label>
           <div>
             <input
               type="text"
               id="full_name"
               name="fullname"
-              placeholder="Иван Иванов"
+              placeholder="Иванов Иван Иванович"
+              autocomplete="name"
               required
             />
           </div>
@@ -237,6 +237,7 @@
               pattern={"7[0-9]{10}"}
               minlength="11"
               maxlength="11"
+              autocomplete="tel"
               required
             />
             <p class="text-xs mt-2 ml-4">Формат: 79998887766</p>
@@ -252,6 +253,15 @@
               required
             />
             <p class="text-xs mt-2 ml-4">Необходим для отправки чека</p>
+          </div>
+
+          <div />
+
+          <div>
+            <label>
+              <input type="checkbox" name="agree" value="yes">
+              <span>Соглашаюсь с <a href="/">политикой обработки персональных данных</a></span>
+            </label>
           </div>
         </form>
       </div>
