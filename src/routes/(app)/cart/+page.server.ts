@@ -72,6 +72,7 @@ export async function load({ locals, cookies }) {
 
     return {
       cart_items,
+      cart_items_count: cart_items.length,
       seo: {
         title: "Корзина"
       }

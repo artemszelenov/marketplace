@@ -7,19 +7,23 @@
   export let as: "link" | "button" = "button"
   export let href: string | undefined = "/";
   export let appearance: 'default' | 'secondary' = 'default'
+  export let activeAreaByParent = false
 
   const appearances = {
     default: "bg-gray-900",
     secondary: "border-2 border-yellow-400 text-yellow-400"
   }
+
+  const activeAreaByParentClasses = activeAreaByParent ? "before:absolute before:inset-0" : ""
 </script>
 
 {#if as === "link"}
-  <a
-    class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase no-underline"
-    {href}
-  >
-    <div class="flex items-center bg-gray-900 rounded-full px-[1.5em] h-[2.5em] tracking-wider">
+  <div
+    class="relative flex items-center gap-[0.5em] w-fit text-white text-{size} font-bold uppercase no-underline"
+  > 
+    <a {href} class="absolute inset-0" aria-label={title} />
+
+    <div class="flex items-center w-fit bg-gray-900 rounded-full px-[1.5em] h-[2.5em] tracking-wider">
       <slot name='text' />
     </div>
 
@@ -30,10 +34,10 @@
         </svg>
       </slot>
     </div>
-  </a>
+  </div>
 {:else}
   <button
-    class="flex items-center gap-[0.5em] text-white text-xs font-bold uppercase"
+    class="flex items-center gap-[0.5em] text-white text-xs font-bold uppercase {activeAreaByParentClasses}"
     {type}
     {title}
     {disabled}

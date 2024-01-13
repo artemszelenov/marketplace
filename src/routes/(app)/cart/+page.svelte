@@ -28,7 +28,7 @@
       </ul>
     </div>
 
-    <div class="w-[25em]">
+    <div>
       <p class="text-xl font-semibold">
         Стоимость без учета доставки
       </p>
@@ -41,6 +41,7 @@
         <Button
           as="link"
           href="/checkout"
+          title="Оформить заказ"
           size="xs"
         >
           <span slot="text">Оформить заказ</span>

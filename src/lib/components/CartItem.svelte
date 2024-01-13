@@ -28,7 +28,7 @@
       </a>
     </h1>
 
-    <table class="w-56 mt-4">
+    <table class="w-48 mt-4">
       <tbody>
         <tr>
           <td class="text-sm">Цена</td>

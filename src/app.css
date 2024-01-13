@@ -16,6 +16,10 @@
     text-underline-offset: 0.2em;
   }
 
+  :is(a, button):active {
+    transform: scale(0.95);
+  }
+
   :is(a, button) svg {
     width: 100%;
   }
@@ -29,6 +33,15 @@
   }
 
   select:disabled + svg {
+    @apply opacity-60;
+  }
+
+  :is(input[type="checkbox"], input[type="radio"]) {
+    width: 1.1em;
+    height: 1em;
+  }
+
+  :is(input[type="checkbox"], input[type="radio"]):disabled + * {
     @apply opacity-60;
   }
 }

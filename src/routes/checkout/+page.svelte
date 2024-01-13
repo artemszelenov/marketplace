@@ -100,12 +100,13 @@
 <div class="grid grid-cols-[1fr_26rem] gap-20 mt-5">
   <div>
     <section>
-      <header class="flex items-center justify-between">
+      <header class="relative flex items-center justify-between">
         <h2 class="text-2xl font-bold">Доставка</h2>
 
         <Button
           size="xs"
           title="ШАГ 1 ИЗ 3"
+          activeAreaByParent
         >
           <span slot="text">ШАГ 1 ИЗ 3</span>
           <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none">
@@ -156,7 +157,7 @@
             <fieldset>
               <legend class="visually-hidden">Способ доставки</legend>
               <label class="flex items-center">
-                <input type="radio" name="delivery_type" value="courier" on:change={setCourierDeliveryTypeActive}>
+                <input disabled type="radio" name="delivery_type" value="courier" on:change={setCourierDeliveryTypeActive}>
                 <span class="ml-2">Курьером до двери</span>
               </label>
               <label class="flex items-center">
@@ -200,12 +201,13 @@
     </section>
 
     <section class="mt-10">
-      <header class="flex items-center justify-between">
+      <header class="relative flex items-center justify-between">
         <h2 class="text-2xl font-bold">Получатель</h2>
 
         <Button
           size="xs"
           title="ШАГ 1 ИЗ 3"
+          activeAreaByParent
         >
           <span slot="text">ШАГ 2 ИЗ 3</span>
           <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none">
@@ -268,12 +270,13 @@
     </section>
 
     <section class="mt-10">
-      <header class="flex items-center justify-between">
+      <header class="relative flex items-center justify-between">
         <h2 class="text-2xl font-bold">Оплата</h2>
   
         <Button
           size="xs"
-          title="ШАГ 1 ИЗ 3"
+          title="ШАГ 3 ИЗ 3"
+          activeAreaByParent
         >
           <span slot="text">ШАГ 3 ИЗ 3</span>
           <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none">
