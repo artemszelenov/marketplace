@@ -4,7 +4,7 @@ export async function load({ fetch, cookies }) {
   {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'content-type': 'application/x-www-form-urlencoded'
     }
   })
     .then(res => res.json())
@@ -12,7 +12,7 @@ export async function load({ fetch, cookies }) {
 
   const cdek_cities = await fetch(`https://api.edu.cdek.ru/v2/location/cities?lang=rus&country_codes=RU`, {
     headers: {
-      'Authorization': `Bearer ${cdek_access_token}`
+      'authorization': `Bearer ${cdek_access_token}`
     }
   })
     .then(res => res.json());

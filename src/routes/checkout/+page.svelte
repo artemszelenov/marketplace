@@ -1,19 +1,19 @@
 <script lang="ts">
-  import type { Order } from "$lib/schema";
-  import { page } from "$app/stores";
-  import { onMount } from "svelte";
+  import { browser } from '$app/environment';
   import Button from "$lib/components/UI/Button.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import { currentCity } from "$lib/stores/currentCity";
+  import { deliveryType } from "$lib/stores/deliveryType";
+  import { deliveryOffice } from "$lib/stores/deliveryOffice";
+  import { deliveryDateAndPrice } from "$lib/stores/deliveryDateAndPrice";
 
   export let data;
 
   let closest_cities: CdekCity[] = [];
-  let selected_office = null;
-  let delivery_type: 'courier' | 'pickup' | undefined;
+  let delivery_done = false;
   let map: any;
 
-  $: if (delivery_type === 'pickup') {
+  $: if (browser && $deliveryType === 'pickup') {
     DG.then(() => {
         map = DG.map('map', {
             center: JSON.parse($currentCity.latlng),
@@ -21,6 +21,8 @@
         });
 
         drawDeliveryPoints();
+
+        calculateDelivery();
     });
   }
 
@@ -36,10 +38,7 @@
       }
 
       if (closest_cities.length > 0) {
-        currentCity.set({
-          cdek_city_code: closest_cities[0].code.toString(),
-          latlng: JSON.stringify([closest_cities[0].latitude, closest_cities[0].longitude])
-        });
+        updateCity(closest_cities[0]);
       }
     });
   }
@@ -49,19 +48,27 @@
     const city = data.cdek_cities.find(({ code }) => code === city_code);
 
     if (city) {
-      currentCity.set({
-        cdek_city_code: city_code.toString(),
-        latlng: JSON.stringify([city.latitude, city.longitude])
-      });
-
-      if (map) {
-        map.setView([city.latitude, city.longitude], 13);
-        drawDeliveryPoints();
-      }
+      updateCity(city);
     }
   }
 
-  async function drawDeliveryPoints() {
+  function updateCity(city: CdekCity) {
+    currentCity.set({
+      cdek_city_code: city.code.toString(),
+      latlng: JSON.stringify([city.latitude, city.longitude])
+    });
+
+    deliveryOffice.set(null);
+
+    calculateDelivery();
+
+    if (map) {
+      map.setView([city.latitude, city.longitude], 13);
+      drawDeliveryPoints();
+    }
+  }
+
+  function drawDeliveryPoints() {
     fetch(`/api/cdek/deliverypoints/${$currentCity.cdek_city_code}`)
       .then(res => res.json())
       .then(data => {
@@ -82,18 +89,26 @@
           marker.addTo(map);
 
           marker.on('click', (data: any) => {
-            selected_office = data.target.options.payload;
-          })
+            deliveryOffice.set(data.target.options.payload);
+          });
         }
       });
   }
 
-  function setCourierDeliveryTypeActive() {
-    delivery_type = 'courier'
+  function calculateDelivery() {
+    fetch(`/api/cdek/calculator/${$currentCity.cdek_city_code}`, {
+      method: 'POST'
+    })
+      .then(res => res.json())
+      .then(data => deliveryDateAndPrice.set(data));
   }
 
-  function setPickupDeliveryTypeActive() {
-    delivery_type = 'pickup'
+  function saveCurrentDeliveryData() {
+    delivery_done = true;
+  }
+
+  function resetCurrentDeliveryData() {
+    delivery_done = false;
   }
 </script>
 
@@ -109,14 +124,14 @@
           activeAreaByParent
         >
           <span slot="text">ШАГ 1 ИЗ 3</span>
-          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none">
+          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
             <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </Button>
       </header>
 
       <div class="mt-10">
-        <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
+        <form method="POST" id="checkout-form" class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
           <label for="city" class="text-lg font-medium mt-2">Город</label>
 
           <div>
@@ -148,7 +163,7 @@
           <label for="tk" class="text-lg font-medium mt-2">Транспортная компания</label>
 
           <Select name="tk" value="cdek" disabled>
-            <option value="cdek">CDEK</option>
+            <option value="cdek" selected>CDEK</option>
           </Select>
 
           <p class="text-lg font-medium">Способ доставки</p>
@@ -157,44 +172,100 @@
             <fieldset>
               <legend class="visually-hidden">Способ доставки</legend>
               <label class="flex items-center">
-                <input disabled type="radio" name="delivery_type" value="courier" on:change={setCourierDeliveryTypeActive}>
+                <input
+                  type="radio"
+                  name="delivery_type"
+                  value="courier"
+                  checked={$deliveryType === 'courier'}
+                  disabled
+                  on:change={() => deliveryType.set('courier')}
+                >
                 <span class="ml-2">Курьером до двери</span>
               </label>
               <label class="flex items-center">
-                <input type="radio" name="delivery_type" value="pickup" on:change={setPickupDeliveryTypeActive}>
+                <input
+                  type="radio"
+                  name="delivery_type"
+                  value="pickup"
+                  checked={$deliveryType === 'pickup'}
+                  on:change={() => deliveryType.set('pickup')}
+                >
                 <span class="ml-2">Самовывоз ПВЗ</span>
               </label>
             </fieldset>
           </div>
 
-          {#if delivery_type === 'pickup'}
-            <div id="map" class="aspect-video col-span-2" />
+          {#if delivery_done}
+            <button
+              type="button"
+              on:click={resetCurrentDeliveryData}
+            >
+              Изменить
+            </button>
+          {:else}
+            {#if $deliveryType === 'pickup'}
+              <div id="map" class="aspect-video col-span-2" />
 
-            <div class="col-span-2 grid grid-cols-[0.5fr_1fr] gap-y-4 gap-x-7">
-              <p class="text-lg font-medium">ПВЗ</p>
+              <div class="col-span-2 grid grid-cols-[0.5fr_1fr] gap-y-4 gap-x-7">
+                <p class="text-lg font-medium">ПВЗ</p>
 
-              {#if selected_office}
-                <p class="ml-4 text-lg">{selected_office.owner_code}</p>
-                <p class="text-base font-medium">Улица</p>
-                <p class="ml-4">{selected_office.location.address}</p>
-                <p class="text-base font-medium">Остановка</p>
-                <p class="ml-4">{selected_office.nearest_station}</p>
-                <p class="text-base font-medium">График работы</p>
-                <p class="ml-4">{selected_office.work_time}</p>
-                <p class="text-base font-medium">Контакты</p>
-                <p class="ml-4">
-                  {#each selected_office.phones as { number }}
-                    <a href="tel:{number}" class="block">{number}</a>
-                  {/each}
-                </p>
-                {#if selected_office.address_comment}
-                  <p class="text-base font-medium">Как добраться</p>
-                  <p class="ml-4">{selected_office.address_comment}</p>
+                {#if browser && $deliveryOffice}
+                  <p class="text-lg">{$deliveryOffice.owner_code}</p>
+
+                  <p class="text-base font-medium">Улица</p>
+                  <p>{$deliveryOffice.location.address}</p>
+
+                  {#if $deliveryOffice.nearest_station}
+                    <p class="text-base font-medium">Остановка</p>
+                    <p>{$deliveryOffice.nearest_station}</p>
+                  {/if}
+
+                  <p class="text-base font-medium">График работы</p>
+                  <p>{$deliveryOffice.work_time}</p>
+
+                  <p class="text-base font-medium">Контакты</p>
+                  <p>
+                    {#each $deliveryOffice.phones as { number }}
+                      <a href="tel:{number}" class="block">{number}</a>
+                    {/each}
+                  </p>
+
+                  {#if $deliveryOffice.address_comment}
+                    <p class="text-base font-medium">Как добраться</p>
+                    <p>{$deliveryOffice.address_comment}</p>
+                  {/if}
+
+                  {#if $deliveryDateAndPrice}
+                    <p class="text-base font-medium">Срок доставки</p>
+                    <p>
+                      От {$deliveryDateAndPrice.calendar_min} до {$deliveryDateAndPrice.calendar_max} календарных дней.
+                      <br>
+                      Мы пришлем вам трек номер по которому можно будет отследить заказ.
+                    </p>
+
+                    <p class="text-base font-medium">Стоимость доставки</p>
+
+                    <p>{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+                  {/if}
+
+                  <div />
+
+                  <p>
+                    <Button
+                      type="button"
+                      size="xs"
+                      title="Заберу здесь"
+                      handler={saveCurrentDeliveryData}
+                      noIcon
+                    >
+                      <span slot="text">Заберу здесь</span>
+                    </Button>
+                  </p>
+                {:else}
+                  <p>Выберите ПВЗ на карте</p>
                 {/if}
-              {:else}
-                <p class="ml-4">Выберите ПВЗ на карте</p>
-              {/if}
-            </div>
+              </div>
+            {/if}
           {/if}
         </form>
       </div>
@@ -210,7 +281,7 @@
           activeAreaByParent
         >
           <span slot="text">ШАГ 2 ИЗ 3</span>
-          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none">
+          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
             <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </Button>
@@ -262,7 +333,7 @@
           <div>
             <label>
               <input type="checkbox" name="agree" value="yes">
-              <span>Соглашаюсь с <a href="/">политикой обработки персональных данных</a></span>
+              <span>Соглашаюсь с <a href="/" class="underline">политикой обработки персональных данных</a></span>
             </label>
           </div>
         </form>
@@ -279,7 +350,7 @@
           activeAreaByParent
         >
           <span slot="text">ШАГ 3 ИЗ 3</span>
-          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none">
+          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
             <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </Button>
@@ -292,10 +363,10 @@
       <span class="font-semibold">Ваш заказ</span>
     </p>
 
-    <p>
-      <span class="font-semibold">Стоимость доставки</span>
-      <span class="font-semibold">500 ₽</span>
-    </p>
+    {#if $deliveryOffice && $deliveryDateAndPrice}
+      <p class="font-semibold">Стоимость доставки</p>
+      <p>{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+    {/if}
 
     <p class="mt-4 text-xl font-semibold">
       <span>Итого</span>
