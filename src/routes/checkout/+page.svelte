@@ -6,14 +6,14 @@
   import { deliveryType } from "$lib/stores/deliveryType";
   import { deliveryOffice } from "$lib/stores/deliveryOffice";
   import { deliveryDateAndPrice } from "$lib/stores/deliveryDateAndPrice";
+  import { deliveryStepDone } from "$lib/stores/deliveryStepDone";
 
   export let data;
 
   let closest_cities: CdekCity[] = [];
-  let delivery_done = false;
   let map: any;
 
-  $: if (browser && $deliveryType === 'pickup') {
+  $: if (browser && $deliveryType === 'pickup' && !$deliveryStepDone) {
     DG.then(() => {
         map = DG.map('map', {
             center: JSON.parse($currentCity.latlng),
@@ -102,190 +102,201 @@
       .then(res => res.json())
       .then(data => deliveryDateAndPrice.set(data));
   }
-
-  function saveCurrentDeliveryData() {
-    delivery_done = true;
-  }
-
-  function resetCurrentDeliveryData() {
-    delivery_done = false;
-  }
 </script>
 
 <div class="grid grid-cols-[1fr_26rem] gap-20 mt-5">
   <div>
-    <section>
-      <header class="relative flex items-center justify-between">
-        <h2 class="text-2xl font-bold">Доставка</h2>
+    <details>
+      <summary class="relative flex items-center justify-between">
+        <h2 class="flex items-center text-2xl font-bold">
+          <span>Доставка</span>
+
+          {#if $deliveryStepDone}
+            <svg class="w-[1lh] h-[1lh] ml-3 text-emerald-700" viewBox="0 0 512 512" aria-hidden="true" fill="currentcolor">
+              <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z" />
+            </svg>
+          {/if}
+        </h2>
 
         <Button
+          as="div"
           size="xs"
           title="ШАГ 1 ИЗ 3"
-          activeAreaByParent
         >
           <span slot="text">ШАГ 1 ИЗ 3</span>
           <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
             <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </Button>
-      </header>
+      </summary>
 
       <div class="mt-10">
         <form method="POST" id="checkout-form" class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
-          <label for="city" class="text-lg font-medium mt-2">Город</label>
+          {#if !$deliveryStepDone}
+            <label for="city" class="text-lg font-medium mt-2">Город</label>
 
-          <div>
-            <Select name="city" value={$currentCity.cdek_city_code} onChange={onCityChange}>
-              <optgroup label="Города рядом с вами">
-                {#each closest_cities as { city, code }}
-                  <option value={code.toString()}>{city}</option>
-                {/each}
-              </optgroup>
-              <optgroup label="Все города">
-                {#each data.cdek_cities as { city, code }}
-                  <option value={code.toString()}>{city}</option>
-                {/each}
-              </optgroup>
+            <div>
+              <Select name="city" value={$currentCity.cdek_city_code} onChange={onCityChange}>
+                <optgroup label="Города рядом с вами">
+                  {#each closest_cities as { city, code }}
+                    <option value={code.toString()}>{city}</option>
+                  {/each}
+                </optgroup>
+                <optgroup label="Все города">
+                  {#each data.cdek_cities as { city, code }}
+                    <option value={code.toString()}>{city}</option>
+                  {/each}
+                </optgroup>
+              </Select>
+
+              <button
+                type="button"
+                class="flex ml-4 mt-2 underline text-sm"
+                on:click={getCurrentPosition}
+              >
+                <span>Определить город по моей локации</span>
+                <svg viewBox="0 0 512 512" class="ml-1 w-[1lh] h-[1lh]" width="12" height="12">
+                  <path d="M448 64L64 240.14h200a8 8 0 018 8V448z" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+                </svg>
+              </button>
+            </div>
+          {/if}
+
+          {#if !$deliveryStepDone}
+            <label for="tk" class="text-lg font-medium mt-2">Транспортная компания</label>
+
+            <Select name="tk" value="cdek" disabled>
+              <option value="cdek" selected>CDEK</option>
             </Select>
+          {/if}
 
-            <button
-              type="button"
-              class="flex ml-4 mt-2 underline text-sm"
-              on:click={getCurrentPosition}
-            >
-              <span>Определить город по моей локации</span>
-              <svg viewBox="0 0 512 512" class="ml-1 w-[1lh] h-[1lh]" width="12" height="12">
-                <path d="M448 64L64 240.14h200a8 8 0 018 8V448z" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
-              </svg>
-            </button>
-          </div>
+          {#if !$deliveryStepDone}
+            <p class="text-lg font-medium">Способ доставки</p>
 
-          <label for="tk" class="text-lg font-medium mt-2">Транспортная компания</label>
+            <div>
+              <fieldset>
+                <legend class="visually-hidden">Способ доставки</legend>
+                <label class="flex items-center">
+                  <input
+                    type="radio"
+                    name="delivery_type"
+                    value="courier"
+                    checked={$deliveryType === 'courier'}
+                    disabled
+                    on:change={() => deliveryType.set('courier')}
+                  >
+                  <span class="ml-2">Курьером до двери</span>
+                </label>
+                <label class="flex items-center">
+                  <input
+                    type="radio"
+                    name="delivery_type"
+                    value="pickup"
+                    checked={$deliveryType === 'pickup'}
+                    on:change={() => deliveryType.set('pickup')}
+                  >
+                  <span class="ml-2">Самовывоз ПВЗ</span>
+                </label>
+              </fieldset>
+            </div>
+          {/if}
 
-          <Select name="tk" value="cdek" disabled>
-            <option value="cdek" selected>CDEK</option>
-          </Select>
-
-          <p class="text-lg font-medium">Способ доставки</p>
-
-          <div>
-            <fieldset>
-              <legend class="visually-hidden">Способ доставки</legend>
-              <label class="flex items-center">
-                <input
-                  type="radio"
-                  name="delivery_type"
-                  value="courier"
-                  checked={$deliveryType === 'courier'}
-                  disabled
-                  on:change={() => deliveryType.set('courier')}
-                >
-                <span class="ml-2">Курьером до двери</span>
-              </label>
-              <label class="flex items-center">
-                <input
-                  type="radio"
-                  name="delivery_type"
-                  value="pickup"
-                  checked={$deliveryType === 'pickup'}
-                  on:change={() => deliveryType.set('pickup')}
-                >
-                <span class="ml-2">Самовывоз ПВЗ</span>
-              </label>
-            </fieldset>
-          </div>
-
-          {#if delivery_done}
-            <button
-              type="button"
-              on:click={resetCurrentDeliveryData}
-            >
-              Изменить
-            </button>
-          {:else}
-            {#if $deliveryType === 'pickup'}
+          {#if $deliveryType === 'pickup'}
+            {#if !$deliveryStepDone}
               <div id="map" class="aspect-video col-span-2" />
+            {/if}
 
-              <div class="col-span-2 grid grid-cols-[0.5fr_1fr] gap-y-4 gap-x-7">
-                <p class="text-lg font-medium">ПВЗ</p>
+            <div class="col-span-2 grid grid-cols-[0.5fr_1fr] gap-y-4 gap-x-7">
+              <p class="text-lg font-medium">ПВЗ</p>
 
-                {#if browser && $deliveryOffice}
-                  <p class="text-lg">{$deliveryOffice.owner_code}</p>
+              {#if browser && $deliveryOffice}
+                <p class="text-lg">{$deliveryOffice.owner_code}</p>
 
-                  <p class="text-base font-medium">Улица</p>
-                  <p>{$deliveryOffice.location.address}</p>
+                <p class="text-base font-medium">Улица</p>
+                <p>{$deliveryOffice.location.address}</p>
 
-                  {#if $deliveryOffice.nearest_station}
-                    <p class="text-base font-medium">Остановка</p>
-                    <p>{$deliveryOffice.nearest_station}</p>
-                  {/if}
+                {#if $deliveryOffice.nearest_station}
+                  <p class="text-base font-medium">Остановка</p>
+                  <p>{$deliveryOffice.nearest_station}</p>
+                {/if}
 
-                  <p class="text-base font-medium">График работы</p>
-                  <p>{$deliveryOffice.work_time}</p>
+                <p class="text-base font-medium">График работы</p>
+                <p>{$deliveryOffice.work_time}</p>
 
-                  <p class="text-base font-medium">Контакты</p>
+                <p class="text-base font-medium">Контакты</p>
+                <p>
+                  {#each $deliveryOffice.phones as { number }}
+                    <a href="tel:{number}" class="block">{number}</a>
+                  {/each}
+                </p>
+
+                {#if $deliveryOffice.address_comment}
+                  <p class="text-base font-medium">Как добраться</p>
+                  <p>{$deliveryOffice.address_comment}</p>
+                {/if}
+
+                {#if $deliveryDateAndPrice}
+                  <p class="text-base font-medium">Срок доставки</p>
                   <p>
-                    {#each $deliveryOffice.phones as { number }}
-                      <a href="tel:{number}" class="block">{number}</a>
-                    {/each}
+                    От {$deliveryDateAndPrice.calendar_min} до {$deliveryDateAndPrice.calendar_max} календарных дней.
+                    <br>
+                    Мы пришлем вам трек номер по которому можно будет отследить заказ.
                   </p>
 
-                  {#if $deliveryOffice.address_comment}
-                    <p class="text-base font-medium">Как добраться</p>
-                    <p>{$deliveryOffice.address_comment}</p>
-                  {/if}
+                  <p class="text-base font-medium">Стоимость доставки</p>
 
-                  {#if $deliveryDateAndPrice}
-                    <p class="text-base font-medium">Срок доставки</p>
-                    <p>
-                      От {$deliveryDateAndPrice.calendar_min} до {$deliveryDateAndPrice.calendar_max} календарных дней.
-                      <br>
-                      Мы пришлем вам трек номер по которому можно будет отследить заказ.
-                    </p>
+                  <p>{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+                {/if}
 
-                    <p class="text-base font-medium">Стоимость доставки</p>
+                <div />
 
-                    <p>{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
-                  {/if}
-
-                  <div />
-
+                {#if $deliveryStepDone}
+                  <p>
+                    <button
+                      class="underline"
+                      type="button"
+                      on:click={() => deliveryStepDone.set(false)}
+                    >
+                      Изменить
+                    </button>
+                  </p>
+                {:else}
                   <p>
                     <Button
                       type="button"
                       size="xs"
                       title="Заберу здесь"
-                      handler={saveCurrentDeliveryData}
+                      handler={() => deliveryStepDone.set(true)}
                       noIcon
                     >
                       <span slot="text">Заберу здесь</span>
                     </Button>
                   </p>
-                {:else}
-                  <p>Выберите ПВЗ на карте</p>
                 {/if}
-              </div>
-            {/if}
+              {:else}
+                <p>Выберите ПВЗ на карте</p>
+              {/if}
+            </div>
           {/if}
         </form>
       </div>
-    </section>
+    </details>
 
-    <section class="mt-10">
-      <header class="relative flex items-center justify-between">
+    <details class="mt-10">
+      <summary class="relative flex items-center justify-between">
         <h2 class="text-2xl font-bold">Получатель</h2>
 
         <Button
+          as="div"
           size="xs"
           title="ШАГ 1 ИЗ 3"
-          activeAreaByParent
         >
           <span slot="text">ШАГ 2 ИЗ 3</span>
           <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
             <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </Button>
-      </header>
+      </summary>
 
       <div class="mt-10">
         <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7" autocomplete="on">
@@ -338,24 +349,24 @@
           </div>
         </form>
       </div>
-    </section>
+    </details>
 
-    <section class="mt-10">
-      <header class="relative flex items-center justify-between">
+    <details class="mt-10">
+      <summary class="relative flex items-center justify-between">
         <h2 class="text-2xl font-bold">Оплата</h2>
   
         <Button
+          as="div"
           size="xs"
           title="ШАГ 3 ИЗ 3"
-          activeAreaByParent
         >
           <span slot="text">ШАГ 3 ИЗ 3</span>
           <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
             <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </Button>
-      </header>
-    </section>
+      </summary>
+    </details>
   </div>
 
   <div>
@@ -382,5 +393,13 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: 70%;
+  }
+
+  details [slot="icon"] {
+    transition: transform .3s ease;
+  }
+
+  details[open] [slot="icon"] {
+    transform: scaleY(-1);
   }
 </style>

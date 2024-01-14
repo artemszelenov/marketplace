@@ -1,6 +1,6 @@
 import { persistentAtom } from "@nanostores/persistent";
 
-export const deliveryDateAndPrice = persistentAtom("delivery_date_and_price:", null, {
+export const deliveryStepDone = persistentAtom("delivery_step_done:", false, {
   encode: JSON.stringify,
   decode: JSON.parse
 });

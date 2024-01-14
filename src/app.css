@@ -44,6 +44,15 @@
   :is(input[type="checkbox"], input[type="radio"]):disabled + * {
     @apply opacity-60;
   }
+
+  details > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
 }
 
 @tailwind components;
