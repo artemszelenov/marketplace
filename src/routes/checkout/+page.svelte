@@ -7,11 +7,28 @@
   import { deliveryOffice } from "$lib/stores/deliveryOffice";
   import { deliveryDateAndPrice } from "$lib/stores/deliveryDateAndPrice";
   import { deliveryStepDone } from "$lib/stores/deliveryStepDone";
+  import { userInfoStepDone } from "$lib/stores/userInfoStepDone";
+  import { userInputData } from "$lib/stores/userInputData";
 
+  type FieldName = keyof typeof $userInputData;
+ 
   export let data;
 
   let closest_cities: CdekCity[] = [];
   let map: any;
+  let incompletedValidations = new Set(['fullname', 'phone', 'email', 'agree']);
+
+  for (const field of Object.values($userInputData)) {
+    if (incompletedValidations.has(field.name) && field.valid) {
+      incompletedValidations.delete(field.name);
+    }
+  }
+
+  $: if (incompletedValidations.size === 0) {
+    userInfoStepDone.set(true);
+  } else {
+    userInfoStepDone.set(false);
+  }
 
   $: if (browser && $deliveryType === 'pickup' && !$deliveryStepDone) {
     DG.then(() => {
@@ -24,6 +41,46 @@
 
         calculateDelivery();
     });
+  }
+
+  function validateInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    if (target.validity.valid) {
+      incompletedValidations.delete(target.name);
+
+      userInputData.set({
+        ...userInputData.get(),
+        [target.name]: {
+          ...userInputData.get()[target.name as FieldName],
+          valid: true
+        }
+      });
+    } else {
+      incompletedValidations.add(target.name);
+
+      userInputData.set({
+        ...userInputData.get(),
+        [target.name]: {
+          ...userInputData.get()[target.name as FieldName],
+          valid: false
+        }
+      });
+    }
+
+    incompletedValidations = incompletedValidations;
+  }
+
+  function validateCheckbox(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    if (target.checked) {
+      incompletedValidations.delete(target.name);
+    } else {
+      incompletedValidations.add(target.name);
+    }
+
+    incompletedValidations = incompletedValidations;
   }
 
   function getCurrentPosition() {
@@ -131,12 +188,17 @@
       </summary>
 
       <div class="mt-10">
-        <form method="POST" id="checkout-form" class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
+        <div class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
           {#if !$deliveryStepDone}
             <label for="city" class="text-lg font-medium mt-2">Город</label>
 
             <div>
-              <Select name="city" value={$currentCity.cdek_city_code} onChange={onCityChange}>
+              <Select
+                name="city"
+                value={$currentCity.cdek_city_code}
+                onChange={onCityChange}
+                form="checkout-form"
+              >
                 <optgroup label="Города рядом с вами">
                   {#each closest_cities as { city, code }}
                     <option value={code.toString()}>{city}</option>
@@ -165,7 +227,12 @@
           {#if !$deliveryStepDone}
             <label for="tk" class="text-lg font-medium mt-2">Транспортная компания</label>
 
-            <Select name="tk" value="cdek" disabled>
+            <Select
+              name="tk"
+              value="cdek"
+              form="checkout-form"
+              disabled
+            >
               <option value="cdek" selected>CDEK</option>
             </Select>
           {/if}
@@ -174,7 +241,7 @@
             <p class="text-lg font-medium">Способ доставки</p>
 
             <div>
-              <fieldset>
+              <fieldset form="checkout-form">
                 <legend class="visually-hidden">Способ доставки</legend>
                 <label class="flex items-center">
                   <input
@@ -278,18 +345,26 @@
               {/if}
             </div>
           {/if}
-        </form>
+        </div>
       </div>
     </details>
 
-    <details class="mt-10">
+    <details class="mt-10" class:disabled={!$deliveryStepDone}>
       <summary class="relative flex items-center justify-between">
-        <h2 class="text-2xl font-bold">Получатель</h2>
+        <h2 class="flex items-center text-2xl font-bold">
+          <span>Получатель</span>
+
+          {#if $userInfoStepDone}
+            <svg class="w-[1lh] h-[1lh] ml-3 text-emerald-700" viewBox="0 0 512 512" aria-hidden="true" fill="currentcolor">
+              <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z" />
+            </svg>
+          {/if}
+        </h2>
 
         <Button
           as="div"
           size="xs"
-          title="ШАГ 1 ИЗ 3"
+          title="ШАГ 2 ИЗ 3"
         >
           <span slot="text">ШАГ 2 ИЗ 3</span>
           <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
@@ -299,16 +374,19 @@
       </summary>
 
       <div class="mt-10">
-        <form method="post" class="grid grid-cols-[0.5fr_1fr] gap-7" autocomplete="on">
+        <form method="POST" id="checkout-form" class="grid grid-cols-[0.5fr_1fr] gap-7" autocomplete="on" enctype="multipart/form-data">
           <label for="full_name" class="text-lg font-medium mt-2">ФИО</label>
           <div>
             <input
               type="text"
               id="full_name"
-              name="fullname"
+              name={$userInputData['fullname'].name}
+              bind:value={$userInputData['fullname'].data}
+              maxlength="300"
               placeholder="Иванов Иван Иванович"
               autocomplete="name"
               required
+              on:input={validateInput}
             />
           </div>
 
@@ -317,12 +395,14 @@
             <input
               type="tel"
               id="phone"
-              name="phone"
+              name={$userInputData['phone'].name}
+              bind:value={$userInputData['phone'].data}
               pattern={"7[0-9]{10}"}
               minlength="11"
               maxlength="11"
               autocomplete="tel"
               required
+              on:input={validateInput}
             />
             <p class="text-xs mt-2 ml-4">Формат: 79998887766</p>
           </div>
@@ -332,18 +412,38 @@
             <input
               type="email"
               id="email"
-              name="email"
+              name={$userInputData['email'].name}
+              bind:value={$userInputData['email'].data}
               placeholder="example@gmail.com"
+              autocomplete="email"
               required
+              on:input={validateInput}
             />
-            <p class="text-xs mt-2 ml-4">Необходим для отправки чека</p>
+            <p class="text-xs mt-2 ml-4">Необходим для отправки чека.</p>
+          </div>
+
+          <label for="tg" class="text-lg font-medium mt-2">Телеграм</label>
+
+          <div>
+            <input
+              type="text"
+              id="tg"
+              name="telegram"
+              placeholder="@nickname"
+            />
+            <p class="text-xs mt-2 ml-4">На него отправим трек номер. Можно не указывать, тогда трек номер пришлем на почту.</p>
           </div>
 
           <div />
 
           <div>
             <label>
-              <input type="checkbox" name="agree" value="yes">
+              <input
+                type="checkbox"
+                name="agree"
+                value="yes"
+                on:change={validateCheckbox}
+              >
               <span>Соглашаюсь с <a href="/" class="underline">политикой обработки персональных данных</a></span>
             </label>
           </div>
@@ -351,7 +451,7 @@
       </div>
     </details>
 
-    <details class="mt-10">
+    <details class="mt-10" class:disabled={!$userInfoStepDone}>
       <summary class="relative flex items-center justify-between">
         <h2 class="text-2xl font-bold">Оплата</h2>
   
@@ -382,6 +482,8 @@
     <p class="mt-4 text-xl font-semibold">
       <span>Итого</span>
     </p>
+
+    <p>Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится</p>
   </div>
 </div>
 
@@ -401,5 +503,10 @@
 
   details[open] [slot="icon"] {
     transform: scaleY(-1);
+  }
+
+  details.disabled {
+    pointer-events: none;
+    opacity: .6;
   }
 </style>

@@ -1,12 +1,13 @@
 <script lang="ts">
   export let name: string
   export let value: string
-  export let disabled: boolean | undefined = false
   export let onChange = (event: Event) => {}
+  export let disabled: boolean | undefined = false
+  export let form: string | undefined;
 </script>
 
 <div class="grid">
-  <select {name} {disabled} bind:value id={name} on:change={onChange}>
+  <select {name} {disabled} bind:value id={name} on:change={onChange} {form}>
     <slot />
   </select>
 

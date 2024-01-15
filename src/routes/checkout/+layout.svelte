@@ -20,7 +20,7 @@
   <h1 class="text-xl font-medium">Оформление заказа</h1>
 </header>
 
-<main class="bg-neutral-100">
+<main class="bg-neutral-100 min-h-[100vh]">
   <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
     <slot />
   </div>
