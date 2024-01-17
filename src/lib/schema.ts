@@ -65,6 +65,8 @@ export const CartItemSchema = z
 
 export type CartItem = z.infer<typeof CartItemSchema>
 
+export type OrderItem = z.infer<typeof CartItemSchema>
+
 export const StoragePreferredShoesSizeMetricSchema = z.enum(SHOES_METRICS);
 
 export type StoragePreferredShoesSizeMetric = z.infer<typeof StoragePreferredShoesSizeMetricSchema>

@@ -2,6 +2,7 @@
   import { browser } from '$app/environment';
   import Button from "$lib/components/UI/Button.svelte";
   import Select from "$lib/components/UI/Select.svelte";
+  import OrderItem from "$lib/components/OrderItem.svelte";
   import { currentCity } from "$lib/stores/currentCity";
   import { deliveryType } from "$lib/stores/deliveryType";
   import { deliveryOffice } from "$lib/stores/deliveryOffice";
@@ -42,6 +43,10 @@
         calculateDelivery();
     });
   }
+
+  $: total = data.order_items.reduce((accum, cart_item) => {
+    return accum += cart_item.product.price * cart_item.quantity
+  }, browser ? $deliveryDateAndPrice.total_sum : 0);
 
   function validateInput(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -161,10 +166,10 @@
   }
 </script>
 
-<div class="grid grid-cols-[1fr_26rem] gap-20 mt-5">
+<div class="grid grid-cols-[1fr_27rem] gap-16 mt-5">
   <div>
-    <details>
-      <summary class="relative flex items-center justify-between">
+    <details open>
+      <summary class="relative flex items-center justify-between pointer-events-none">
         <h2 class="flex items-center text-2xl font-bold">
           <span>Доставка</span>
 
@@ -179,11 +184,10 @@
           as="div"
           size="xs"
           title="ШАГ 1 ИЗ 3"
+          appearance="outlined"
+          noIcon
         >
           <span slot="text">ШАГ 1 ИЗ 3</span>
-          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
-            <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
         </Button>
       </summary>
 
@@ -349,8 +353,8 @@
       </div>
     </details>
 
-    <details class="mt-10" class:disabled={!$deliveryStepDone}>
-      <summary class="relative flex items-center justify-between">
+    <details class="mt-10" class:disabled={!$deliveryStepDone} open={$deliveryStepDone}>
+      <summary class="relative flex items-center justify-between pointer-events-none">
         <h2 class="flex items-center text-2xl font-bold">
           <span>Получатель</span>
 
@@ -365,16 +369,22 @@
           as="div"
           size="xs"
           title="ШАГ 2 ИЗ 3"
+          appearance="outlined"
+          noIcon
         >
           <span slot="text">ШАГ 2 ИЗ 3</span>
-          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
-            <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
         </Button>
       </summary>
 
       <div class="mt-10">
-        <form method="POST" id="checkout-form" class="grid grid-cols-[0.5fr_1fr] gap-7" autocomplete="on" enctype="multipart/form-data">
+        <form
+          method="POST"
+          action="?/proceed"
+          id="checkout-form"
+          class="grid grid-cols-[0.5fr_1fr] gap-7"
+          autocomplete="on"
+          enctype="multipart/form-data"
+        >
           <label for="full_name" class="text-lg font-medium mt-2">ФИО</label>
           <div>
             <input
@@ -404,7 +414,7 @@
               required
               on:input={validateInput}
             />
-            <p class="text-xs mt-2 ml-4">Формат: 79998887766</p>
+            <small class="text-xs mt-2 ml-4">Формат: 79998887766</small>
           </div>
 
           <label for="email" class="text-lg font-medium mt-2">E-mail</label>
@@ -419,7 +429,7 @@
               required
               on:input={validateInput}
             />
-            <p class="text-xs mt-2 ml-4">Необходим для отправки чека.</p>
+            <small class="text-xs mt-2 ml-4">Необходим для отправки чека.</small>
           </div>
 
           <label for="tg" class="text-lg font-medium mt-2">Телеграм</label>
@@ -451,39 +461,62 @@
       </div>
     </details>
 
-    <details class="mt-10" class:disabled={!$userInfoStepDone}>
-      <summary class="relative flex items-center justify-between">
+    <details class="mt-10" class:disabled={!$userInfoStepDone} open={$userInfoStepDone}>
+      <summary class="relative flex items-center justify-between pointer-events-none">
         <h2 class="text-2xl font-bold">Оплата</h2>
   
         <Button
           as="div"
           size="xs"
           title="ШАГ 3 ИЗ 3"
+          appearance="outlined"
+          noIcon
         >
           <span slot="text">ШАГ 3 ИЗ 3</span>
-          <svg slot="icon" width="17" height="10" viewBox="0 0 17 10" fill="none" aria-hidden="true">
-            <path d="M15.0625 1.76562L8.5 8.32812L1.9375 1.76562" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
         </Button>
       </summary>
+
+      <p class="mt-10">
+        <Button
+          type="submit"
+          title="Оплатить"
+          size="md"
+          form="checkout-form"
+        >
+          <span slot="text">Оплатить</span>
+        </Button>
+      </p>
     </details>
   </div>
 
   <div>
-    <p>
-      <span class="font-semibold">Ваш заказ</span>
-    </p>
+    <h3 class="font-semibold">
+      Ваш заказ
+    </h3>
 
-    {#if $deliveryOffice && $deliveryDateAndPrice}
-      <p class="font-semibold">Стоимость доставки</p>
-      <p>{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
-    {/if}
+    <ul class="space-y-7 mt-4">
+      {#each data.order_items as order_item (order_item.id)}
+        <li>
+          <OrderItem {order_item} />
+        </li>
+      {/each}
+    </ul>
 
-    <p class="mt-4 text-xl font-semibold">
-      <span>Итого</span>
-    </p>
+    <div class="grid grid-cols-2 gap-4 mt-10">
+      {#if $deliveryOffice && $deliveryDateAndPrice}
+        <h3 class="font-semibold">Стоимость доставки</h3>
+        <p class="font-semibold">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+      {/if}
 
-    <p>Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится</p>
+      <h3 class="text-xl font-semibold">
+        Итого
+      </h3>
+      <p class="text-xl font-semibold">
+        {total.toLocaleString("ru-RU") + " ₽"}
+      </p>
+    </div>
+
+    <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится</small>
   </div>
 </div>
 
@@ -495,14 +528,6 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: 70%;
-  }
-
-  details [slot="icon"] {
-    transition: transform .3s ease;
-  }
-
-  details[open] [slot="icon"] {
-    transform: scaleY(-1);
   }
 
   details.disabled {

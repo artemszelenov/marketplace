@@ -4,19 +4,21 @@
   export let type: "submit" | "button" = "button";
   export let handler: () => void = () => {};
   export let disabled: boolean = false;
-  export let as: "link" | "button" | "div" = "button"
+  export let as: "link" | "button" | "div" = "button";
   export let href: string | undefined = "/";
-  export let appearance: 'default' | 'secondary' | 'green' = 'default'
-  export let activeAreaByParent = false
-  export let noIcon = false
+  export let form: string | undefined = undefined;
+  export let appearance: 'default' | 'secondary' | 'green' | 'outlined' = 'default';
+  export let activeAreaByParent = false;
+  export let noIcon = false;
 
   const appearances = {
     default: "bg-gray-900",
     secondary: "border-2 border-yellow-400 text-yellow-400",
-    green: "bg-emerald-700"
+    green: "bg-emerald-700",
+    outlined: "border-2 border-gray-900 text-gray-900"
   }
 
-  const activeAreaByParentClasses = activeAreaByParent ? "before:absolute before:inset-0" : ""
+  const activeAreaByParentClasses = activeAreaByParent ? "before:absolute before:inset-0" : "";
 </script>
 
 {#if as === "link"}
@@ -38,7 +40,7 @@
     </div>
   </div>
 {:else if as === 'div'}
-  <div class="flex items-center gap-[0.5em] text-white text-xs font-bold uppercase {activeAreaByParentClasses}">
+  <div class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase {activeAreaByParentClasses}">
     {#if $$slots.text}
       <div class="flex items-center rounded-full px-5 h-[2.5em] tracking-wider {appearances[appearance]}">
         <slot name='text' />
@@ -57,10 +59,11 @@
   </div>
 {:else}
   <button
-    class="flex items-center gap-[0.5em] text-white text-xs font-bold uppercase {activeAreaByParentClasses}"
+    class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase {activeAreaByParentClasses}"
     {type}
     {title}
     {disabled}
+    {form}
     on:click={handler}
   >
     {#if $$slots.text}

@@ -12,7 +12,7 @@
   }
 </script>
 
-<article class="flex space-x-7 actions-show-on-hover">
+<article class="flex space-x-7">
   <img
     class="max-w-36 aspect-square rounded object-cover"
     src={cart_item.product.image}
@@ -32,19 +32,19 @@
       <tbody>
         <tr>
           <td class="text-sm">Цена</td>
-          <td class="font-medium">{cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
+          <td class="text-sm font-medium">{cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
         </tr>
         <tr>
           <td class="text-sm">Размер</td>
-          <td class="font-medium">{getSizeTitleFrom(cart_item.stock_item)}</td>
+          <td class="text-sm font-medium">{getSizeTitleFrom(cart_item.stock_item)}</td>
         </tr>
         <tr>
           <td class="text-sm">Количество</td>
-          <td class="font-medium">{cart_item.quantity}</td>
+          <td class="text-sm font-medium">{cart_item.quantity}</td>
         </tr>
         <tr>
           <td class="text-sm">Цвет</td>
-          <td class="font-medium">{cart_item.product.color}</td>
+          <td class="text-sm font-medium">{cart_item.product.color}</td>
         </tr>
       </tbody>
     </table>
