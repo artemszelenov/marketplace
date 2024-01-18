@@ -28,29 +28,31 @@
       </a>
     </h1>
 
-    <table class="w-48 mt-4">
-      <tbody>
-        <tr>
-          <td class="text-sm">Цена</td>
-          <td class="text-sm font-medium">{cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
-        </tr>
-        <tr>
-          <td class="text-sm">Размер</td>
-          <td class="text-sm font-medium">{getSizeTitleFrom(cart_item.stock_item)}</td>
-        </tr>
-        <tr>
-          <td class="text-sm">Количество</td>
-          <td class="text-sm font-medium">{cart_item.quantity}</td>
-        </tr>
-        <tr>
-          <td class="text-sm">Цвет</td>
-          <td class="text-sm font-medium">{cart_item.product.color}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="mt-2 ml-auto">
-      <RemoveFromCartForm cart_item_id={cart_item.id} />
+    <div class="flex items-end">
+      <table class="w-48 mt-4">
+        <tbody>
+          <tr>
+            <td class="text-sm">Цена</td>
+            <td class="text-sm font-medium">{cart_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
+          </tr>
+          <tr>
+            <td class="text-sm">Размер</td>
+            <td class="text-sm font-medium">{getSizeTitleFrom(cart_item.stock_item)}</td>
+          </tr>
+          <tr>
+            <td class="text-sm">Количество</td>
+            <td class="text-sm font-medium">{cart_item.quantity}</td>
+          </tr>
+          <tr>
+            <td class="text-sm">Цвет</td>
+            <td class="text-sm font-medium">{cart_item.product.color}</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div class="ml-auto">
+        <RemoveFromCartForm cart_item_id={cart_item.id} />
+      </div>
     </div>
   </div>
 </article>

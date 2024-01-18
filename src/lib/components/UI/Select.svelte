@@ -3,10 +3,11 @@
   export let value: string
   export let onChange = (event: Event) => {}
   export let disabled: boolean | undefined = false
-  export let form: string | undefined;
+  export let form: string | undefined = undefined;
+  export let hidden: boolean | undefined = undefined;
 </script>
 
-<div class="grid">
+<div class={hidden ? "hidden" : "grid"}>
   <select {name} {disabled} bind:value id={name} on:change={onChange} {form}>
     <slot />
   </select>

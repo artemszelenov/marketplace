@@ -7,13 +7,12 @@
   export let as: "link" | "button" | "div" = "button";
   export let href: string | undefined = "/";
   export let form: string | undefined = undefined;
-  export let appearance: 'default' | 'secondary' | 'green' | 'outlined' = 'default';
+  export let appearance: 'default' | 'green' | 'outlined' = 'default';
   export let activeAreaByParent = false;
   export let noIcon = false;
 
   const appearances = {
     default: "bg-gray-900",
-    secondary: "border-2 border-yellow-400 text-yellow-400",
     green: "bg-emerald-700",
     outlined: "border-2 border-gray-900 text-gray-900"
   }

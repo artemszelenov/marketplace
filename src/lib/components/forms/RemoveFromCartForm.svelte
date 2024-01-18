@@ -14,7 +14,7 @@
     title="Удалить из корзины"
     type="submit"
     size="xs"
-    appearance="secondary"
+    appearance="outlined"
   >
     <span slot="text">Удалить</span>
     <svg slot="icon" viewBox="0 0 512 512" aria-hidden="true">

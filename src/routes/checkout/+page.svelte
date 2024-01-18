@@ -193,84 +193,96 @@
 
       <div class="mt-10">
         <div class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
-          {#if !$deliveryStepDone}
-            <label for="city" class="text-lg font-medium mt-2">Город</label>
+          <label
+            for="city"
+            hidden={$deliveryStepDone}
+            class="text-lg font-medium mt-2"
+          >
+            Город
+          </label>
 
-            <div>
-              <Select
-                name="city"
-                value={$currentCity.cdek_city_code}
-                onChange={onCityChange}
-                form="checkout-form"
-              >
-                <optgroup label="Города рядом с вами">
-                  {#each closest_cities as { city, code }}
-                    <option value={code.toString()}>{city}</option>
-                  {/each}
-                </optgroup>
-                <optgroup label="Все города">
-                  {#each data.cdek_cities as { city, code }}
-                    <option value={code.toString()}>{city}</option>
-                  {/each}
-                </optgroup>
-              </Select>
-
-              <button
-                type="button"
-                class="flex ml-4 mt-2 underline text-sm"
-                on:click={getCurrentPosition}
-              >
-                <span>Определить город по моей локации</span>
-                <svg viewBox="0 0 512 512" class="ml-1 w-[1lh] h-[1lh]" width="12" height="12">
-                  <path d="M448 64L64 240.14h200a8 8 0 018 8V448z" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
-                </svg>
-              </button>
-            </div>
-          {/if}
-
-          {#if !$deliveryStepDone}
-            <label for="tk" class="text-lg font-medium mt-2">Транспортная компания</label>
-
+          <div hidden={$deliveryStepDone}>
             <Select
-              name="tk"
-              value="cdek"
+              name="citycode"
+              value={$currentCity.cdek_city_code}
+              onChange={onCityChange}
               form="checkout-form"
-              disabled
             >
-              <option value="cdek" selected>CDEK</option>
+              <optgroup label="Города рядом с вами">
+                {#each closest_cities as { city, code }}
+                  <option value={code.toString()}>{city}</option>
+                {/each}
+              </optgroup>
+              <optgroup label="Все города">
+                {#each data.cdek_cities as { city, code }}
+                  <option value={code.toString()}>{city}</option>
+                {/each}
+              </optgroup>
             </Select>
-          {/if}
 
-          {#if !$deliveryStepDone}
-            <p class="text-lg font-medium">Способ доставки</p>
+            <button
+              type="button"
+              class="flex ml-4 mt-2 underline text-sm"
+              on:click={getCurrentPosition}
+            >
+              <span>Определить город по моей локации</span>
+              <svg viewBox="0 0 512 512" class="ml-1 w-[1lh] h-[1lh]" width="12" height="12">
+                <path d="M448 64L64 240.14h200a8 8 0 018 8V448z" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+              </svg>
+            </button>
+          </div>
 
-            <div>
-              <fieldset form="checkout-form">
-                <legend class="visually-hidden">Способ доставки</legend>
-                <label class="flex items-center">
-                  <input
-                    type="radio"
-                    name="delivery_type"
-                    value="courier"
-                    checked={$deliveryType === 'courier'}
-                    disabled
-                    on:change={() => deliveryType.set('courier')}
-                  >
-                  <span class="ml-2">Курьером до двери</span>
-                </label>
-                <label class="flex items-center">
-                  <input
-                    type="radio"
-                    name="delivery_type"
-                    value="pickup"
-                    checked={$deliveryType === 'pickup'}
-                    on:change={() => deliveryType.set('pickup')}
-                  >
-                  <span class="ml-2">Самовывоз ПВЗ</span>
-                </label>
-              </fieldset>
-            </div>
-          {/if}
+          <label
+            for="tk"
+            hidden={$deliveryStepDone}
+            class="text-lg font-medium mt-2"
+          >
+            Транспортная компания
+          </label>
+
+          <Select
+            name="tk"
+            value="cdek"
+            form="checkout-form"
+            hidden={$deliveryStepDone}
+          >
+            <option value="post" disabled>Почта России</option>
+            <option value="yandex" disabled>Яндекс</option>
+            <option value="cdek" selected>CDEK</option>
+          </Select>
+
+          <p hidden={$deliveryStepDone} class="text-lg font-medium">
+            Способ доставки
+          </p>
+
+          <div hidden={$deliveryStepDone}>
+            <fieldset form="checkout-form">
+              <legend class="visually-hidden">Способ доставки</legend>
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="delivery_type"
+                  value="courier"
+                  checked={$deliveryType === 'courier'}
+                  form="checkout-form"
+                  disabled
+                  on:change={() => deliveryType.set('courier')}
+                >
+                <span class="ml-2">Курьером до двери</span>
+              </label>
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="delivery_type"
+                  value="pickup"
+                  form="checkout-form"
+                  checked={$deliveryType === 'pickup'}
+                  on:change={() => deliveryType.set('pickup')}
+                >
+                <span class="ml-2">Самовывоз ПВЗ</span>
+              </label>
+            </fieldset>
+          </div>
 
           {#if $deliveryType === 'pickup'}
             {#if !$deliveryStepDone}
@@ -281,6 +293,8 @@
               <p class="text-lg font-medium">ПВЗ</p>
 
               {#if browser && $deliveryOffice}
+                <input type="hidden" name="delivery_point" value={$deliveryOffice.uuid} form="checkout-form">
+
                 <p class="text-lg">{$deliveryOffice.owner_code}</p>
 
                 <p class="text-base font-medium">Улица</p>
@@ -516,7 +530,7 @@
       </p>
     </div>
 
-    <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится</small>
+    <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.</small>
   </div>
 </div>
 
