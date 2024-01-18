@@ -468,7 +468,7 @@
                 value="yes"
                 on:change={validateCheckbox}
               >
-              <span>Соглашаюсь с <a href="/" class="underline">политикой обработки персональных данных</a></span>
+              <span>Соглашаюсь с <a href="/docs/privacy-policy" class="underline">политикой обработки персональных данных</a></span>
             </label>
           </div>
         </form>
