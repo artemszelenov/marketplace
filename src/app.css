@@ -24,7 +24,7 @@
     width: 100%;
   }
 
-  input:not([type="radio"], [type="checkbox"]) {
+  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]) {
     @apply block w-full bg-white px-4 py-2.5 border rounded-full focus:outline focus:outline-gray-900 focus:outline-[3px] disabled:opacity-60;
   }
 
@@ -35,11 +35,11 @@
     margin-left: 1ch;
   }
 
-  input:user-valid {
+  :is([type="text"], [type="tel"], [type="email"], [type="password"]):user-valid {
     @apply outline outline-emerald-700;
   }
 
-  input:user-invalid {
+  :is([type="text"], [type="tel"], [type="email"], [type="password"]):user-invalid {
     @apply outline outline-red-600;
   }
 
