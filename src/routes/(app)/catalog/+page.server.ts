@@ -75,11 +75,6 @@ export const actions = {
         filter: query.join(" && ")
       });
 
-    const checked_filters = [];
-    for (const val of formData.values()) {
-      checked_filters.push(val);
-    }
-
     return {
       filtered_teasers: filtered_products
         .map<ProductTeaser>(product => {
@@ -92,7 +87,7 @@ export const actions = {
             })
           }
         }),
-      checked_filters
+      checked_filters: [...formData.values()]
     }
   }
 }
