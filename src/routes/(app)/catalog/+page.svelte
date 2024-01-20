@@ -1,11 +1,15 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import ProductTeaser from "$lib/components/ProductTeaser.svelte";
+  import LoadMoreForm from "$lib/components/forms/LoadMoreForm.svelte";
 
   export let data;
   export let form;
 
-  $: teasers = form?.filtered_teasers || data.teasers;
+  $: teasers = [...data.teasers, ...(form?.teasers || [])];
+
+  $: pagination = form?.pagination || data.pagination;
+  $: has_more_items = !pagination.done;
 </script>
 
 <section class="mt-12">
@@ -25,7 +29,7 @@
                 type="checkbox"
                 name={filters_group_key}
                 value={entity.value}
-                checked={form?.checked_filters.includes(entity.value)}
+                checked={form?.checked_filters?.includes(entity.value)}
               >
               <span>{entity.title}</span>
             </label>
@@ -48,3 +52,9 @@
     </li>
   {/each}
 </ul>
+
+{#if has_more_items}
+  <div class="flex justify-center mt-4">
+    <LoadMoreForm {pagination} />
+  </div>
+{/if}

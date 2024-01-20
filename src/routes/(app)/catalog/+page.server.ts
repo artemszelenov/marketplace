@@ -3,20 +3,9 @@ import type { ProductTeaser } from "$lib/schema"
 
 export async function load({ locals }) {
   try {
-    let teasers = await locals.pb
+    const { page, perPage, totalPages, items } = await locals.pb
       .collection<ProductTeaser>('product_teasers')
-      .getFullList();
-
-    teasers = teasers.map(teaser => {
-      return {
-        id: teaser.id,
-        title: teaser.title,
-        price: teaser.price,
-        gallery: teaser.gallery.map((file_name: string) => {
-          return locals.pb.files.getUrl(teaser, file_name);
-        })
-      }
-    });
+      .getList(1, 5);
 
     const colors_records = await locals.pb
       .collection('colors')
@@ -41,8 +30,22 @@ export async function load({ locals }) {
     }
 
     return {
-      teasers,
+      teasers: items.map(teaser => {
+        return {
+          id: teaser.id,
+          title: teaser.title,
+          price: teaser.price,
+          gallery: teaser.gallery.map((file_name: string) => {
+            return locals.pb.files.getUrl(teaser, file_name);
+          })
+        }
+      }),
       filters,
+      pagination: {
+        current_page: page,
+        limit: perPage,
+        done: page === totalPages
+      },
       seo: {
         title: "Каталог"
       }
@@ -76,7 +79,7 @@ export const actions = {
       });
 
     return {
-      filtered_teasers: filtered_products
+      teasers: filtered_products
         .map<ProductTeaser>(product => {
           return {
             id: product.id,
@@ -88,6 +91,32 @@ export const actions = {
           }
         }),
       checked_filters: [...formData.values()]
+    }
+  },
+
+  loadMore: async ({ request, locals }) => {
+    const body = Object.fromEntries(await request.formData());
+
+    const { page, perPage, totalPages, items } = await locals.pb
+      .collection<ProductTeaser>('product_teasers')
+      .getList(Number(body["next-page"]), Number(body["limit"]));
+
+    return {
+      teasers: items.map(teaser => {
+        return {
+          id: teaser.id,
+          title: teaser.title,
+          price: teaser.price,
+          gallery: teaser.gallery.map((file_name: string) => {
+            return locals.pb.files.getUrl(teaser, file_name);
+          })
+        }
+      }),
+      pagination: {
+        current_page: page,
+        limit: perPage,
+        done: page === totalPages
+      }
     }
   }
 }
