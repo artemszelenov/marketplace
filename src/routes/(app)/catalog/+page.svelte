@@ -1,15 +1,19 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
   import ProductTeaser from "$lib/components/ProductTeaser.svelte";
-  import LoadMoreForm from "$lib/components/forms/LoadMoreForm.svelte";
 
   export let data;
-  export let form;
 
-  $: teasers = [...data.teasers, ...(form?.teasers || [])];
+  $: has_more_items = !data.pagination.done;
 
-  $: pagination = form?.pagination || data.pagination;
-  $: has_more_items = !pagination.done;
+  $: page = data.pagination.current_page;
+
+  function onApplyFilters() {
+    page = 1;
+  }
+
+  function onShowMore() {
+    page += 1;
+  }
 </script>
 
 <section class="mt-12">
@@ -18,7 +22,7 @@
       Фильтры
     </summary>
 
-    <form action="?/filter" method="POST" use:enhance>
+    <form id="filter-form" action="/catalog" data-sveltekit-noscroll>
       {#each Object.keys(data.filters) as filters_group_key}
         <fieldset>
           <legend>{data.filters[filters_group_key].title}</legend>
@@ -29,7 +33,6 @@
                 type="checkbox"
                 name={filters_group_key}
                 value={entity.value}
-                checked={form?.checked_filters?.includes(entity.value)}
               >
               <span>{entity.title}</span>
             </label>
@@ -39,14 +42,16 @@
 
       <p>
         <input type="reset" value="Сбросить">
-        <input type="submit" value="Применить">
+        <input type="submit" value="Применить" on:click={onApplyFilters}>
       </p>
+
+      <input type="hidden" name="page" value={page}>
     </form>
   </details>
 </section>
 
 <ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-7 gap-4">
-  {#each teasers as product (product.id)}
+  {#each data.teasers as product (product.id)}
     <li>
       <ProductTeaser {product} />
     </li>
@@ -55,6 +60,6 @@
 
 {#if has_more_items}
   <div class="flex justify-center mt-4">
-    <LoadMoreForm {pagination} />
+    <input type="submit" form="filter-form" value="Показать еще {data.pagination.limit}" on:click={onShowMore}>
   </div>
 {/if}
