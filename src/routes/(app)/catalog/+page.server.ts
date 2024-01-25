@@ -2,12 +2,12 @@ import { error } from '@sveltejs/kit';
 import type Pocktbase from "pocketbase";
 import type { ProductTeaser, Product } from "$lib/schema";
 
-const LIMIT = 5;
+const LIMIT = 2;
 
-export async function load({ locals, url, parent }) {
+let total_teasers: ProductTeaser[] = [];
+
+export async function load({ locals, url }) {
   const search_page = Number(url.searchParams.get("page")) || 1;
-
-  console.log(await parent());
 
   const filters_query = [];
   for (const [param, value] of url.searchParams.entries()) {
@@ -22,6 +22,12 @@ export async function load({ locals, url, parent }) {
       .getList(search_page, LIMIT, {
         filter: filters_query.join(" && ")
       });
+
+    if (page === 1 || items.some((item) => item.id === total_teasers.at(-1)?.id)) {
+      total_teasers = buildTeasers(items, locals.pb);
+    } else {
+      total_teasers = [...total_teasers, ...buildTeasers(items, locals.pb)];
+    }
 
     const colors_records = await locals.pb
       .collection('colors')
@@ -46,7 +52,7 @@ export async function load({ locals, url, parent }) {
     }
 
     return {
-      teasers: buildTeasers(items, locals.pb),
+      teasers: total_teasers,
       filters,
       pagination: {
         current_page: page,

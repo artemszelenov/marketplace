@@ -11,3 +11,11 @@ export async function load({ locals, params }) {
     }
   }
 }
+
+export function entries() {
+	return [
+		{ slug: 'privacy-policy' }
+	];
+}
+
+export const prerender = true;

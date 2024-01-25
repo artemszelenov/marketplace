@@ -1,19 +1,14 @@
 <script lang="ts">
   import ProductTeaser from "$lib/components/ProductTeaser.svelte";
+  import { page } from '$app/stores';
 
   export let data;
 
   $: has_more_items = !data.pagination.done;
 
-  $: page = data.pagination.current_page;
+  $: current_page = data.pagination.current_page;
 
-  function onApplyFilters() {
-    page = 1;
-  }
-
-  function onShowMore() {
-    page += 1;
-  }
+  $: search_values = [...$page.url.searchParams.values()];
 </script>
 
 <section class="mt-12">
@@ -33,6 +28,7 @@
                 type="checkbox"
                 name={filters_group_key}
                 value={entity.value}
+                checked={search_values.includes(entity.value)}
               >
               <span>{entity.title}</span>
             </label>
@@ -42,10 +38,10 @@
 
       <p>
         <input type="reset" value="Сбросить">
-        <input type="submit" value="Применить" on:click={onApplyFilters}>
+        <input type="submit" value="Применить" on:click={() => { current_page = 1 }}>
       </p>
 
-      <input type="hidden" name="page" value={page}>
+      <input type="hidden" name="page" value={current_page}>
     </form>
   </details>
 </section>
@@ -58,8 +54,25 @@
   {/each}
 </ul>
 
+<div class="mt-4">
+  <p>Страница {current_page}</p>
+
+  <!-- {#if current_page > 1} -->
+    <input
+      type="submit"
+      form="filter-form"
+      value="Вернуться к началу"
+      on:click={() => { current_page = 1 }}>
+  <!-- {/if} -->
+</div>
+
 {#if has_more_items}
   <div class="flex justify-center mt-4">
-    <input type="submit" form="filter-form" value="Показать еще {data.pagination.limit}" on:click={onShowMore}>
+    <input
+      type="submit"
+      form="filter-form"
+      value="Показать еще {data.pagination.limit}"
+      on:click={() => { current_page += 1 }}
+    >
   </div>
 {/if}

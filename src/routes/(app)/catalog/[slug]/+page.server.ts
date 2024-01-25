@@ -15,6 +15,7 @@ export async function load({ params, locals, url }) {
     type: product_record.expand?.type.value ?? 'unknown',
     price: product_record.price,
     title: product_record.title,
+    color: product_record.expand?.color.ru_title,
     description: product_record.description,
     gallery: product_record.gallery.map((file_name: string) => {
       return locals.pb.files.getUrl(product_record, file_name);
@@ -67,7 +68,7 @@ async function getRecords(pb: PocketBase, product_slug: string) {
   const product_record = await pb
     .collection('products')
     .getOne(product_slug, {
-      expand: "type"
+      expand: "type, color"
     });
 
   const stock_item_records = await pb
