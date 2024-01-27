@@ -32,8 +32,8 @@
 
     <div class="flex items-center justify-center rounded-full bg-gray-900 w-[2.5em] h-[2.5em]">
       <slot name='icon'>
-        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" class="w-[1em]">
-          <path d="M14.1635 13.6685L14.1198 2.44264L2.89397 2.39897M13.3429 3.21953L2.00509 14.5574" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <svg height="18" viewBox="0 0 512 512" class="rotate-45" aria-hidden="true">
+          <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" />
         </svg>
       </slot>
     </div>
@@ -49,8 +49,8 @@
     {#if !noIcon}
       <div class="flex items-center justify-center rounded-full w-[2.5em] h-[2.5em] {appearances[appearance]}">
         <slot name='icon'>
-          <svg width="16" height="17" viewBox="0 0 16 17" fill="none" class="w-[1em]">
-            <path d="M14.1635 13.6685L14.1198 2.44264L2.89397 2.39897M13.3429 3.21953L2.00509 14.5574" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <svg height="18" viewBox="0 0 512 512" class="rotate-45" aria-hidden="true">
+            <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" />
           </svg>
         </slot>
       </div>
@@ -74,8 +74,8 @@
     {#if !noIcon}
       <div class="flex items-center justify-center rounded-full w-[2.5em] h-[2.5em] {appearances[appearance]}">
         <slot name='icon'>
-          <svg width="16" height="17" viewBox="0 0 16 17" fill="none" class="w-[1em]">
-            <path d="M14.1635 13.6685L14.1198 2.44264L2.89397 2.39897M13.3429 3.21953L2.00509 14.5574" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <svg height="18" viewBox="0 0 512 512" class="rotate-45" aria-hidden="true">
+            <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" />
           </svg>
         </slot>
       </div>

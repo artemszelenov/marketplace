@@ -257,7 +257,7 @@
 
           <div hidden={$deliveryStepDone}>
             <fieldset form="checkout-form">
-              <legend class="visually-hidden">Способ доставки</legend>
+              <legend class="sr-only">Способ доставки</legend>
               <label class="flex items-center">
                 <input
                   type="radio"

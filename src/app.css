@@ -9,6 +9,8 @@
   :root {
     --accent-color: theme(colors.gray.900);
     accent-color: var(--accent-color);
+
+    scroll-behavior: smooth;
   }
 
   p a[href]:not(.no-underline) {
@@ -73,7 +75,7 @@
 @tailwind utilities;
 
 @layer utilities {
-  .visually-hidden {
+  .sr-only {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
