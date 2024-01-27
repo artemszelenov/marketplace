@@ -493,9 +493,9 @@
       <p class="mt-10">
         <Button
           type="submit"
-          title="Оплатить"
-          size="md"
           form="checkout-form"
+          title="Оплатить"
+          size="base"
         >
           <span slot="text">Оплатить</span>
         </Button>

@@ -20,7 +20,6 @@
   }
 
   function goTop() {
-    reset()
     scrollTo(0, 0);
   }
 
@@ -104,7 +103,7 @@
   </details>
 </section>
 
-<ul class="grid grid-cols-2 md:grid-cols-4 mt-7 gap-4">
+<ul class="grid grid-cols-2 md:grid-cols-4 mt-10 gap-4">
   {#each teasers as product (product.id)}
     <li>
       <ProductTeaser {product} />
@@ -112,13 +111,14 @@
   {/each}
 </ul>
 
-<div class="flex flex-col items-end gap-6 mt-4">
+<div class="flex gap-4 my-10">
   <Button
     type="submit"
     form="filter-form"
     size="xs"
     title="Вернуться к началу"
     handler={goTop}
+    additional_class="mr-auto"
   >
     <svg slot="icon" height="18" viewBox="0 0 512 512" aria-hidden="true">
       <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" />

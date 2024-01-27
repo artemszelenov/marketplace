@@ -9,6 +9,7 @@
   export let form: string | undefined = undefined;
   export let appearance: 'action' | 'outlined' = 'action';
   export let noIcon = false;
+  export let additional_class = "";
 
   const appearances = {
     action: "action-button bg-gray-900",
@@ -18,7 +19,7 @@
 
 {#if as === "link"}
   <div
-    class="relative flex items-center gap-[0.5em] w-fit text-white text-{size} font-bold uppercase no-underline"
+    class="relative flex items-center gap-[0.5em] w-fit text-white text-{size} font-bold uppercase no-underline {additional_class}"
   > 
     <a {href} class="absolute inset-0" aria-label={title} />
 
@@ -35,7 +36,7 @@
     </div>
   </div>
 {:else if as === 'div'}
-  <div class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase cursor-default">
+  <div class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase cursor-default {additional_class}">
     {#if $$slots.text}
       <div class="flex items-center rounded-full px-5 h-[2.5em] tracking-wider {appearances[appearance]}">
         <slot name='text' />
@@ -54,7 +55,7 @@
   </div>
 {:else}
   <button
-    class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase"
+    class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase {additional_class}"
     {type}
     {title}
     {disabled}

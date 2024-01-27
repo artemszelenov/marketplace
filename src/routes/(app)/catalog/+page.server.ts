@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { Product } from "$lib/schema";
 
-const LIMIT = 10;
+const LIMIT = 4;
 
 export async function load({ locals, url }) {
   const next_page = Number(url.searchParams.get("page")) || 1;

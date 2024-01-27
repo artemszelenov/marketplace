@@ -41,7 +41,7 @@
     class="mx-auto lg:col-span-3 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 max-w-2xl mt-14 sm:mt-16"
   >
     <div class="sticky top-3">
-      <h1 class="text-3xl uppercase text-gray-900 font-bold">{data.product.title}</h1>
+      <h1 class="text-xl md:text-3xl uppercase text-gray-900 font-bold">{data.product.title}</h1>
 
       <p class="text-lg font-medium text-gray-900 mt-2">{data.product.price.toLocaleString("ru-RU") + " ₽"}</p>
 
