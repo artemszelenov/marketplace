@@ -6,9 +6,23 @@
 
   $: has_more_items = !data.pagination.done;
 
-  $: current_page = data.pagination.current_page;
+  $: next_page = data.pagination.current_page;
 
-  $: search_values = [...$page.url.searchParams.values()];
+  $: search_values = Array.from($page.url.searchParams.values());
+
+  let prev_teasers: typeof data.teasers = [];
+
+  $: teasers = prev_teasers.concat(data.teasers);
+
+  function reset() {
+    prev_teasers = [];
+    next_page = 1;
+  }
+
+  function loadMore() {
+    prev_teasers.push(...data.teasers);
+    next_page += 1;
+  }
 </script>
 
 <section class="mt-12">
@@ -38,16 +52,16 @@
 
       <p>
         <input type="reset" value="Сбросить">
-        <input type="submit" value="Применить" on:click={() => { current_page = 1 }}>
+        <input type="submit" value="Применить" on:click={reset}>
       </p>
 
-      <input type="hidden" name="page" value={current_page}>
+      <input type="hidden" name="page" value={next_page}>
     </form>
   </details>
 </section>
 
 <ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-7 gap-4">
-  {#each data.teasers as product (product.id)}
+  {#each teasers as product (product.id)}
     <li>
       <ProductTeaser {product} />
     </li>
@@ -55,14 +69,14 @@
 </ul>
 
 <div class="mt-4">
-  <p>Страница {current_page}</p>
+  <p>Страница {next_page}</p>
 
   <!-- {#if current_page > 1} -->
     <input
       type="submit"
       form="filter-form"
       value="Вернуться к началу"
-      on:click={() => { current_page = 1 }}>
+      on:click={reset}>
   <!-- {/if} -->
 </div>
 
@@ -72,7 +86,7 @@
       type="submit"
       form="filter-form"
       value="Показать еще {data.pagination.limit}"
-      on:click={() => { current_page += 1 }}
+      on:click={loadMore}
     >
   </div>
 {/if}

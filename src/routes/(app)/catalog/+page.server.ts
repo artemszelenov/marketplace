@@ -1,13 +1,10 @@
 import { error } from '@sveltejs/kit';
-import type Pocktbase from "pocketbase";
-import type { ProductTeaser, Product } from "$lib/schema";
+import type { Product } from "$lib/schema";
 
-const LIMIT = 2;
-
-let total_teasers: ProductTeaser[] = [];
+const LIMIT = 10;
 
 export async function load({ locals, url }) {
-  const search_page = Number(url.searchParams.get("page")) || 1;
+  const next_page = Number(url.searchParams.get("page")) || 1;
 
   const filters_query = [];
   for (const [param, value] of url.searchParams.entries()) {
@@ -19,15 +16,9 @@ export async function load({ locals, url }) {
   try {
     const { page, perPage, totalPages, items } = await locals.pb
       .collection<Product>('products')
-      .getList(search_page, LIMIT, {
+      .getList(next_page, LIMIT, {
         filter: filters_query.join(" && ")
       });
-
-    if (page === 1 || items.some((item) => item.id === total_teasers.at(-1)?.id)) {
-      total_teasers = buildTeasers(items, locals.pb);
-    } else {
-      total_teasers = [...total_teasers, ...buildTeasers(items, locals.pb)];
-    }
 
     const colors_records = await locals.pb
       .collection('colors')
@@ -52,7 +43,16 @@ export async function load({ locals, url }) {
     }
 
     return {
-      teasers: total_teasers,
+      teasers: items.map(product => {
+        return {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          gallery: product.gallery.map((file_name: string) => {
+            return locals.pb.files.getUrl(product, file_name);
+          })
+        }
+      }),
       filters,
       pagination: {
         current_page: page,
@@ -64,22 +64,9 @@ export async function load({ locals, url }) {
       }
     }
   } catch (err) {
-    console.log(`Ошибка на сервере`);
+    console.log(`Ошибка на сервере`, err);
 		throw error(500, {
 			message: 'Ошибка на сервере'
 		});
   }
-}
-
-function buildTeasers(products: Product[], pb: Pocktbase): ProductTeaser[] {
-  return products.map(product => {
-    return {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      gallery: product.gallery.map((file_name: string) => {
-        return pb.files.getUrl(product, file_name);
-      })
-    }
-  })
 }

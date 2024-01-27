@@ -47,5 +47,5 @@
     </a>
   </h1>
 
-  <p class="text-sm">{price.toLocaleString("ru-RU") + " руб."}</p>
+  <p class="text-sm">{price.toLocaleString("ru-RU") + " ₽"}</p>
 </article>
