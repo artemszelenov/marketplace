@@ -30,9 +30,11 @@
   }
 </script>
 
-<section class="mt-12">
-  <details>
-    <summary class="max-w-max">
+<section class="grid grid-cols-2 md:mt-12">
+  <h1 class="col-start-1 row-start-1 text-2xl font-bold">Все товары</h1>
+
+  <details class="col-start-1 row-start-1 col-end-3">
+    <summary class="max-w-max ml-auto">
       <Button
         as="div"
         size="xs"
@@ -53,12 +55,12 @@
     <form
       id="filter-form"
       action="/catalog"
-      class="mt-8 max-w-lg"
+      class="mt-8 ml-auto"
       data-sveltekit-noscroll
     >
       {#each Object.keys(data.filters) as filters_group_key}
-        <fieldset class="flex gap-2 flex-wrap mt-4">
-          <legend class="uppercase font-bold mb-2">
+        <fieldset class="flex gap-2 flex-wrap mt-6">
+          <legend class="uppercase font-bold mb-3">
             {data.filters[filters_group_key].title}
           </legend>
 
@@ -72,7 +74,7 @@
                 class="sr-only"
               >
               <span
-                class="inline-flex items-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default"
+                class="inline-flex items-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
               >
                 {entity.title}
               </span>
@@ -81,11 +83,11 @@
         </fieldset>
       {/each}
 
-      <p class="flex justify-between gap-4 mt-8">
+      <p class="flex justify-between md:justify-end gap-8 mt-8">
         <input
           type="reset"
           value="Сбросить все"
-          class="underline"
+          class="underline underline-offset-[0.2em]"
         >
 
         <Button
@@ -102,7 +104,7 @@
   </details>
 </section>
 
-<ul class="grid md:grid-cols-2 lg:grid-cols-4 mt-7 gap-4">
+<ul class="grid grid-cols-2 md:grid-cols-4 mt-7 gap-4">
   {#each teasers as product (product.id)}
     <li>
       <ProductTeaser {product} />
@@ -110,16 +112,7 @@
   {/each}
 </ul>
 
-<div class="flex flex-col items-end gap-2 mt-4">
-  <Button
-    as="div"
-    size="xs"
-    appearance="outlined"
-  >
-    <span slot="text">Страница</span>
-    <span slot="icon">{next_page}</span>
-  </Button>
-
+<div class="flex flex-col items-end gap-6 mt-4">
   <Button
     type="submit"
     form="filter-form"
@@ -127,7 +120,6 @@
     title="Вернуться к началу"
     handler={goTop}
   >
-    <span slot="text">Вернуться к началу</span>
     <svg slot="icon" height="18" viewBox="0 0 512 512" aria-hidden="true">
       <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" />
     </svg>
@@ -147,6 +139,14 @@
       </svg>
     </Button>
   {/if}
+
+  <Button
+    as="div"
+    size="xs"
+    appearance="outlined"
+  >
+    <span slot="icon">{next_page}</span>
+  </Button>
 </div>
 
 <style>

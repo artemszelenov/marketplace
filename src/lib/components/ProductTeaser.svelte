@@ -9,26 +9,28 @@
 </script>
 
 <article>
-  <img
-    class="block aspect-square rounded object-cover"
-    src={gallery[activeImageID]}
-    alt={title}
-    width="300"
-    height="300"
-    decoding="async"
-    loading="eager"
-  />
+  <a href="/catalog/{id}" class="block">
+    <img
+      class="block aspect-square rounded object-cover"
+      src={gallery[activeImageID]}
+      alt={title}
+      width="300"
+      height="300"
+      decoding="async"
+      loading="eager"
+    />
+  </a>
 
   <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
     {#each gallery as thumbnail, index}
-      <li class="shrink-0">
+      <li class="shrink-0 w-[20%]">
         <button
           type="button"
           class="block"
           on:click={() => (activeImageID = index)}
         >
           <img
-            class="w-11 rounded cursor-pointer"
+            class="w-full aspect-square rounded"
             src={thumbnail}
             alt={title}
             width="100"

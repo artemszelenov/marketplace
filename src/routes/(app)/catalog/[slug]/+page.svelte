@@ -17,14 +17,15 @@
 </script>
 
 <div
-  class="lg:gap-x-8 lg:gap-y-10 lg:grid lg:grid-cols-7 lg:grid-rows-1 xl:gap-x-16"
+  class="md:gap-x-8 md:gap-y-10 md:grid md:grid-cols-7 md:grid-rows-1 xl:gap-x-16"
 >
-  <div class="lg:col-span-4 lg:row-end-1">
-    <ul class="grid gap-4">
+  <div class="md:col-span-4 md:row-end-1">
+    <ul class="flex overflow-auto md:grid gap-4">
       {#each data.product.gallery as src}
-        <li>
+        <li class="w-[80%] md:w-auto shrink-0">
           <img
             class="aspect-square rounded-2xl"
+            height="400"
             {src}
             alt={data.product.title}
             decoding="async"
@@ -85,14 +86,14 @@
           <h2 class="text-xl font-bold text-gray-900">Размеры</h2>
         {/if}
 
-        <nav class="grid grid-cols-5 gap-3 mt-3">
+        <nav class="grid grid-cols-4 md:grid-cols-5 gap-3 mt-3">
           {#each data.stock_items as stock_item (stock_item.id)}
             {#if stock_item.count > 0}
               <a
                 href="/catalog/{stock_item.product_id}?stock_item={stock_item.id}"
-                class="relative px-2 py-1.5 text-s text-center font-bold border-2 border-gray-900 rounded-lg outline-offset-2 cursor-pointer"
-                class:border-gray-900={current_stock_item?.id === stock_item.id}
-                title="Выбрать размер"
+                class="inline-flex items-center justify-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
+                class:bg-gray-900={current_stock_item?.id === stock_item.id}
+                class:text-white={current_stock_item?.id === stock_item.id}
               >
                 {getSizeTitleFrom(stock_item)}
               </a>

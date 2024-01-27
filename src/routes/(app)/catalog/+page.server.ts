@@ -17,7 +17,8 @@ export async function load({ locals, url }) {
     const { page, perPage, totalPages, items } = await locals.pb
       .collection<Product>('products')
       .getList(next_page, LIMIT, {
-        filter: filters_query.join(" && ")
+        filter: filters_query.join(" && "),
+        sort: "-created"
       });
 
     const colors_records = await locals.pb

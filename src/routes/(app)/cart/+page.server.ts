@@ -100,7 +100,7 @@ export const actions = {
     }
 
     // new cart flow
-    let existing_cart_record
+    let existing_cart_record;
 
     try {
       existing_cart_record = await locals.pb
@@ -129,7 +129,7 @@ export const actions = {
     }
 
     // existing cart flow
-    let cart_item_record
+    let cart_item_record;
 
     try {
       cart_item_record = await locals.pb

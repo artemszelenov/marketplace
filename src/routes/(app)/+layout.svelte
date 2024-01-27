@@ -5,21 +5,13 @@
 
   const nav = [
     {
-      text: "М",
-      url: "/",
-    },
-    {
-      text: "Ж",
+      text: "Главная",
       url: "/",
     },
     {
       text: "Каталог",
       url: "/catalog",
-    },
-    {
-      text: "Sale",
-      url: "/",
-    },
+    }
   ];
 </script>
 
@@ -29,7 +21,7 @@
 
 <header class="bg-neutral-100">
   <nav
-    class="flex flex-col w-full mx-auto md:items-center md:justify-between md:flex-row md:px-12 px-8 py-4 max-w-7xl lg:px-12"
+    class="grid grid-cols-[3rem_1fr_3rem] gap-3 w-full max-w-7xl mx-auto items-center px-4 md:px-12 py-4"
   >
     <a href="/" class="text-neutral-100 bg-gray-900 px-2 py-[0.3rem] rounded">
       <svg width="35" height="13" viewBox="0 0 35 13" fill="none" aria-hidden="true">
@@ -37,28 +29,24 @@
       </svg>
     </a>
 
-    <div
-      class="flex-col items-center md:pb-0 md:flex md:flex-row"
-    >
+    <div class="flex items-center md:justify-center">
       {#each nav as { text, url }}
-        <a class="px-2 py-2 text-gray-900 font-bold lg:px-3 md:px-3 hover:text-gray-800" href={url}>
+        <a class="px-3 py-2 text-gray-900 font-bold hover:text-gray-800" href={url}>
           {text}
         </a>
       {/each}
     </div>
 
-    <div
-      class="flex-col items-center md:pb-0 md:flex md:flex-row"
-    >
+    <div class="flex items-center justify-end">
       {#if $page.data.user}
-        <a class="px-2 py-2 text-sm text-black lg:px-3 md:px-3" href="/user">
+        <a class="px-3 py-2 text-sm text-black" href="/user">
           Мой аккаунт
         </a>
       {/if}
 
       <a
         href="/cart"
-        class="px-2 py-2 text-gray-900 lg:px-3 md:px-3 hover:text-gray-800"
+        class="block px-3 py-2 -mr-2 text-gray-900 md:-mr-3 hover:text-gray-800"
       >
         <div class="relative">
           <svg width="20" height="22" viewBox="0 0 20 22" fill="none" aria-hidden="true">
@@ -73,15 +61,15 @@
   </nav>
 </header>
 
-<main class="bg-neutral-100 relative z-10 shadow-2xl">
-  <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
+<main class="min-h-[100vh] bg-neutral-100 relative z-10">
+  <div class="px-4 md:px-12 py-4 md:py-12 mx-auto max-w-7xl">
     <slot />
   </div>
 </main>
 
-<footer class="text-white bg-gray-900 sticky bottom-0">
+<footer class="text-white bg-gray-900 md:sticky left-0 bottom-0 z-0">
   <div
-    class="flex flex-col w-full mx-auto md:items-center md:justify-center md:flex-row md:px-12 md:py-20 px-8 py-4 max-w-7xl lg:px-12"
+    class="flex w-full max-w-7xl mx-auto items-center justify-center py-20 px-4 md:px-12"
   >
     <a href="/">
       <svg width="268" height="96" viewBox="0 0 268 96" fill="none" aria-hidden="true">

@@ -9,9 +9,9 @@
   }, 0);
 </script>
 
-<h1 class="text-2xl font-bold text-gray-900">Корзина</h1>
+<h1 class="text-2xl font-bold">Корзина</h1>
 
-<div class="grid grid-cols-[1fr_30rem] gap-32 mt-10">
+<div class="md:grid md:grid-cols-[1fr_30rem] md:gap-32 mt-8">
   {#if data.cart_items.length === 0}
     <p>
       В корзине пусто. Добавьте, что-нибудь из

@@ -7,17 +7,13 @@
   export let as: "link" | "button" | "div" = "button";
   export let href: string | undefined = "/";
   export let form: string | undefined = undefined;
-  export let appearance: 'default' | 'green' | 'outlined' = 'default';
-  export let activeAreaByParent = false;
+  export let appearance: 'action' | 'outlined' = 'action';
   export let noIcon = false;
 
   const appearances = {
-    default: "bg-gray-900",
-    green: "bg-emerald-700",
+    action: "action-button bg-gray-900",
     outlined: "border-2 border-gray-900 text-gray-900"
   }
-
-  const activeAreaByParentClasses = activeAreaByParent ? "before:absolute before:inset-0" : "";
 </script>
 
 {#if as === "link"}
@@ -39,7 +35,7 @@
     </div>
   </div>
 {:else if as === 'div'}
-  <div class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase {activeAreaByParentClasses}">
+  <div class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase cursor-default">
     {#if $$slots.text}
       <div class="flex items-center rounded-full px-5 h-[2.5em] tracking-wider {appearances[appearance]}">
         <slot name='text' />
@@ -58,7 +54,7 @@
   </div>
 {:else}
   <button
-    class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase {activeAreaByParentClasses}"
+    class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase"
     {type}
     {title}
     {disabled}
