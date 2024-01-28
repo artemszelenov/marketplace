@@ -16,3 +16,19 @@
     <path d="M136 208l120-104 120 104M136 304l120 104 120-104" fill="none" stroke="currentcolor" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" />
   </svg>
 </div>
+
+<style>
+  select#shoes-size-metric {
+    @apply border-gray-900;
+
+    padding: 0.4em 1em;
+    font-size: 12px;
+    width: 6em;
+    font-weight: bold;
+    background-color: transparent;
+  }
+
+  select#shoes-size-metric + svg {
+    right: 0.4em;
+  }
+</style>
