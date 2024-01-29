@@ -12,20 +12,20 @@
   import { userInputData } from "$lib/stores/userInputData";
 
   type FieldName = keyof typeof $userInputData;
- 
+
   export let data;
 
   let closest_cities: CdekCity[] = [];
   let map: any;
-  let incompletedValidations = new Set(['fullname', 'phone', 'email', 'agree']);
+  let incompleted_validations = new Set(['fullname', 'phone', 'email', 'agree']);
 
   for (const field of Object.values($userInputData)) {
-    if (incompletedValidations.has(field.name) && field.valid) {
-      incompletedValidations.delete(field.name);
+    if (incompleted_validations.has(field.name) && field.valid) {
+      incompleted_validations.delete(field.name);
     }
   }
 
-  $: if (incompletedValidations.size === 0) {
+  $: if (incompleted_validations.size === 0) {
     userInfoStepDone.set(true);
   } else {
     userInfoStepDone.set(false);
@@ -52,7 +52,7 @@
     const target = event.target as HTMLInputElement;
 
     if (target.validity.valid) {
-      incompletedValidations.delete(target.name);
+      incompleted_validations.delete(target.name);
 
       userInputData.set({
         ...userInputData.get(),
@@ -62,7 +62,7 @@
         }
       });
     } else {
-      incompletedValidations.add(target.name);
+      incompleted_validations.add(target.name);
 
       userInputData.set({
         ...userInputData.get(),
@@ -73,19 +73,19 @@
       });
     }
 
-    incompletedValidations = incompletedValidations;
+    incompleted_validations = incompleted_validations;
   }
 
   function validateCheckbox(event: Event) {
     const target = event.target as HTMLInputElement;
 
     if (target.checked) {
-      incompletedValidations.delete(target.name);
+      incompleted_validations.delete(target.name);
     } else {
-      incompletedValidations.add(target.name);
+      incompleted_validations.add(target.name);
     }
 
-    incompletedValidations = incompletedValidations;
+    incompleted_validations = incompleted_validations;
   }
 
   function getCurrentPosition() {
@@ -478,7 +478,7 @@
     <details class="mt-10" class:disabled={!$userInfoStepDone} open={$userInfoStepDone}>
       <summary class="relative flex items-center justify-between pointer-events-none">
         <h2 class="text-2xl font-bold">Оплата</h2>
-  
+
         <Button
           as="div"
           size="xs"
@@ -516,7 +516,7 @@
       {/each}
     </ul>
 
-    <div class="grid grid-cols-2 gap-4 mt-10">
+    <div class="total grid grid-cols-2 justify-items-end gap-4 mt-10">
       {#if $deliveryOffice && $deliveryDateAndPrice}
         <h3 class="font-semibold">Стоимость доставки</h3>
         <p class="font-semibold">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
@@ -547,5 +547,9 @@
   details.disabled {
     pointer-events: none;
     opacity: .6;
+  }
+
+  .total > *:nth-child(odd) {
+    justify-self: start;
   }
 </style>

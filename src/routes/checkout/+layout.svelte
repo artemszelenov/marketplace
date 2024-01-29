@@ -5,7 +5,7 @@
 
 <svelte:head>
   <title>{`${$page.data.seo.title} | 6:52`}</title>
-  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=basic" async></script>
+  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=basic"></script>
 </svelte:head>
 
 <header class="flex flex-col gap-3 w-full md:items-center md:justify-center md:flex-row md:px-12 px-8 py-4 lg:px-12 bg-neutral-100">

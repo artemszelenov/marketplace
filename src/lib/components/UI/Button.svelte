@@ -7,21 +7,22 @@
   export let as: "link" | "button" | "div" = "button";
   export let href: string | undefined = "/";
   export let form: string | undefined = undefined;
-  export let appearance: 'action' | 'outlined' = 'action';
+  export let appearance: 'action' | 'outlined' | 'silent-action' = 'action';
   export let noIcon = false;
   export let additional_class = "";
 
-  const appearances = {
+  const appearances: { [key in typeof appearance]: string } = {
     action: "action-button bg-gray-900",
-    outlined: "border-2 border-gray-900 text-gray-900"
+    "silent-action": "text-gray-900 bg-gray-200",
+    outlined: "info-action border-2 border-gray-900 text-gray-900"
   }
 </script>
 
 {#if as === "link"}
   <div
     class="relative flex items-center gap-[0.5em] w-fit text-white text-{size} font-bold uppercase no-underline {additional_class}"
-  > 
-    <a {href} class="absolute inset-0" aria-label={title} />
+  >
+    <a {href} class="absolute inset-0" data-sveltekit-reload aria-label={title} />
 
     <div class="flex items-center w-fit bg-gray-900 rounded-full px-[1.5em] h-[2.5em] tracking-wider">
       <slot name='text' />

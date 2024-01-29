@@ -22,7 +22,7 @@
   }
 </script>
 
-<div class="md:gap-10 md:grid md:grid-cols-[1fr_28rem]">
+<div class="md:gap-10 md:grid md:grid-cols-[1fr_28rem] pb-10">
   <ul class="flex overflow-auto md:grid gap-3">
     {#each data.product.gallery as src}
       <li class="w-[80%] md:w-auto shrink-0">
@@ -39,11 +39,15 @@
     {/each}
   </ul>
 
-  <div>
+  <div class="mt-10 md:mt-0">
     <div class="sticky top-3">
-      <h1 class="text-xl md:text-3xl uppercase text-gray-900 font-bold">{data.product.title}</h1>
+      <h1 class="text-xl md:text-3xl uppercase text-gray-900 font-bold">
+        {data.product.title}
+      </h1>
 
-      <p class="text-lg font-medium text-gray-900 mt-2">{data.product.price.toLocaleString("ru-RU") + " ₽"}</p>
+      <p class="text-lg font-medium text-gray-900 mt-2">
+        {data.product.price.toLocaleString("ru-RU") + " ₽"}
+      </p>
 
       <div class="mt-4">
         <AddToCartForm

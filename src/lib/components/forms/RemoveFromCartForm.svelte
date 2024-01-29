@@ -14,9 +14,8 @@
     title="Удалить из корзины"
     type="submit"
     size="xs"
-    appearance="outlined"
+    appearance="silent-action"
   >
-    <span slot="text">Удалить</span>
     <svg slot="icon" viewBox="0 0 512 512" aria-hidden="true">
       <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M400 256H112" />
     </svg>
