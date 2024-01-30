@@ -33,7 +33,7 @@
   <h1 class="col-start-1 row-start-1 text-2xl font-bold">Все товары</h1>
 
   <details class="col-start-1 row-start-1 col-end-3">
-    <summary class="max-w-max ml-auto">
+    <summary class="max-w-max ml-auto rounded-full">
       <Button
         as="div"
         size="xs"
@@ -150,6 +150,10 @@
 </div>
 
 <style>
+  #filter-form [type="checkbox"]:focus + * {
+    @apply bg-neutral-200;
+  }
+
   #filter-form [type="checkbox"]:checked + * {
     @apply bg-gray-900 text-white;
   }

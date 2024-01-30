@@ -10,7 +10,7 @@
     stock_item => stock_item.id === data.current_stock_item_id
   );
 
-  function getSizeTitleFrom(stock_item: StockItem) {
+  function getSizeTitleOf(stock_item: StockItem) {
     return data.product.type === "shoes"
       ? stock_item.metrics[$preferredShoesSizeMetric]
       : stock_item.metrics.intl
@@ -89,17 +89,16 @@
                 <a
                   href="/catalog/{stock_item.product_id}?stock_item={stock_item.id}"
                   class="inline-flex items-center justify-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
-                  class:bg-gray-900={current_stock_item?.id === stock_item.id}
-                  class:text-white={current_stock_item?.id === stock_item.id}
+                  class:active={current_stock_item?.id === stock_item.id}
                 >
-                  {getSizeTitleFrom(stock_item)}
+                  {getSizeTitleOf(stock_item)}
                 </a>
               {:else}
                 <div
                   class="px-2 py-1.5 text-s text-center font-medium border-2 border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
                   title="Нет в наличии"
                 >
-                  {getSizeTitleFrom(stock_item)}
+                  {getSizeTitleOf(stock_item)}
                 </div>
               {/if}
             {/each}

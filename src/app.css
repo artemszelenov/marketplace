@@ -18,8 +18,29 @@
     text-underline-offset: 0.2em;
   }
 
+  a[href] {
+    @apply rounded;
+  }
+
   :is(a, button, summary):active:not(:disabled) {
     transform: scale(0.95);
+  }
+
+  :is(.action-button):is(:hover, :focus):not(:disabled),
+  :is(a[href], summary):focus:not(:disabled) {
+    @apply outline-gray-900;
+
+    outline-width: 2px;
+    outline-offset: 3px;
+    outline-style: solid;
+  }
+
+  :is(a[href]):hover:not(:disabled, .logo) {
+    @apply bg-neutral-200 cursor-default;
+  }
+
+  :is(a[href].active):not(:disabled, .logo) {
+    @apply bg-gray-900 text-white;
   }
 
   :is(a, button) svg {

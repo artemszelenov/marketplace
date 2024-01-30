@@ -185,7 +185,7 @@
           size="xs"
           title="ШАГ 1 ИЗ 3"
           appearance="outlined"
-          noIcon
+          no_icon
         >
           <span slot="text">ШАГ 1 ИЗ 3</span>
         </Button>
@@ -352,7 +352,7 @@
                       size="xs"
                       title="Заберу здесь"
                       handler={() => deliveryStepDone.set(true)}
-                      noIcon
+                      no_icon
                     >
                       <span slot="text">Заберу здесь</span>
                     </Button>
@@ -384,7 +384,7 @@
           size="xs"
           title="ШАГ 2 ИЗ 3"
           appearance="outlined"
-          noIcon
+          no_icon
         >
           <span slot="text">ШАГ 2 ИЗ 3</span>
         </Button>
@@ -484,7 +484,7 @@
           size="xs"
           title="ШАГ 3 ИЗ 3"
           appearance="outlined"
-          noIcon
+          no_icon
         >
           <span slot="text">ШАГ 3 ИЗ 3</span>
         </Button>
