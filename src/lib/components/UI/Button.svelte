@@ -7,25 +7,26 @@
   export let as: "link" | "button" | "div" = "button";
   export let href: string | undefined = "/";
   export let form: string | undefined = undefined;
-  export let appearance: 'action' | 'outlined' | 'silent-action' = 'action';
+  export let appearance: 'action' | 'outlined' | 'silent' = 'action';
   export let no_icon = false;
   export let additional_class = "";
 
   const appearances: { [key in typeof appearance]: string } = {
     action: "bg-gray-900",
-    "silent-action": "text-gray-900 bg-gray-200",
+    silent: "text-gray-900 bg-gray-200",
     outlined: "border-2 border-gray-900 text-gray-900"
   }
 
   additional_class += appearance === "action" ? " action-button" : "";
+  additional_class += appearance === "silent" ? " silent-button" : "";
 </script>
 
 {#if as === "link"}
-  <div
+  <a
+    {href}
+    data-sveltekit-reload
     class="relative flex items-center gap-[0.5em] w-fit text-white text-{size} font-bold uppercase no-underline cursor-default rounded-full {additional_class}"
   >
-    <a {href} class="absolute inset-0 cursor-default" data-sveltekit-reload aria-label={title} />
-
     <div class="flex items-center w-fit bg-gray-900 rounded-full px-[1.5em] h-[2.5em] tracking-wider">
       <slot name='text' />
     </div>
@@ -37,7 +38,7 @@
         </svg>
       </slot>
     </div>
-  </div>
+  </a>
 {:else if as === 'div'}
   <div class="flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase cursor-default rounded-full {additional_class}">
     {#if $$slots.text}
