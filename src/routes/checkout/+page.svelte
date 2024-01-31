@@ -446,16 +446,34 @@
             <small class="text-xs mt-2 ml-4">Необходим для отправки чека.</small>
           </div>
 
-          <label for="tg" class="text-lg font-medium mt-2">Телеграм</label>
+          <label for="social-network" class="text-lg font-medium mt-2">Способ связи</label>
 
           <div>
-            <input
-              type="text"
-              id="tg"
-              name="telegram"
-              placeholder="@nickname"
-            />
-            <p class="text-xs mt-2 ml-4">На него отправим трек номер. Можно не указывать, тогда трек номер пришлем на почту.</p>
+            <div class="grid grid-cols-2">
+              <div class="relative row-start-1 col-start-1 w-36">
+                <Select
+                  name="social-network"
+                  form="checkout-form"
+                >
+                  <optgroup label="Предпочитаемая соц. сеть">
+                    <option value="tg">Телеграм</option>
+                    <option value="wa">WhatsApp</option>
+                    <option value="inst">Instagram</option>
+                  </optgroup>
+                </Select>
+              </div>
+
+              <input
+                type="text"
+                name="nickname"
+                placeholder="nickname"
+                class="row-start-1 col-start-1 col-end-3"
+              />
+            </div>
+
+            <p class="text-xs mt-2 ml-4">
+              Можно не указывать, тогда трек номер пришлем на почту.
+            </p>
           </div>
 
           <div />
@@ -551,5 +569,9 @@
 
   .total > *:nth-child(odd) {
     justify-self: start;
+  }
+
+  input[name="nickname"] {
+    @apply pl-40;
   }
 </style>

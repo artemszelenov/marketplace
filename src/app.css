@@ -18,7 +18,7 @@
     text-underline-offset: 0.2em;
   }
 
-  a[href]:not(.action-button) {
+  a[href]:not(.action-button, .leaflet-control a) {
     @apply rounded;
   }
 
@@ -48,7 +48,12 @@
   }
 
   input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]) {
-    @apply block w-full bg-white px-4 py-2.5 border rounded-full focus:outline focus:outline-gray-900 focus:outline-[3px] disabled:opacity-60;
+    @apply block w-full bg-white px-4 py-2.5 border rounded-full;
+  }
+
+  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]),
+  select {
+    @apply focus:outline focus:outline-gray-900 focus:outline-[3px] focus:outline-offset-0;
   }
 
   label:has(+ div > input:required, + input:required)::after {
@@ -58,20 +63,20 @@
     margin-left: 1ch;
   }
 
-  :is([type="text"], [type="tel"], [type="email"], [type="password"]):user-valid {
+  :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-valid {
     @apply outline outline-emerald-700;
   }
 
-  :is([type="text"], [type="tel"], [type="email"], [type="password"]):user-invalid {
+  :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-invalid {
     @apply outline outline-red-600;
   }
 
   select {
-    @apply appearance-none row-start-1 col-start-1 block w-full bg-white px-4 py-2.5 border rounded-full focus:outline focus:outline-gray-900 focus:outline-[3px] disabled:opacity-60;
+    @apply appearance-none row-start-1 col-start-1 block w-full bg-white px-4 py-2.5 border rounded-full;
   }
 
   select:disabled + svg,
-  button:disabled {
+  :is(button, input):disabled {
     @apply opacity-60;
   }
 

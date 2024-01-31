@@ -150,7 +150,7 @@
 </div>
 
 <style>
-  #filter-form [type="checkbox"]:focus + * {
+  #filter-form [type="checkbox"]:is(:hover, :focus) + * {
     @apply bg-neutral-200;
   }
 
