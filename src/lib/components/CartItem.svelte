@@ -12,17 +12,17 @@
   }
 </script>
 
-<article class="flex space-x-7">
+<article class="grid gap-4 md:gap-7 grid-flow-col">
   <img
-    class="max-w-36 aspect-square rounded object-cover"
+    class="max-w-20 md:max-w-36 aspect-square rounded object-cover"
     src={cart_item.product.image}
     alt={cart_item.product.title}
     decoding="async"
     loading="eager"
   />
 
-  <div class="grow flex flex-col">
-    <h1 class="text-lg font-semibold">
+  <div>
+    <h1 class="md:text-lg font-semibold">
       <a href="/catalog/{cart_item.product?.id}?size={cart_item.stock_item.id}">
         {cart_item.product.title}
       </a>
@@ -49,7 +49,7 @@
           </tr>
         </tbody>
       </table>
-  
+
       <div class="ml-auto">
         <RemoveFromCartForm cart_item_id={cart_item.id} />
       </div>

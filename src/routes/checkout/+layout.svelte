@@ -8,7 +8,7 @@
   <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=basic"></script>
 </svelte:head>
 
-<header class="flex flex-col gap-3 w-full md:items-center md:justify-center md:flex-row md:px-12 px-8 py-4 lg:px-12 bg-neutral-100">
+<header class="flex gap-3 w-full items-center justify-center py-4 px-4 md:px-12 bg-neutral-100">
   <nav>
     <a href="/" class="block text-neutral-100 bg-gray-900 px-2 py-[0.3rem] rounded">
       <svg width="35" height="13" viewBox="0 0 35 13" fill="none" aria-hidden="true">
@@ -21,7 +21,7 @@
 </header>
 
 <main class="bg-neutral-100 min-h-[100vh]">
-  <div class="px-8 py-12 mx-auto max-w-7xl md:px-12">
+  <div class="px-4 md:px-12 py-4 md:py-12 mx-auto max-w-7xl">
     <slot />
   </div>
 </main>

@@ -15,6 +15,8 @@
 
   export let data;
 
+  let innerWidth: number;
+
   let closest_cities: CdekCity[] = [];
   let map: any;
   let incompleted_validations = new Set(['fullname', 'phone', 'email', 'agree']);
@@ -166,7 +168,46 @@
   }
 </script>
 
-<div class="grid grid-cols-[1fr_27rem] gap-16 mt-5">
+<svelte:window bind:innerWidth={innerWidth}></svelte:window>
+
+{#if innerWidth < 600}
+  <details class="order-details-mobile mb-10">
+    <summary class="flex items-center gap-4">
+      <h2 class="shrink-0 font-semibold">Ваш заказ</h2>
+
+      <ul class="flex gap-4 grow overflow-auto">
+        {#each data.order_items as order_item (order_item.id)}
+          <li class="shrink-0">
+            <img
+              class="w-12 aspect-square rounded object-cover"
+              src={order_item.product.image}
+              alt={order_item.product.title}
+              decoding="async"
+              loading="eager">
+          </li>
+        {/each}
+      </ul>
+
+      <svg class="shrink-0 chevron ml-auto" width="20" viewBox="0 0 512 512" aria-hidden="true">
+        <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144" />
+      </svg>
+    </summary>
+
+    <ul class="grid gap-7 mt-4">
+      {#each data.order_items as order_item (order_item.id)}
+        <li>
+          <OrderItem {order_item} />
+        </li>
+      {/each}
+    </ul>
+  </details>
+
+  <small class="block text-sm mt-10">
+    Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.
+  </small>
+{/if}
+
+<div class="grid md:grid-cols-[1fr_27rem] gap-16 mt-5">
   <div>
     <details open>
       <summary class="relative flex items-center justify-between pointer-events-none">
@@ -409,6 +450,7 @@
               maxlength="300"
               placeholder="Иванов Иван Иванович"
               autocomplete="name"
+              autocapitalize="words"
               required
               on:input={validateInput}
             />
@@ -508,6 +550,38 @@
         </Button>
       </summary>
 
+      {#if innerWidth < 600}
+        <div>
+          <h3 class="font-semibold">
+            Ваш заказ
+          </h3>
+
+          <ul class="space-y-7 mt-4">
+            {#each data.order_items as order_item (order_item.id)}
+              <li>
+                <OrderItem {order_item} />
+              </li>
+            {/each}
+          </ul>
+
+          <div class="total grid grid-cols-2 justify-items-end gap-4 mt-10">
+            {#if $deliveryOffice && $deliveryDateAndPrice}
+              <h3 class="font-semibold">Стоимость доставки</h3>
+              <p class="font-semibold">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+            {/if}
+
+            <h3 class="text-xl font-semibold">
+              Итого
+            </h3>
+            <p class="text-xl font-semibold">
+              {total.toLocaleString("ru-RU") + " ₽"}
+            </p>
+          </div>
+
+          <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.</small>
+        </div>
+      {/if}
+
       <p class="mt-10">
         <Button
           type="submit"
@@ -521,35 +595,37 @@
     </details>
   </div>
 
-  <div>
-    <h3 class="font-semibold">
-      Ваш заказ
-    </h3>
-
-    <ul class="space-y-7 mt-4">
-      {#each data.order_items as order_item (order_item.id)}
-        <li>
-          <OrderItem {order_item} />
-        </li>
-      {/each}
-    </ul>
-
-    <div class="total grid grid-cols-2 justify-items-end gap-4 mt-10">
-      {#if $deliveryOffice && $deliveryDateAndPrice}
-        <h3 class="font-semibold">Стоимость доставки</h3>
-        <p class="font-semibold">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
-      {/if}
-
-      <h3 class="text-xl font-semibold">
-        Итого
+  {#if innerWidth > 600}
+    <div>
+      <h3 class="font-semibold">
+        Ваш заказ
       </h3>
-      <p class="text-xl font-semibold">
-        {total.toLocaleString("ru-RU") + " ₽"}
-      </p>
-    </div>
 
-    <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.</small>
-  </div>
+      <ul class="space-y-7 mt-4">
+        {#each data.order_items as order_item (order_item.id)}
+          <li>
+            <OrderItem {order_item} />
+          </li>
+        {/each}
+      </ul>
+
+      <div class="total grid grid-cols-2 justify-items-end gap-4 mt-10">
+        {#if $deliveryOffice && $deliveryDateAndPrice}
+          <h3 class="font-semibold">Стоимость доставки</h3>
+          <p class="font-semibold">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+        {/if}
+
+        <h3 class="text-xl font-semibold">
+          Итого
+        </h3>
+        <p class="text-xl font-semibold">
+          {total.toLocaleString("ru-RU") + " ₽"}
+        </p>
+      </div>
+
+      <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.</small>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -573,5 +649,13 @@
 
   input[name="nickname"] {
     @apply pl-40;
+  }
+
+  details.order-details-mobile[open] summary img {
+    visibility: hidden;
+  }
+
+  details.order-details-mobile[open] summary svg.chevron {
+    transform: rotate(90deg);
   }
 </style>

@@ -11,41 +11,43 @@
   }
 </script>
 
-<article class="flex space-x-5">
+<article class="grid gap-4 md:gap-7 grid-flow-col">
   <img
-    class="max-w-24 aspect-square rounded object-cover"
+    class="max-w-20 md:max-w-36 aspect-square rounded object-cover"
     src={order_item.product.image}
     alt={order_item.product.title}
     decoding="async"
     loading="eager"
   />
 
-  <div class="grow flex flex-col">
-    <h1 class="text-base font-semibold">
+  <div>
+    <h1 class="md:text-lg font-semibold">
       <a href="/catalog/{order_item.product?.id}?size={order_item.stock_item.id}">
         {order_item.product.title}
       </a>
     </h1>
 
-    <table class="w-48 mt-2">
-      <tbody>
-        <tr>
-          <td class="text-sm">Цена</td>
-          <td class="text-sm font-medium">{order_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
-        </tr>
-        <tr>
-          <td class="text-sm">Размер</td>
-          <td class="text-sm font-medium">{getSizeTitleFrom(order_item.stock_item)}</td>
-        </tr>
-        <tr>
-          <td class="text-sm">Количество</td>
-          <td class="text-sm font-medium">{order_item.quantity}</td>
-        </tr>
-        <tr>
-          <td class="text-sm">Цвет</td>
-          <td class="text-sm font-medium">{order_item.product.color}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="flex items-end">
+      <table class="w-48 mt-4">
+        <tbody>
+          <tr>
+            <td class="text-sm">Цена</td>
+            <td class="text-sm font-medium">{order_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
+          </tr>
+          <tr>
+            <td class="text-sm">Размер</td>
+            <td class="text-sm font-medium">{getSizeTitleFrom(order_item.stock_item)}</td>
+          </tr>
+          <tr>
+            <td class="text-sm">Количество</td>
+            <td class="text-sm font-medium">{order_item.quantity}</td>
+          </tr>
+          <tr>
+            <td class="text-sm">Цвет</td>
+            <td class="text-sm font-medium">{order_item.product.color}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </article>

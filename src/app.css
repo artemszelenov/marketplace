@@ -22,12 +22,12 @@
     @apply rounded;
   }
 
-  :is(a, button, summary):active:not(:disabled) {
+  :is(a, button):active:not(:disabled) {
     transform: scale(0.95);
   }
 
-  :is(.action-button, .silent-button):is(:hover, :focus):not(:disabled),
-  :is(a[href], summary):focus:not(:disabled) {
+  :is(.action-button, .silent-button):is(:hover, :focus-visible):not(:disabled),
+  :is(a[href], summary):focus-visible:not(:disabled) {
     @apply outline-gray-900;
 
     outline-width: 2px;
