@@ -4,10 +4,9 @@
   export let onChange = (event: Event) => {};
   export let disabled: boolean | undefined = false;
   export let form: string | undefined = undefined;
-  export let hidden: boolean | undefined = undefined;
 </script>
 
-<div class={hidden ? "hidden" : "grid"}>
+<div class="grid">
   {#if value === undefined}
     <select {name} {disabled} id={name} {form}>
       <slot />

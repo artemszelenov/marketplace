@@ -171,7 +171,7 @@
 <svelte:window bind:innerWidth={innerWidth}></svelte:window>
 
 {#if innerWidth < 600}
-  <details class="order-details-mobile mb-10">
+  <details class="order-details-mobile">
     <summary class="flex items-center gap-4">
       <h2 class="shrink-0 font-semibold">Ваш заказ</h2>
 
@@ -202,12 +202,12 @@
     </ul>
   </details>
 
-  <small class="block text-sm mt-10">
+  <small class="block text-sm mt-5">
     Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.
   </small>
 {/if}
 
-<div class="grid md:grid-cols-[1fr_27rem] gap-16 mt-5">
+<div class="grid md:grid-cols-[1fr_27rem] gap-16 mt-8 pb-10 md-pb-0 md:mt-5">
   <div>
     <details open>
       <summary class="relative flex items-center justify-between pointer-events-none">
@@ -232,17 +232,17 @@
         </Button>
       </summary>
 
-      <div class="mt-10">
-        <div class="grid grid-cols-[0.5fr_1fr] gap-7 mt-10">
+      <div class="mt-5 md:mt-10">
+        <div class="grid md:grid-cols-[0.5fr_1fr] md:gap-7 md:mt-10">
           <label
             for="city"
             hidden={$deliveryStepDone}
-            class="text-lg font-medium mt-2"
+            class="text-lg font-medium md:mt-2"
           >
             Город
           </label>
 
-          <div hidden={$deliveryStepDone}>
+          <div hidden={$deliveryStepDone} class="mt-2 md:mt-0">
             <Select
               name="citycode"
               value={$currentCity.cdek_city_code}
@@ -276,27 +276,28 @@
           <label
             for="tk"
             hidden={$deliveryStepDone}
-            class="text-lg font-medium mt-2"
+            class="text-lg font-medium mt-6 md:mt-2"
           >
             Транспортная компания
           </label>
 
-          <Select
-            name="tk"
-            value="cdek"
-            form="checkout-form"
-            hidden={$deliveryStepDone}
-          >
-            <option value="post" disabled>Почта России</option>
-            <option value="yandex" disabled>Яндекс</option>
-            <option value="cdek" selected>CDEK</option>
-          </Select>
+          <div hidden={$deliveryStepDone} class="mt-2 md:mt-0">
+            <Select
+              name="tk"
+              value="cdek"
+              form="checkout-form"
+            >
+              <option value="post" disabled>Почта России</option>
+              <option value="yandex" disabled>Яндекс</option>
+              <option value="cdek" selected>CDEK</option>
+            </Select>
+          </div>
 
-          <p hidden={$deliveryStepDone} class="text-lg font-medium">
+          <p hidden={$deliveryStepDone} class="mt-6 md:mt-0 text-lg font-medium">
             Способ доставки
           </p>
 
-          <div hidden={$deliveryStepDone}>
+          <div hidden={$deliveryStepDone} class="mt-2 md:mt-0">
             <fieldset form="checkout-form">
               <legend class="sr-only">Способ доставки</legend>
               <label class="flex items-center">
@@ -327,10 +328,10 @@
 
           {#if $deliveryType === 'pickup'}
             {#if !$deliveryStepDone}
-              <div id="map" class="aspect-video col-span-2" />
+              <div id="map" class="aspect-video my-4 md:my-0 md:col-span-2" />
             {/if}
 
-            <div class="col-span-2 grid grid-cols-[0.5fr_1fr] gap-y-4 gap-x-7">
+            <div class="md:col-span-2 md:grid md:grid-cols-[0.5fr_1fr] md:gap-y-4 md:gap-x-7">
               <p class="text-lg font-medium">ПВЗ</p>
 
               {#if browser && $deliveryOffice}
@@ -338,46 +339,46 @@
 
                 <p class="text-lg">{$deliveryOffice.owner_code}</p>
 
-                <p class="text-base font-medium">Улица</p>
-                <p>{$deliveryOffice.location.address}</p>
+                <p class="mt-2 md:mt-0 text-base font-medium">Улица</p>
+                <p class="mt-1 md:mt-0">{$deliveryOffice.location.address}</p>
 
                 {#if $deliveryOffice.nearest_station}
-                  <p class="text-base font-medium">Остановка</p>
-                  <p>{$deliveryOffice.nearest_station}</p>
+                  <p class="mt-2 md:mt-0 text-base font-medium">Остановка</p>
+                  <p class="mt-1 md:mt-0">{$deliveryOffice.nearest_station}</p>
                 {/if}
 
-                <p class="text-base font-medium">График работы</p>
-                <p>{$deliveryOffice.work_time}</p>
+                <p class="mt-2 md:mt-0 text-base font-medium">График работы</p>
+                <p class="mt-1 md:mt-0">{$deliveryOffice.work_time}</p>
 
-                <p class="text-base font-medium">Контакты</p>
-                <p>
+                <p class="mt-2 md:mt-0 text-base font-medium">Контакты</p>
+                <p class="mt-1 md:mt-0">
                   {#each $deliveryOffice.phones as { number }}
                     <a href="tel:{number}" class="block">{number}</a>
                   {/each}
                 </p>
 
                 {#if $deliveryOffice.address_comment}
-                  <p class="text-base font-medium">Как добраться</p>
-                  <p>{$deliveryOffice.address_comment}</p>
+                  <p class="mt-2 md:mt-0 text-base font-medium">Как добраться</p>
+                  <p class="mt-1 md:mt-0">{$deliveryOffice.address_comment}</p>
                 {/if}
 
                 {#if $deliveryDateAndPrice}
-                  <p class="text-base font-medium">Срок доставки</p>
-                  <p>
+                  <p class="mt-2 md:mt-0 text-base font-medium">Срок доставки</p>
+                  <p class="mt-1 md:mt-0">
                     От {$deliveryDateAndPrice.calendar_min} до {$deliveryDateAndPrice.calendar_max} календарных дней.
                     <br>
                     Мы пришлем вам трек номер по которому можно будет отследить заказ.
                   </p>
 
-                  <p class="text-base font-medium">Стоимость доставки</p>
+                  <p class="mt-2 md:mt-0 text-base font-medium">Стоимость доставки</p>
 
-                  <p>{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+                  <p class="mt-1 md:mt-0">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
                 {/if}
 
                 <div />
 
                 {#if $deliveryStepDone}
-                  <p>
+                  <p class="mt-2 md:mt-0">
                     <button
                       class="underline"
                       type="button"
@@ -387,7 +388,7 @@
                     </button>
                   </p>
                 {:else}
-                  <p>
+                  <p class="mt-2 md:mt-0">
                     <Button
                       type="button"
                       size="xs"
@@ -400,7 +401,7 @@
                   </p>
                 {/if}
               {:else}
-                <p>Выберите ПВЗ на карте</p>
+                <p class="mt-4 md:mt-0">Выберите ПВЗ на карте</p>
               {/if}
             </div>
           {/if}
@@ -431,17 +432,19 @@
         </Button>
       </summary>
 
-      <div class="mt-10">
+      <div class="mt-5 md:mt-10">
         <form
           method="POST"
           action="?/proceed"
           id="checkout-form"
-          class="grid grid-cols-[0.5fr_1fr] gap-7"
+          class="md:grid md:grid-cols-[0.5fr_1fr] md:gap-7"
           autocomplete="on"
           enctype="multipart/form-data"
         >
-          <label for="full_name" class="text-lg font-medium mt-2">ФИО</label>
-          <div>
+          <label for="full_name" class="text-lg font-medium mt-2">
+            ФИО
+          </label>
+          <div class="mt-2 md:mt-0">
             <input
               type="text"
               id="full_name"
@@ -456,8 +459,10 @@
             />
           </div>
 
-          <label for="phone" class="text-lg font-medium mt-2">Телефон</label>
-          <div>
+          <label for="phone" class="block mt-6 md:mt-2 text-lg font-medium">
+            Телефон
+          </label>
+          <div class="mt-2 md:mt-0">
             <input
               type="tel"
               id="phone"
@@ -470,11 +475,13 @@
               required
               on:input={validateInput}
             />
-            <small class="text-xs mt-2 ml-4">Формат: 79998887766</small>
+            <small class="text-xs mt-2 md:ml-4">Формат: 79998887766</small>
           </div>
 
-          <label for="email" class="text-lg font-medium mt-2">E-mail</label>
-          <div>
+          <label for="email" class="block mt-6 md:mt-2 text-lg font-medium">
+            Email
+          </label>
+          <div class="mt-2 md:mt-0">
             <input
               type="email"
               id="email"
@@ -485,12 +492,14 @@
               required
               on:input={validateInput}
             />
-            <small class="text-xs mt-2 ml-4">Необходим для отправки чека.</small>
+            <small class="text-xs mt-2 md:ml-4">Необходим для отправки чека.</small>
           </div>
 
-          <label for="social-network" class="text-lg font-medium mt-2">Способ связи</label>
+          <label for="social-network" class="block mt-6 md:mt-2 text-lg font-medium">
+            Способ связи
+          </label>
 
-          <div>
+          <div class="mt-2 md:mt-0">
             <div class="grid grid-cols-2">
               <div class="relative row-start-1 col-start-1 w-36">
                 <Select
@@ -508,19 +517,19 @@
               <input
                 type="text"
                 name="nickname"
-                placeholder="nickname"
+                placeholder="никнейм"
                 class="row-start-1 col-start-1 col-end-3"
               />
             </div>
 
-            <p class="text-xs mt-2 ml-4">
+            <p class="text-xs mt-2 md:ml-4">
               Можно не указывать, тогда трек номер пришлем на почту.
             </p>
           </div>
 
           <div />
 
-          <div>
+          <div class="mt-6 md:mt-0">
             <label>
               <input
                 type="checkbox"
@@ -551,7 +560,7 @@
       </summary>
 
       {#if innerWidth < 600}
-        <div>
+        <div class="mt-5">
           <h3 class="font-semibold">
             Ваш заказ
           </h3>
@@ -577,12 +586,10 @@
               {total.toLocaleString("ru-RU") + " ₽"}
             </p>
           </div>
-
-          <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.</small>
         </div>
       {/if}
 
-      <p class="mt-10">
+      <div class="ml-auto max-w-max mt-5">
         <Button
           type="submit"
           form="checkout-form"
@@ -591,7 +598,7 @@
         >
           <span slot="text">Оплатить</span>
         </Button>
-      </p>
+      </div>
     </details>
   </div>
 
