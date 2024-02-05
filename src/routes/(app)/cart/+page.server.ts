@@ -61,7 +61,7 @@ export async function load({ locals, cookies }) {
           if (stock_item_record.size_group === size_record.expand?.group.id) {
             const cart_item = cart_items.find(cart_item => stock_item_record.id === cart_item.stock_item.id);
             const metric_value = StockItemsMetricsSchema.parse(size_record.expand?.metric.value);
-    
+
             if (cart_item) {
               cart_item.stock_item.metrics[metric_value] = size_record.title;
             }
@@ -207,7 +207,7 @@ export const actions = {
       if (err instanceof ClientResponseError) {
         console.log('Pocketbase: Ошибка при удалении товара', err);
         throw error(500, {
-          message: 'Pocketbase: ' + err.message
+          message: '[Pocketbase]: ' + err.message
         });
       }
       console.log('Неизвестная ошибка', err);
