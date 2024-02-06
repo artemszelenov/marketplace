@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { enhance } from "$app/forms";
   import Button from "$lib/components/UI/Button.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import OrderItem from "$lib/components/OrderItem.svelte";
@@ -13,6 +14,7 @@
 
   type FieldName = keyof typeof $userInputData;
 
+  export let form;
   export let data;
 
   let innerWidth: number;
@@ -440,6 +442,7 @@
           class="md:grid md:grid-cols-[0.5fr_1fr] md:gap-7"
           autocomplete="on"
           enctype="multipart/form-data"
+          use:enhance
         >
           <label for="full_name" class="text-lg font-medium mt-2">
             ФИО
@@ -590,6 +593,9 @@
       {/if}
 
       <div class="ml-auto max-w-max mt-5">
+        <input type="hidden" name="paid_delivery" value={$deliveryDateAndPrice?.total_sum} form="checkout-form">
+        <input type="hidden" name="paid_total" value={total} form="checkout-form">
+
         <Button
           type="submit"
           form="checkout-form"
@@ -599,6 +605,12 @@
           <span slot="text">Оплатить</span>
         </Button>
       </div>
+
+      {#if form?.message}
+        <p class="ml-auto max-w-max mt-2 text-red-700">
+          {form?.message}
+        </p>
+      {/if}
     </details>
   </div>
 
@@ -630,7 +642,9 @@
         </p>
       </div>
 
-      <small class="block text-sm mt-10">Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.</small>
+      <small class="block text-sm mt-4">
+        Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.
+      </small>
     </div>
   {/if}
 </div>

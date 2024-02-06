@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
 
 export async function load({ locals, cookies }) {
@@ -83,52 +83,65 @@ export async function load({ locals, cookies }) {
 
 export const actions = {
   proceed: async ({ request, locals, cookies }) => {
-    const body = Object.fromEntries(await request.formData());
+    const body = Object.fromEntries(await request.formData()) as { [key: string]: string };
 
-    console.log(body);
-    const cart_id_cookie = cookies.get("pb_cart");
+    const full_name = body.fullname
+      .trim()
+      .split(' ')
+      .map(word => word[0].toUpperCase() + word.slice(1))
+      .join(' ');
+
+    const phone = body.phone.trim();
+    const email = body.email.trim();
+    const social_network = body["social-network"].trim();
+    const nickname = body.nickname.trim();
 
     const test_body = {
-      citycode: '44',
-      tk: 'cdek',
-      delivery_type: 'pickup',
-      delivery_point: '406a52a9-a394-449e-ba6d-22f6b9b90dec',
+      citycode: '44', // надо ли ?
+      tk: 'cdek', // надо ли ?
+      delivery_type: 'pickup', // надо ли ?
+      delivery_point: '406a52a9-a394-449e-ba6d-22f6b9b90dec', // надо ли ?
       fullname: 'asdasdasd dsd asd',
       phone: '79507834198',
       email: 'deeloyy@gmail.com',
       'social-network': 'wa',
       nickname: 'artem123',
-      agree: 'yes'
+      agree: 'yes',
+      paid_delivery: '486',
+      paid_total: '40486'
     }
 
+    await locals.pb.autoCancellation(false); // костыль, возможно надо убрать и оптимизировать
+
     let user;
+
     try {
       user = await locals.pb
-        .collection("users")
-        .create({
-          full_name: body.fullname
-            .trim()
-            .split(' ')
-            .map(word => word[0].toUpperCase() + word.slice(1))
-            .join(' '),
-          email: body.email.trim(),
-          phone: body.phone.trim(),
-          social_network: body["social-network"].trim(),
-          nickname: body.nickname.trim()
-        });
-    } catch (err) {
-      user = await locals.pb
-        .collection("users")
-        .getFirstListItem(`email = "${body.email.trim()}"`)
+        .collection("guests")
+        .getFirstListItem(`email = "${email}"`);
 
       locals.pb
-        .collection("users")
-        .update(user.id, {
-          full_name: body.fullname.trim(),
-          phone: body.phone.trim(),
-          social_network: body["social-network"].trim(),
-          nickname: body.nickname.trim()
-        })
+        .collection("guests")
+        .update(user.id, { full_name, phone, social_network, nickname });
+    } catch (err) {
+      user = await locals.pb
+        .collection("guests")
+        .create({ full_name, email, phone, social_network, nickname });
+    }
+
+    const cart_items_records = await locals.pb
+      .collection("cart_items")
+      .getFullList({
+        filter: `cart = "${cookies.get("pb_cart")}"`,
+        expand: "stock_item, stock_item.product"
+      });
+
+    for (const cart_item of cart_items_records) {
+      const stock_item = cart_item.expand?.stock_item;
+
+      if (stock_item.count - cart_item.quantity < 0) {
+        return fail(422, { message: "На складе недостаточно товара" });
+      }
     }
 
     const new_order = await locals.pb
@@ -136,31 +149,15 @@ export const actions = {
       .create({
         paid_by: user.id,
         state: "intake",
-        paid_total: 0, // fix
-        paid_delivery: 0 // fix
+        paid_total: Number(body.paid_total),
+        paid_delivery: Number(body.paid_delivery)
       });
-
-    const cart_items_records = await locals.pb
-      .collection("cart_items")
-      .getFullList({
-        filter: `cart = "${cart_id_cookie}"`,
-        expand: "stock_item, stock_item.product"
-      });
-
-    const create_order_items_queue = [];
-    const update_stock_items_queue = [];
-    const delete_cart_items_queue = [];
 
     for (const cart_item of cart_items_records) {
       const stock_item = cart_item.expand?.stock_item;
       const product = stock_item.expand?.product;
 
-      if (stock_item.count - cart_item.qiantity < 0) {
-        // fail
-        // exit
-      }
-
-      const create_order_item = locals.pb
+      locals.pb
         .collection("order_items")
         .create({
           order: new_order.id,
@@ -169,30 +166,26 @@ export const actions = {
           price: product.price
         });
 
-      const update_stock_item = locals.pb
+      locals.pb
         .collection("stock_items")
         .update(stock_item.id, {
-          count: stock_item.count - cart_item.qiantity
+          count: stock_item.count - cart_item.quantity
         });
 
-      const delete_cart_item = locals.pb
+      locals.pb
         .collection("cart_items")
         .delete(cart_item.id);
-
-      create_order_items_queue.push(create_order_item);
-      update_stock_items_queue.push(update_stock_item);
-      delete_cart_items_queue.push(delete_cart_item);
     }
 
-    await Promise.all(create_order_items_queue);
-    await Promise.all(update_stock_items_queue);
-    await Promise.all(delete_cart_items_queue);
-
-    await locals.pb
-      .collection("carts")
-      .delete(cart_id_cookie);
+    if (cookies.get("pb_cart")) {
+      await locals.pb
+        .collection("carts")
+        .delete(cookies.get("pb_cart")!);
+    }
 
     cookies.delete("pb_cart", { path: "/" });
+
+    redirect(303, "/thank_you");
 
     // action to tg bot
 
