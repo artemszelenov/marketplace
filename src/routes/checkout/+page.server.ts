@@ -1,4 +1,5 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { TELEGRAM_BOT_TOKEN, TELEGRAM_ORDERS_CHAT_ID } from "$env/static/private";
+import { error, fail, redirect } from "@sveltejs/kit";
 import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
 
 export async function load({ locals, cookies }) {
@@ -82,7 +83,7 @@ export async function load({ locals, cookies }) {
 }
 
 export const actions = {
-  proceed: async ({ request, locals, cookies }) => {
+  proceed: async ({ request, locals, cookies, fetch }) => {
     const body = Object.fromEntries(await request.formData()) as { [key: string]: string };
 
     const full_name = body.fullname
@@ -184,6 +185,11 @@ export const actions = {
     }
 
     cookies.delete("pb_cart", { path: "/" });
+
+    const botMessage = 'order created TEST'
+
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_ORDERS_CHAT_ID}&text=${botMessage}`;
+    await fetch(url);
 
     redirect(303, "/thank_you");
 
