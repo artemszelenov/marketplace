@@ -91,26 +91,12 @@ export const actions = {
       .split(' ')
       .map(word => word[0].toUpperCase() + word.slice(1))
       .join(' ');
-
     const phone = body.phone.trim();
     const email = body.email.trim();
     const social_network = body["social-network"].trim();
     const nickname = body.nickname.trim();
-
-    const test_body = {
-      citycode: '44', // надо ли ?
-      tk: 'cdek', // надо ли ?
-      delivery_type: 'pickup', // надо ли ?
-      delivery_point: '406a52a9-a394-449e-ba6d-22f6b9b90dec', // надо ли ?
-      fullname: 'asdasdasd dsd asd',
-      phone: '79507834198',
-      email: 'deeloyy@gmail.com',
-      'social-network': 'wa',
-      nickname: 'artem123',
-      agree: 'yes',
-      paid_delivery: '486',
-      paid_total: '40486'
-    }
+    const delivery_address = body["delivery-address"].trim();
+    const delivery_city = body["delivery-city"].trim();
 
     await locals.pb.autoCancellation(false); // костыль, возможно надо убрать и оптимизировать
 
@@ -134,7 +120,7 @@ export const actions = {
       .collection("cart_items")
       .getFullList({
         filter: `cart = "${cookies.get("pb_cart")}"`,
-        expand: "stock_item, stock_item.product"
+        expand: "stock_item, stock_item.size_group, stock_item.product, stock_item.product.color"
       });
 
     for (const cart_item of cart_items_records) {
@@ -154,9 +140,14 @@ export const actions = {
         paid_delivery: Number(body.paid_delivery)
       });
 
+    let items_string = "";
+
     for (const cart_item of cart_items_records) {
       const stock_item = cart_item.expand?.stock_item;
       const product = stock_item.expand?.product;
+      const leftover = stock_item.count - cart_item.quantity;
+
+      items_string += `%0A%0A${product.title}%0AРазмер: ${stock_item.expand?.size_group.title}%0AЦвет: ${product.expand?.color.ru_title}%0AКоличество: ${cart_item.quantity}%0A-------------%0AОстаток: ${leftover}`;
 
       locals.pb
         .collection("order_items")
@@ -170,7 +161,7 @@ export const actions = {
       locals.pb
         .collection("stock_items")
         .update(stock_item.id, {
-          count: stock_item.count - cart_item.quantity
+          count: leftover
         });
 
       locals.pb
@@ -186,14 +177,12 @@ export const actions = {
 
     cookies.delete("pb_cart", { path: "/" });
 
-    const botMessage = 'order created TEST'
+    const botMessage = `📝 *Новый заказ*%0A%0A*Получатель*%0A%0AФИО: ${full_name}%0AТелефон: ${phone}%0AПочта: ${email}%0AСоцсеть ${social_network} - @${nickname}%0A%0A*Доставка*%0A%0AГород: ${delivery_city}%0AАдрес ПВЗ: ${delivery_address}%0A%0A*Заказ*${items_string}`;
 
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_ORDERS_CHAT_ID}&text=${botMessage}`;
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_ORDERS_CHAT_ID}&text=${botMessage}&parse_mode=markdown`;
     await fetch(url);
 
     redirect(303, "/thank_you");
-
-    // action to tg bot
 
     // нужно удалить данные из localStorage после успешного чекаута ?
   }

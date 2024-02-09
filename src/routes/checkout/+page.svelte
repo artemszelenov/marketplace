@@ -50,7 +50,7 @@
 
   $: total = data.order_items.reduce((accum, cart_item) => {
     return accum += cart_item.product.price * cart_item.quantity
-  }, browser ? $deliveryDateAndPrice.total_sum : 0);
+  }, browser ? $deliveryDateAndPrice?.total_sum : 0);
 
   function validateInput(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -337,7 +337,8 @@
               <p class="text-lg font-medium">ПВЗ</p>
 
               {#if browser && $deliveryOffice}
-                <input type="hidden" name="delivery_point" value={$deliveryOffice.uuid} form="checkout-form">
+                <input type="hidden" name="delivery-address" value={$deliveryOffice.location.address} form="checkout-form">
+                <input type="hidden" name="delivery-city" value={data.cdek_cities.find(({ code }) => $currentCity.cdek_city_code === code.toString())?.city} form="checkout-form">
 
                 <p class="text-lg">{$deliveryOffice.owner_code}</p>
 
