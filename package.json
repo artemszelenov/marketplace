@@ -4,7 +4,7 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"pb": "./pb/pocketbase serve",
+		"pb": "./pb/pocketbase serve --dev",
 		"dev": "vite dev --host",
 		"build": "vite build",
 		"preview": "vite preview",
