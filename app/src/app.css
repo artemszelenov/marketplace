@@ -36,8 +36,8 @@
     content: "";
   }
 
-  :is(a[href]):hover:not(:disabled, .logo, .action-button) {
-    @apply bg-neutral-200 cursor-default;
+  :is(a[href]):hover:not(:disabled, .logo, .action-button, .teaser-link) {
+    @apply bg-neutral-200;
   }
 
   :is(a[href].active):not(:disabled) {

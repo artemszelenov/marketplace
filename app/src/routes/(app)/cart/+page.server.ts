@@ -30,7 +30,7 @@ export async function load({ locals, cookies }) {
       cart_items = cart_items_records.map(cart_item => {
         const stock_item = cart_item.expand?.stock_item;
         const product = stock_item.expand?.product;
-        const firstImageUrl = locals.pb.files.getUrl(product, product.gallery[0]);
+        const firstImageUrl = locals.pb.files.getUrl(product, product.gallery[0]).replace("pb", "localhost");
 
         return {
           id: cart_item.id,

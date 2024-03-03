@@ -18,9 +18,9 @@ export async function load({ params, locals, url }) {
     color: product_record.expand?.color.ru_title,
     description: product_record.description,
     gallery: product_record.gallery.map((file_name: string) => {
-      return locals.pb.files.getUrl(product_record, file_name);
+      return locals.pb.files.getUrl(product_record, file_name).replace("pb", "localhost");
     }),
-    image: locals.pb.files.getUrl(product_record, product_record.gallery[0])
+    image: locals.pb.files.getUrl(product_record, product_record.gallery[0]).replace("pb", "localhost")
   }
 
   const stock_items: StockItem[] = stock_item_records.map(item => {
@@ -49,7 +49,7 @@ export async function load({ params, locals, url }) {
     return {
       id: variant.id,
       title: variant.title,
-      image: locals.pb.files.getUrl(variant, variant.gallery[0])
+      image: locals.pb.files.getUrl(variant, variant.gallery[0]).replace("pb", "localhost")
     }
   });
 

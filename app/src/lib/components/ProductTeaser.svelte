@@ -44,7 +44,7 @@
   </ul>
 
   <h1 class="mt-1 font-semibold">
-    <a href="/catalog/{id}">
+    <a href="/catalog/{id}" class="inline-block teaser-link underline-offset-2 decoration-2 hover:underline">
       {title}
     </a>
   </h1>
