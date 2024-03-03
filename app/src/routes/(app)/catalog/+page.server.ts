@@ -1,5 +1,4 @@
 import { error } from '@sveltejs/kit';
-// import { CLIENT_PB_DOMAIN } from '$env/static/private';
 import type { Product } from "$lib/schema";
 
 const LIMIT = 10;

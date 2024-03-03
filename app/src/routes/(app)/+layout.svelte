@@ -31,7 +31,7 @@
 
     <div class="flex items-center md:justify-center">
       {#each nav as { text, url }}
-        <a class="px-3 py-2 text-gray-900 font-bold" href={url}>
+        <a data-sveltekit-reload class="px-3 py-2 text-gray-900 font-bold" href={url}>
           {text}
         </a>
       {/each}

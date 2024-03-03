@@ -12,7 +12,7 @@
   }
 </script>
 
-<article class="grid gap-4 md:gap-7 grid-flow-col">
+<article class="grid gap-4 md:gap-7 grid-flow-col grid-cols-[max-content_1fr]">
   <img
     class="max-w-20 md:max-w-36 aspect-square rounded object-cover"
     src={cart_item.product.image}
