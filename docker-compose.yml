@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  app:
+    container_name: 652store-app
+    working_dir: /app
+    depends_on:
+      - pb
+    build:
+      context: ./app
+      target: dev
+    volumes:
+      - ./app/src:/app/src
+      - ./app/.svelte-kit/:/app/.svelte-kit
+    ports:
+      - 8080:8080
+
+  pb:
+    container_name: 652store-pb
+    working_dir: /pb
+    build:
+      context: ./pb
+    volumes:
+      - ./pb/pb_data:/pb/pb_data
+      - ./pb/pb_migrations:/pb/pb_migrations
+    ports:
+      - 8090:8090

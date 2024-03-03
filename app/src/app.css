@@ -1,0 +1,117 @@
+@import "@fontsource/inter";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+@tailwind base;
+
+@layer base {
+  :root {
+    --accent-color: theme(colors.gray.900);
+    accent-color: var(--accent-color);
+
+    scroll-behavior: smooth;
+  }
+
+  p a[href]:not(.no-underline) {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  a[href]:not(.action-button, .leaflet-control a) {
+    @apply rounded;
+  }
+
+  :is(a, button):active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  :is(.action-button, .silent-button):is(:hover, :focus-visible):not(:disabled)::before,
+  :is(a[href], summary):focus-visible:not(:disabled)::before {
+    @apply bg-neutral-200 rounded-full;
+
+    position: absolute;
+    inset: -5px;
+    z-index: -1;
+    content: "";
+  }
+
+  :is(a[href]):hover:not(:disabled, .logo, .action-button) {
+    @apply bg-neutral-200 cursor-default;
+  }
+
+  :is(a[href].active):not(:disabled) {
+    @apply bg-gray-900 text-white;
+  }
+
+  :is(a, button) svg {
+    width: 100%;
+  }
+
+  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]) {
+    @apply block w-full bg-white px-4 py-2.5 border rounded-full;
+  }
+
+  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]),
+  select {
+    @apply focus:outline focus:outline-gray-900 focus:outline-[3px] focus:outline-offset-0;
+  }
+
+  label:has(+ div > input:required, + input:required)::after {
+    @apply text-red-600;
+
+    content: "*";
+    margin-left: 1ch;
+  }
+
+  :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-valid {
+    @apply outline outline-emerald-700;
+  }
+
+  :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-invalid {
+    @apply outline outline-red-600;
+  }
+
+  select {
+    @apply appearance-none row-start-1 col-start-1 block w-full bg-white px-4 py-2.5 border rounded-full;
+  }
+
+  select:disabled + svg,
+  :is(button, input):disabled {
+    @apply opacity-60;
+  }
+
+  :is(input[type="checkbox"], input[type="radio"]) {
+    width: 1.1em;
+    height: 1em;
+  }
+
+  :is(input[type="checkbox"], input[type="radio"]):disabled + * {
+    @apply opacity-60;
+  }
+
+  details > summary {
+    list-style: none;
+  }
+
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .sr-only {
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    overflow: hidden;
+  }
+}
