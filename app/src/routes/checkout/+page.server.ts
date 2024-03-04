@@ -1,4 +1,4 @@
-import { TELEGRAM_BOT_TOKEN, TELEGRAM_ORDERS_CHAT_ID } from "$env/static/private";
+import { TELEGRAM_BOT_TOKEN, TELEGRAM_ORDERS_CHAT_ID, ORIGIN, SERVER_URL } from "$env/static/private";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
 
@@ -30,7 +30,7 @@ export async function load({ locals, cookies }) {
       cart_items = cart_items_records.map(cart_item => {
         const stock_item = cart_item.expand?.stock_item;
         const product = stock_item.expand?.product;
-        const firstImageUrl = locals.pb.files.getUrl(product, product.gallery[0]).replace("pb", "localhost");
+        const firstImageUrl = locals.pb.files.getUrl(product, product.gallery[0]).replace(SERVER_URL, ORIGIN);
 
         return {
           id: cart_item.id,

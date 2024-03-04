@@ -27,7 +27,7 @@
     {#each data.product.gallery as src}
       <li class="w-[80%] md:w-auto shrink-0">
         <img
-          class="rounded-2xl"
+          class="rounded-2xl w-full"
           height="400"
           {src}
           alt={data.product.title}

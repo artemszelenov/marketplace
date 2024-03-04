@@ -1,3 +1,5 @@
+import { ORIGIN, SERVER_URL } from '$env/static/private';
+
 export async function load({ locals }) {
   const { items } = await locals.pb
     .collection('products')
@@ -12,7 +14,7 @@ export async function load({ locals }) {
         title: product.title,
         price: product.price,
         gallery: product.gallery.map((file_name: string) => {
-          return locals.pb.files.getUrl(product, file_name).replace("pb", "localhost");
+          return locals.pb.files.getUrl(product, file_name).replace(SERVER_URL, ORIGIN);
         })
       }
     })

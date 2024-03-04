@@ -1,3 +1,4 @@
+import { SERVER_URL, ORIGIN } from '$env/static/private';
 import { error } from '@sveltejs/kit';
 import type { Product } from "$lib/schema";
 
@@ -50,7 +51,7 @@ export async function load({ locals, url }) {
           title: product.title,
           price: product.price,
           gallery: product.gallery.map((file_name: string) => {
-            return locals.pb.files.getUrl(product, file_name).replace("pb", "localhost");
+            return locals.pb.files.getUrl(product, file_name).replace(SERVER_URL, ORIGIN);
           })
         }
       }),

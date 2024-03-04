@@ -7,5 +7,8 @@ WORKDIR /pb
 RUN go build
 WORKDIR /
 
+EXPOSE 8090
+
 # start PocketBase
+# ENTRYPOINT ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
 CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]

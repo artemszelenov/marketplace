@@ -30,7 +30,7 @@
           on:click={() => (activeImageID = index)}
         >
           <img
-            class="w-full aspect-square rounded"
+            class="w-full aspect-square rounded object-cover"
             src={thumbnail}
             alt={title}
             width="100"
