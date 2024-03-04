@@ -38,7 +38,7 @@ services:
     volumes:
       - ./pb_data:/pb_data
     environment:
-      - DOMAIN=localhost
+      - DOMAIN=${DOMAIN}
     labels:
       caddy: api.${DOMAIN}
       caddy.reverse_proxy: "{{upstreams 8090}}"
