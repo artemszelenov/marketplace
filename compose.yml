@@ -16,8 +16,8 @@ services:
       - ./app:/app
     environment:
       - SERVER_URL=http://db-admin:8090
-      - DOMAIN=localhost
-      - ORIGIN=http://localhost:8090
+      - DOMAIN=${DOMAIN}
+      - ORIGIN=${ORIGIN}
     labels:
       caddy: app.${DOMAIN}
       caddy.reverse_proxy: "{{upstreams 5173}}"
