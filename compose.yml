@@ -36,7 +36,7 @@ services:
     networks:
       - caddy
     volumes:
-      - ./pb/pb_data:/pb_data
+      - ./pb/pb_data:/pb/pb_data
     environment:
       - DOMAIN=${DOMAIN}
     labels:
