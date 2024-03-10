@@ -1,8 +1,14 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 import type { z } from "zod";
-import type PocketBase from "pocketbase";
+import type PocketBase, { FileService } from "pocketbase";
 import type { User } from "$lib/schema";
+
+type PBHelpers = {
+	files: {
+		getFileUrlWithCorrectOrigin(record: { [key: string]: any }, filename: string): string
+	}
+}
 
 declare global {
 	namespace App {
@@ -10,6 +16,7 @@ declare global {
 		interface Locals {
 			user: User | null
 			pb: PocketBase
+			pb_helpers: PBHelpers
 			seo: {
 				title: string
 			}

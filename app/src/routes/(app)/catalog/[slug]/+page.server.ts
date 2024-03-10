@@ -1,7 +1,6 @@
-import { ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND } from '$env/static/private';
-import { StockItemsMetricsSchema } from "$lib/schema"
+import { StockItemsMetricsSchema } from "$lib/schema";
 import type PocketBase from "pocketbase";
-import type { Product, StockItem } from "$lib/schema"
+import type { Product, StockItem } from "$lib/schema";
 
 export async function load({ params, locals, url }) {
   const {
@@ -19,9 +18,9 @@ export async function load({ params, locals, url }) {
     color: product_record.expand?.color.ru_title,
     description: product_record.description,
     gallery: product_record.gallery.map((file_name: string) => {
-      return locals.pb.files.getUrl(product_record, file_name).replace(ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND);
+      return locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product_record, file_name);
     }),
-    image: locals.pb.files.getUrl(product_record, product_record.gallery[0]).replace(ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND)
+    image: locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product_record, product_record.gallery[0])
   }
 
   const stock_items: StockItem[] = stock_item_records.map(item => {
@@ -50,7 +49,7 @@ export async function load({ params, locals, url }) {
     return {
       id: variant.id,
       title: variant.title,
-      image: locals.pb.files.getUrl(variant, variant.gallery[0]).replace(ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND)
+      image: locals.pb_helpers.files.getFileUrlWithCorrectOrigin(variant, variant.gallery[0])
     }
   });
 
