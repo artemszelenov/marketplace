@@ -1,8 +1,9 @@
 services:
-  app-dev:
+  app-prod:
     build:
       context: ./app
-    container_name: app-dev
+      dockerfile: prod.Dockerfile
+    container_name: app-prod
     restart: unless-stopped
     ports:
       - "5173:5173"
@@ -13,11 +14,13 @@ services:
     working_dir: /app
     volumes:
       - /app/node_modules
+      - /app/build
       - ./app:/app
     environment:
-      - SERVER_URL=http://db-admin:8090
       - DOMAIN=${DOMAIN}
-      - ORIGIN=${ORIGIN}
+      - ORIGIN_BACKEND_INTERNAL=http://db-admin:8090
+      - ORIGIN_BACKEND=${ORIGIN_BACKEND}
+      - ORIGIN_FRONTEND=${ORIGIN_FRONTEND}
     labels:
       caddy: app.${DOMAIN}
       caddy.reverse_proxy: "{{upstreams 5173}}"

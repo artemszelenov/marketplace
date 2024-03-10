@@ -1,9 +1,9 @@
-import { SERVER_URL } from '$env/static/private';
+import { ORIGIN_BACKEND_INTERNAL } from '$env/static/private';
 import { dev } from '$app/environment';
 import PocketBase from "pocketbase";
 
 export async function handle({ event, resolve }) {
-  event.locals.pb = new PocketBase(SERVER_URL);
+  event.locals.pb = new PocketBase(ORIGIN_BACKEND_INTERNAL);
   event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || "");
 
   try {

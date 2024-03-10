@@ -1,4 +1,4 @@
-import { ORIGIN, SERVER_URL } from '$env/static/private';
+import { ORIGIN_BACKEND, ORIGIN_BACKEND_INTERNAL } from '$env/static/private';
 import { error, fail } from '@sveltejs/kit';
 import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
 import { ClientResponseError } from "pocketbase";
@@ -31,7 +31,7 @@ export async function load({ locals, cookies }) {
       cart_items = cart_items_records.map(cart_item => {
         const stock_item = cart_item.expand?.stock_item;
         const product = stock_item.expand?.product;
-        const firstImageUrl = locals.pb.files.getUrl(product, product.gallery[0]).replace(SERVER_URL, ORIGIN);
+        const firstImageUrl = locals.pb.files.getUrl(product, product.gallery[0]).replace(ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND);
 
         return {
           id: cart_item.id,

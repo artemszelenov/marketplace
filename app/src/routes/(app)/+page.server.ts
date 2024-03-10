@@ -1,4 +1,4 @@
-import { ORIGIN, SERVER_URL } from '$env/static/private';
+import { ORIGIN_BACKEND, ORIGIN_BACKEND_INTERNAL } from '$env/static/private';
 
 export async function load({ locals }) {
   const { items } = await locals.pb
@@ -14,7 +14,7 @@ export async function load({ locals }) {
         title: product.title,
         price: product.price,
         gallery: product.gallery.map((file_name: string) => {
-          return locals.pb.files.getUrl(product, file_name).replace(SERVER_URL, ORIGIN);
+          return locals.pb.files.getUrl(product, file_name).replace(ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND);
         })
       }
     })

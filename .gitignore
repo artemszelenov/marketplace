@@ -9,3 +9,4 @@ node_modules
 /app/vite.config.js.timestamp-*
 /app/vite.config.ts.timestamp-*
 /pb/pb_data
+compose.dev.yml
