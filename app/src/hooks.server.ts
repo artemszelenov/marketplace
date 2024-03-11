@@ -6,9 +6,6 @@ export async function handle({ event, resolve }) {
   event.locals.pb = new PocketBase(ORIGIN_BACKEND_INTERNAL);
   event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || "");
 
-  console.log("ORIGIN_BACKEND_INTERNAL", ORIGIN_BACKEND_INTERNAL);
-  console.log("event.locals.pb", event.locals.pb);
-
   event.locals.pb_helpers = {
     files: {
       getFileUrlWithCorrectOrigin(record, filename) {

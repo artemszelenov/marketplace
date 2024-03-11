@@ -1,0 +1,30 @@
+services:
+  app-dev:
+    build:
+      context: ./app
+      dockerfile: dev.Dockerfile
+    container_name: app-dev
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    expose:
+      - "5173"
+    working_dir: /app
+    volumes:
+      - /app/node_modules
+      - ./app:/app
+    env_file: .env.local
+
+  # Pocketbase - sqlite, auth, api, admin ui
+  pocketbase:
+    build:
+      context: ./pb
+    container_name: pocketbase
+    working_dir: /pb
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    expose:
+      - "8090"
+    volumes:
+      - ./pb/pb_data:/pb/pb_data

@@ -12,21 +12,19 @@ services:
     networks:
       - caddy
     working_dir: /app
+    depends_on:
+      - pocketbase
     volumes:
       - /app/node_modules
       - /app/build
       - ./app:/app
-    environment:
-      - DOMAIN=${DOMAIN}
-      - ORIGIN_BACKEND_INTERNAL=http://db-admin:8090
-      - ORIGIN_BACKEND=${ORIGIN_BACKEND}
-      - ORIGIN_FRONTEND=${ORIGIN_FRONTEND}
+    env_file: .env
     labels:
       caddy: app.${DOMAIN}
       caddy.reverse_proxy: "{{upstreams 5173}}"
 
   # Pocketbase - sqlite, auth, api, admin ui
-  db-admin:
+  pocketbase:
     build:
       context: ./pb
     container_name: pocketbase
