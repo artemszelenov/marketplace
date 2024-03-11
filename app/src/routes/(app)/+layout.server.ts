@@ -3,15 +3,20 @@ export async function load({ locals, depends, cookies }) {
 
   const cart_id_cookie = cookies.get("pb_cart");
 
-  const cart_items = locals.pb
-    .collection("cart_items")
-    .getFullList({
-      filter: `cart = "${cart_id_cookie}"`
-    });
+  let cart_items_count = 0;
+  try {
+    const cart_items = await locals.pb
+      .collection("cart_items")
+      .getFullList({
+        filter: `cart = "${cart_id_cookie}"`
+      });
+
+    cart_items_count = cart_items.length;
+  } catch (_) {}
 
   return {
     user: locals.user,
-    cart_items_count: await cart_items.then(items => items.length),
+    cart_items_count,
     seo: {
       title: "Главная"
     }
