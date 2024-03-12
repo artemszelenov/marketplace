@@ -7,11 +7,14 @@ COPY pnpm-lock.yaml .
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
 COPY . .
-RUN ORIGIN_BACKEND_INTERNAL=http://pocketbase:8090 ORIGIN_BACKEND=https://api.652store.ru \
+RUN TELEGRAM_BOT_TOKEN_FILE=$TELEGRAM_BOT_TOKEN_FILE TELEGRAM_ORDERS_CHAT_ID_FILE=$TELEGRAM_ORDERS_CHAT_ID_FILE \
+    ORIGIN_BACKEND_INTERNAL=http://pocketbase:8090 ORIGIN_BACKEND=https://api.652store.ru \
     pnpm exec vite build
 RUN pnpm prune --prod
 
 FROM node:20-alpine
+ENV TELEGRAM_BOT_TOKEN_FILE=$TELEGRAM_BOT_TOKEN_FILE
+ENV TELEGRAM_ORDERS_CHAT_ID_FILE=$TELEGRAM_ORDERS_CHAT_ID_FILE
 WORKDIR /app
 COPY --from=builder /app/build build/
 COPY --from=builder /app/node_modules node_modules/
