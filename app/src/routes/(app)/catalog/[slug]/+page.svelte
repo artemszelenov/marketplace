@@ -88,14 +88,14 @@
               {#if stock_item.count > 0}
                 <a
                   href="/catalog/{stock_item.product_id}?stock_item={stock_item.id}"
-                  class="inline-flex items-center justify-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
+                  class="inline-flex items-center justify-center text-sm rounded border border-gray-900 h-[2.5em] cursor-default font-medium"
                   class:active={current_stock_item?.id === stock_item.id}
                 >
                   {getSizeTitleOf(stock_item)}
                 </a>
               {:else}
                 <div
-                  class="px-2 py-1.5 text-s text-center font-medium border-2 border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
+                  class="py-1.5 text-s text-center font-medium border-2 border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
                   title="Нет в наличии"
                 >
                   {getSizeTitleOf(stock_item)}
