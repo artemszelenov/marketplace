@@ -3,6 +3,9 @@ services:
     build:
       context: ./app
       dockerfile: prod.Dockerfile
+      args:
+        TELEGRAM_BOT_TOKEN_FILE: /run/secrets/tg_bot_token
+        TELEGRAM_ORDERS_CHAT_ID_FILE: /run/secrets/tg_orders_chat_id
     container_name: app-prod
     restart: unless-stopped
     ports:
@@ -18,9 +21,6 @@ services:
       - /app/node_modules
       - /app/build
       - ./app:/app
-    environment:
-       TELEGRAM_BOT_TOKEN_FILE: /run/secrets/tg_bot_token
-       TELEGRAM_ORDERS_CHAT_ID_FILE: /run/secrets/tg_orders_chat_id
     secrets:
       - tg_bot_token
       - tg_orders_chat_id

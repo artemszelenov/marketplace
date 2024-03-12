@@ -1,4 +1,6 @@
 FROM node:20-alpine AS builder
+ARG TELEGRAM_BOT_TOKEN_FILE
+ARG TELEGRAM_ORDERS_CHAT_ID_FILE
 WORKDIR /app
 COPY package.json .
 COPY pnpm-lock.yaml .
