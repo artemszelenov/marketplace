@@ -1,4 +1,5 @@
-import { TELEGRAM_BOT_TOKEN, TELEGRAM_ORDERS_CHAT_ID } from "$env/static/private";
+import { open } from "node:fs/promises";
+import { TELEGRAM_ORDERS_CHAT_ID_FILE, TELEGRAM_BOT_TOKEN_FILE } from "$env/static/private";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { StockItemsMetricsSchema, type CartItem } from "$lib/schema";
 
@@ -177,9 +178,19 @@ export const actions = {
 
     cookies.delete("pb_cart", { path: "/" });
 
+    const [
+      tg_token,
+      tg_orders_chat_id
+    ] = await Promise.all([
+      open(TELEGRAM_BOT_TOKEN_FILE)
+        .then(buffer => buffer.readFile('utf8')),
+      open(TELEGRAM_ORDERS_CHAT_ID_FILE)
+        .then(buffer => buffer.readFile('utf8'))
+    ])
+
     const botMessage = `📝 *Новый заказ*%0A%0A*Получатель*%0A%0AФИО: ${full_name}%0AТелефон: ${phone}%0AПочта: ${email}%0AСоцсеть ${social_network} - @${nickname}%0A%0A*Доставка*%0A%0AГород: ${delivery_city}%0AАдрес ПВЗ: ${delivery_address}%0A%0A*Заказ*${items_string}`;
 
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_ORDERS_CHAT_ID}&text=${botMessage}&parse_mode=markdown`;
+    const url = `https://api.telegram.org/bot${tg_token}/sendMessage?chat_id=${tg_orders_chat_id}&text=${botMessage}&parse_mode=markdown`;
     await fetch(url);
 
     redirect(303, "/thank_you");

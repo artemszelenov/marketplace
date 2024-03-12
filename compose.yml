@@ -18,9 +18,14 @@ services:
       - /app/node_modules
       - /app/build
       - ./app:/app
-    env_file: .env
+    environment:
+       TELEGRAM_BOT_TOKEN_FILE: /run/secrets/tg_bot_token
+       TELEGRAM_ORDERS_CHAT_ID_FILE: /run/secrets/tg_orders_chat_id
+    secrets:
+      - tg_bot_token
+      - tg_orders_chat_id
     labels:
-      caddy: app.${DOMAIN}
+      caddy: app.652store.ru
       caddy.reverse_proxy: "{{upstreams 5173}}"
 
   # Pocketbase - sqlite, auth, api, admin ui
@@ -38,10 +43,8 @@ services:
       - caddy
     volumes:
       - ./pb/pb_data:/pb/pb_data
-    environment:
-      - DOMAIN=${DOMAIN}
     labels:
-      caddy: api.${DOMAIN}
+      caddy: api.652store.ru
       caddy.reverse_proxy: "{{upstreams 8090}}"
 
   # Caddy - proxy server router for containers
@@ -59,6 +62,12 @@ services:
       - CADDY_INGRESS_NETWORKS=caddy
     networks:
       - caddy
+
+secrets:
+  tg_bot_token:
+    file: ./secrets/tg_bot_token.txt
+  tg_orders_chat_id:
+    file: ./secrets/tg_orders_chat_id.txt
 
 networks:
   caddy:

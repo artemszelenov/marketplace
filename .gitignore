@@ -6,6 +6,7 @@ node_modules
 .env
 .env.*
 !.env.example
+/secrets
 /app/vite.config.js.timestamp-*
 /app/vite.config.ts.timestamp-*
 /pb/pb_data

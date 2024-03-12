@@ -44,12 +44,4 @@ declare global {
   }
 }
 
-interface ImportMetaEnv {
-	readonly PUBLIC_POCKETBASE_URL: string
-}
-
-interface ImportMeta {
-	readonly env: ImportMetaEnv
-}
-
 export {};

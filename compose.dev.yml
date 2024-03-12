@@ -10,10 +10,15 @@ services:
     expose:
       - "5173"
     working_dir: /app
+    environment:
+       TELEGRAM_BOT_TOKEN_FILE: /run/secrets/tg_bot_token
+       TELEGRAM_ORDERS_CHAT_ID_FILE: /run/secrets/tg_orders_chat_id
+    secrets:
+      - tg_bot_token
+      - tg_orders_chat_id
     volumes:
       - /app/node_modules
       - ./app:/app
-    env_file: .env.local
 
   # Pocketbase - sqlite, auth, api, admin ui
   pocketbase:
@@ -28,3 +33,9 @@ services:
       - "8090"
     volumes:
       - ./pb/pb_data:/pb/pb_data
+
+secrets:
+  tg_bot_token:
+    file: ./secrets/tg_bot_token.txt
+  tg_orders_chat_id:
+    file: ./secrets/tg_orders_chat_id.txt
