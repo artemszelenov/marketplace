@@ -10,7 +10,8 @@ export const UserSchema = z
     username: z.string(),
     name: z.string().optional(),
     email: z.string().email(),
-    verified: z.boolean()
+    verified: z.boolean(),
+    company_name: z.string().optional()
   });
 
 export type User = z.infer<typeof UserSchema>

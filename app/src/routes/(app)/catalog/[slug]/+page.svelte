@@ -136,9 +136,7 @@
 </div>
 
 <style>
-  .description {
-    & > p + p {
-      @apply mt-4;
-    }
+  .description > p + p {
+    @apply mt-4;
   }
 </style>

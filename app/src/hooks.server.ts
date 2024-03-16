@@ -25,7 +25,8 @@ export async function handle({ event, resolve }) {
         username: logged_in_user.username,
         name: logged_in_user.name,
         email: logged_in_user.email,
-        verified: logged_in_user.verified
+        verified: logged_in_user.verified,
+        company_name: logged_in_user.company_name
       };
     }
   } catch (_) {
