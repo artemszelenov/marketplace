@@ -25,7 +25,7 @@ export async function load({ locals, url }) {
     for (const val of values) {
       group.push(`${filter_name}.id ?= "${val}"`);
     }
-    filters_query.push(`(${group.join(" || ")})`)
+    filters_query.push(`(${group.join(" || ")})`);
   }
 
   const filter = filters_query.join(" && ");

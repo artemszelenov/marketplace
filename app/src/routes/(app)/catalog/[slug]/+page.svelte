@@ -130,7 +130,15 @@
         </div>
       {/if}
 
-      <p class="mt-10">{@html data.product.description}</p>
+      <p class="description mt-10">{@html data.product.description}</p>
     </div>
   </div>
 </div>
+
+<style>
+  .description {
+    & > p + p {
+      @apply mt-4;
+    }
+  }
+</style>
