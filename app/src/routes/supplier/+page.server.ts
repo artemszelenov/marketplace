@@ -1,7 +1,5 @@
 import { redirect } from "@sveltejs/kit";
 
-export async function load({ locals }) {
-  if (!locals.user) {
-    throw redirect(303, "/supplier/login");
-  }
+export async function load() {
+  throw redirect(303, "/supplier/products");
 }
