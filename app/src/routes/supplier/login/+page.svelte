@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { SubmitFunction } from "@sveltejs/kit";
   import { enhance, applyAction } from "$app/forms";
-  import { goto } from "$app/navigation";
 
   import Button from "$lib/components/UI/Button.svelte";
 
@@ -14,13 +13,7 @@
         return;
       }
 
-      if (result.type === 'redirect') {
-				goto(result.location, {
-          invalidateAll: true
-        });
-			} else {
-				await applyAction(result);
-			}
+      await applyAction(result);
     };
   };
 </script>

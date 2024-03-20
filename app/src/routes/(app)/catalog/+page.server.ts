@@ -66,7 +66,7 @@ export async function load({ locals, url }) {
           id: product.id,
           title: product.title,
           price: product.price,
-          gallery: product.gallery.map((file_name: string) => {
+          gallery: product.gallery.map(file_name => {
             return locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product, file_name);
           })
         }
