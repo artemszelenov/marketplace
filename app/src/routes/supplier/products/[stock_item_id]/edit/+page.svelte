@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/UI/Button.svelte";
+  import Editor from "$lib/components/UI/Editor.svelte";
 
   export let data;
 
@@ -28,12 +29,7 @@
 
     <div>
       <label for="description">Описание</label>
-      <textarea
-        name="description"
-        id="description"
-      >
-        {product.description}
-      </textarea>
+      <Editor content={product.description} />
     </div>
   
     <div>
