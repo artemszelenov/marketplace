@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { Editor } from '@tiptap/core'
   import StarterKit from '@tiptap/starter-kit'
+  import Bold from '@tiptap/extension-bold'
 
   export let content: string
 
@@ -13,6 +14,7 @@
       element: element,
       extensions: [
         StarterKit,
+        Bold
       ],
       content,
       onTransaction: () => {
@@ -30,23 +32,14 @@
 </script>
 
 {#if editor}
-  <menu>
+  <menu class="mb-2">
     <button
-      on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
+      on:click={() => editor.chain().focus().toggleBold().run()}
       class="inline-flex items-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
-      class:bg-gray-900={editor.isActive('heading', { level: 1 })}
-      class:text-white={editor.isActive('heading', { level: 1 })}
+      class:bg-gray-900={editor.isActive('bold')}
+      class:text-white={editor.isActive('bold')}
     >
-      H1
-    </button>
-
-    <button
-      on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-      class="inline-flex items-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
-      class:bg-gray-900={editor.isActive('heading', { level: 2 })}
-      class:text-white={editor.isActive('heading', { level: 2 })}
-    >
-      H2
+      Bold
     </button>
 
     <button

@@ -29,6 +29,7 @@
 		"@fontsource/inter": "^5.0.16",
 		"@nanostores/persistent": "^0.9.1",
 		"@tiptap/core": "^2.2.4",
+		"@tiptap/extension-bold": "^2.2.4",
 		"@tiptap/pm": "^2.2.4",
 		"@tiptap/starter-kit": "^2.2.4",
 		"nanostores": "^0.9.5",
