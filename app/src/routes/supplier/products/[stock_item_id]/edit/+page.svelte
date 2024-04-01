@@ -2,6 +2,7 @@
   import Button from "$lib/components/UI/Button.svelte";
   import Editor from "$lib/components/UI/Editor.svelte";
   import Sizes from "./Sizes.svelte";
+  import Photos from "./Photos.svelte";
 
   export let data;
 
@@ -66,24 +67,7 @@
       </ul>
     </div>
 
-    <div>
-      <h3 class="font-bold mb-1">Фото</h3>
-      <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
-        {#each product.gallery as thumbnail}
-          <li class="shrink-0 w-[20%]">
-            <img
-              class="w-full aspect-square rounded object-cover"
-              src={thumbnail}
-              alt=""
-              width="100"
-              height="100"
-              decoding="async"
-              loading="lazy"
-            />
-          </li>
-        {/each}
-      </ul>
-    </div>
+    <Photos {product} />
 
     <Sizes {product} {current_stock_item_id} />
 

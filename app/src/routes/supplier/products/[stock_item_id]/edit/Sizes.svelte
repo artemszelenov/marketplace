@@ -21,7 +21,7 @@
   }
 </script>
 
-<div>
+<section>
   <div class="flex justify-between">
     <h3 class="font-bold mb-1">
       Размеры
@@ -107,7 +107,7 @@
       </div>
     </form>
   </dialog>
-</div>
+</section>
 
 <style>
   dialog {

@@ -55,7 +55,10 @@ export async function load({ locals, params }) {
           title: product.expand?.color.ru_title
         },
         gallery: product.gallery.map((file_name: string) => {
-          return locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product, file_name);
+          return {
+            photo_name: file_name,
+            url: locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product, file_name)
+          };
         }),
         stock_items: product.stock_items,
         allowed_size_groups: all_size_groups
@@ -103,6 +106,33 @@ export const actions = {
          size_group: size_group_id,
          count: 0
        })
+
+    return { success: true }
+  },
+
+  deletePhoto: async ({ request, locals }) => {
+    const formData = await request.formData()
+    const photo_name = formData.get("photo_name")
+    const product_id = formData.get("product_id") as string
+
+    await locals.pb
+      .collection("products")
+      .update(product_id, {
+        "gallery-": [photo_name]
+      })
+
+    return { success: true }
+  },
+
+  uploadPhotos: async ({ request, locals }) => {
+    const formData = await request.formData()
+    const product_id = formData.get("product_id") as string
+
+    await locals.pb
+      .collection("products")
+      .update(product_id, {
+        "gallery": formData.getAll("photos")
+      })
 
     return { success: true }
   }
