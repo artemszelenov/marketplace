@@ -3,6 +3,7 @@
   import Editor from "$lib/components/UI/Editor.svelte";
   import Sizes from "./Sizes.svelte";
   import Photos from "./Photos.svelte";
+  import Colors from "./Colors.svelte";
 
   export let data;
 
@@ -49,23 +50,13 @@
   </section>
   
   <section class="grid gap-10 auto-rows-max">
-    <div>
-      <h3 class="font-bold mb-1">Цвета</h3>
-      <ul class="flex p-1 -mx-1 space-x-1 overflow-x-auto">
-        {#each data.products as { color, stock_items } (color.id)}
-          <li>
-            <a
-              href="/supplier/products/{stock_items[0].id}/edit"
-              class="tab-link inline-flex items-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
-              class:bg-gray-900={color.id === current_color_id}
-              class:text-white={color.id === current_color_id}
-            >
-              {color.title}
-            </a>
-          </li>
-        {/each}
-      </ul>
-    </div>
+    <Colors
+      current_product={product}
+      products={data.products}
+      allowed_colors={data.allowed_colors}
+      all_size_groups={data.all_size_groups}
+      {current_color_id}
+    />
 
     <Photos {product} />
 

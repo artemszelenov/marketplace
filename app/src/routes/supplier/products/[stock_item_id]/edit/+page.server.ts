@@ -40,6 +40,10 @@ export async function load({ locals, params }) {
     .collection("size_groups")
     .getFullList();
 
+  const all_colors = await locals.pb
+    .collection("colors")
+    .getFullList();
+
   return {
     current_color_id,
     current_product_id,
@@ -47,6 +51,7 @@ export async function load({ locals, params }) {
     products: products.map(product => {
       return {
         id: product.id,
+        group_id: product.group,
         title: product.title,
         description: product.description,
         price: product.price,
@@ -78,34 +83,66 @@ export async function load({ locals, params }) {
             }
           })
       }
-    })
+    }),
+    allowed_colors: all_colors
+      .filter(({ id }) => {
+        const found = products.find(({ color }: any) => color === id)
+
+        if (found) {
+          return false
+        }
+
+        return true
+      }).map(color => {
+        return {
+          id: color.id,
+          title: color.ru_title
+        }
+      }),
+    all_size_groups
   }
 }
 
 export const actions = {
-  deleteStockItem: async ({ request, locals }) => {
+  deleteColor: async ({ request, locals }) => {
     const formData = await request.formData()
-    const stock_item_id = formData.get("stock_item_id") as string
+    const product_id = formData.get("product_id") as string
 
     await locals.pb
-      .collection("stock_items")
-      .delete(stock_item_id)
+      .collection("products")
+      .delete(product_id)
 
     return redirect(303, "/supplier/products")
   },
 
-  createStockItem: async ({ request, locals }) => {
+  createColor: async ({ request, locals }) => {
     const formData = await request.formData()
-    const size_group_id = formData.get("size_group_id")
-    const product_id = formData.get("product_id")
+    const title = formData.get("title")
+    const description = formData.get("description")
+    const price = formData.get("price")
+    const group = formData.get("group_id")
+    const color = formData.get("color_id")
+    const size_group = formData.get("size_group_id")
+
+    const { id } = await locals.pb
+      .collection("products")
+      .create({
+        title,
+        description,
+        price,
+        group,
+        color,
+        supplier: locals.user!.id,
+        visible: false
+      })
 
     await locals.pb
       .collection("stock_items")
       .create({
-         product: product_id,
-         size_group: size_group_id,
-         count: 0
-       })
+        product: id,
+        size_group,
+        count: 0
+      })
 
     return { success: true }
   },
@@ -133,6 +170,33 @@ export const actions = {
       .update(product_id, {
         "gallery": formData.getAll("photos")
       })
+
+    return { success: true }
+  },
+
+  deleteStockItem: async ({ request, locals }) => {
+    const formData = await request.formData()
+    const stock_item_id = formData.get("stock_item_id") as string
+
+    await locals.pb
+      .collection("stock_items")
+      .delete(stock_item_id)
+
+    return redirect(303, "/supplier/products")
+  },
+
+  createStockItem: async ({ request, locals }) => {
+    const formData = await request.formData()
+    const size_group_id = formData.get("size_group_id")
+    const product_id = formData.get("product_id")
+
+    await locals.pb
+      .collection("stock_items")
+      .create({
+         product: product_id,
+         size_group: size_group_id,
+         count: 0
+       })
 
     return { success: true }
   }
