@@ -199,5 +199,31 @@ export const actions = {
        })
 
     return { success: true }
+  },
+
+  updateTexts: async ({ request, locals }) => {
+    const formData = await request.formData()
+    const product_id = formData.get("product_id") as string
+    const title = formData.get("title")
+    const description = formData.get("description")
+    const price = formData.get("price")
+    const count = formData.get("count")
+    const stock_item_id = formData.get("stock_item_id") as string
+
+    await locals.pb
+      .collection("products")
+      .update(product_id, {
+        title,
+        description,
+        price
+      })
+
+    await locals.pb
+      .collection("stock_items")
+      .update(stock_item_id, {
+         count
+       })
+
+    return { success: true }
   }
 }

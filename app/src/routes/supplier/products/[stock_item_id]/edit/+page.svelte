@@ -18,7 +18,10 @@
 
 <h1 class="text-xl font-semibold">{product.title}</h1>
 
-<form class="grid grid-cols-2 gap-10 mt-6" enctype="multipart/form-data">
+<form action="?/updateTexts" method="post" class="grid grid-cols-2 gap-10 mt-6">
+  <input type="hidden" name="product_id" value={product.id}>
+  <input type="hidden" name="stock_item_id" value={current_stock_item.id}>
+
   <section class="grid gap-10 auto-rows-max">
     <div>
       <label for="title" class="block font-bold mb-2">Заголовок</label>
@@ -31,11 +34,6 @@
     </div>
 
     <div>
-      <label for="description" class="block font-bold mb-2">Описание</label>
-      <Editor content={product.description} />
-    </div>
-  
-    <div>
       <label for="price" class="block font-bold mb-2">Цена</label>
       <input
         type="text"
@@ -46,6 +44,11 @@
         value={product.price}
         required
       >
+    </div>
+
+    <div>
+      <label for="description" class="block font-bold mb-2">Описание</label>
+      <Editor content={product.description} />
     </div>
   </section>
   
@@ -71,14 +74,14 @@
         value={current_stock_item.count}
       >
     </div>
-  </section>
 
-  <Button
-    type="submit"
-    size="sm"
-    additional_class="max-w-max"
-    no_icon
-  >
-    <span slot="text">Сохранить</span>
-  </Button>
+    <Button
+      type="submit"
+      size="sm"
+      additional_class="max-w-max"
+      no_icon
+    >
+      <span slot="text">Сохранить</span>
+    </Button>
+  </section>
 </form>

@@ -55,6 +55,8 @@
 
 <div class="prose" bind:this={element} />
 
+<textarea name="description" value={editor?.getHTML()} class="sr-only" />
+
 <style>
   :global(.prose p) {
     @apply mb-4;
