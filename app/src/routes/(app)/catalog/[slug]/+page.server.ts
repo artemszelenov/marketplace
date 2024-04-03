@@ -12,10 +12,10 @@ export async function load({ params, locals, url }) {
 
   const product: Product = {
     id: product_record.id,
-    type: product_record.expand?.type.value ?? 'unknown',
+    type: product_record.expand?.type?.value ?? 'unknown',
     price: product_record.price,
     title: product_record.title,
-    color: product_record.expand?.color.ru_title,
+    color: product_record.expand?.color.title,
     description: product_record.description,
     gallery: product_record.gallery.map((file_name: string) => {
       return locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product_record, file_name);

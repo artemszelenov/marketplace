@@ -1,6 +1,7 @@
 import { ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND } from '$env/static/private';
 import { dev } from '$app/environment';
 import PocketBase from "pocketbase";
+import { redirect } from "@sveltejs/kit";
 
 export async function handle({ event, resolve }) {
   event.locals.pb = new PocketBase(ORIGIN_BACKEND_INTERNAL);
@@ -25,12 +26,22 @@ export async function handle({ event, resolve }) {
         username: logged_in_user.username,
         name: logged_in_user.name,
         email: logged_in_user.email,
-        verified: logged_in_user.verified
+        verified: logged_in_user.verified,
+        company_name: logged_in_user.company_name
       };
     }
   } catch (_) {
     event.locals.pb.authStore.clear();
     event.locals.user = null;
+  }
+
+  // supplier login check
+  if (
+    !event.locals.user &&
+    event.route.id?.startsWith("/supplier") && 
+    event.route.id !== "/supplier/login"
+  ) {
+    throw redirect(302, "/supplier/login");
   }
 
   const response = await resolve(event);

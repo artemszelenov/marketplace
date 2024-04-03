@@ -38,11 +38,11 @@
     </div>
 
     <div class="flex items-center justify-end">
-      {#if $page.data.user}
+      <!-- {#if $page.data.user}
         <a class="px-3 py-2 text-sm text-black" href="/user">
           Мой аккаунт
         </a>
-      {/if}
+      {/if} -->
 
       <a
         href="/cart"

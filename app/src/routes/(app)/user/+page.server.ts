@@ -12,21 +12,26 @@ export const actions = {
     const body = Object.fromEntries(await request.formData());
 
     try {
-      await locals.pb.collection('users')
-        .authWithPassword(body.email.toString(), body.password.toString());
+      await locals.pb
+        .collection('users')
+        .authWithPassword(body.email as string, body.password as string);
     } catch (err) {
       const error = err as ClientResponseError;
       console.error('Error: ', error.data);
       return fail(422, { errors: [error.data] });
     }
 
-    throw redirect(303, body.referrer?.toString() ?? "/user");
+    if (body["redirect-to"]) {
+      throw redirect(303, body["redirect-to"] as string);
+    }
   },
+
   register: async ({ request, locals }) => {
     const body = Object.fromEntries(await request.formData());
 
     try {
-      await locals.pb.collection('users')
+      await locals.pb
+        .collection('users')
         .create({
           email: body.email,
           password: body.password,
@@ -35,18 +40,23 @@ export const actions = {
         });
 
       // TODO: добавить подтверждение email по почте
-      await locals.pb.collection('users')
-        .authWithPassword(body.email.toString(), body.password.toString());
+      await locals.pb
+        .collection('users')
+        .authWithPassword(body.email as string, body.password as string);
     } catch (err) {
       const error = err as ClientResponseError;
       console.error('Error: ', error.data);
       return fail(422, { errors: [error.data] });
     }
 
-    throw redirect(303, body.referrer?.toString() ?? "/user");
+    if (body["redirect-to"]) {
+      throw redirect(303, body["redirect-to"] as string);
+    }
   },
-  logout: async ({ locals }) => {
+
+  logout: async ({ locals, request }) => {
+    const body = Object.fromEntries(await request.formData());
     locals.pb.authStore.clear();
-    throw redirect(303, "/");
+    throw redirect(303, body["redirect-to"] as string ?? "/");
   },
 }

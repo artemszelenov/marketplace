@@ -36,7 +36,7 @@
     content: "";
   }
 
-  :is(a[href]):hover:not(:disabled, .logo, .action-button, .teaser-link) {
+  :is(a[href]):hover:not(:disabled, .logo, .action-button, .teaser-link, .tab-link) {
     @apply bg-neutral-200;
   }
 
@@ -52,8 +52,12 @@
     @apply block w-full bg-white px-4 py-2.5 border rounded-full;
   }
 
+  textarea, .tiptap {
+    @apply block w-full bg-white px-4 py-2.5 border rounded;
+  }
+
   input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]),
-  select {
+  select, textarea, .tiptap {
     @apply focus:outline focus:outline-gray-900 focus:outline-[3px] focus:outline-offset-0;
   }
 

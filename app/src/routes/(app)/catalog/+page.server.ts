@@ -32,7 +32,7 @@ export async function load({ locals, url }) {
 
   try {
     const { page, perPage, totalPages, items } = await locals.pb
-      .collection<Product>('products')
+      .collection<Product>('product_teasers')
       .getList(next_page, LIMIT, {
         filter,
         sort: "-created"
@@ -52,11 +52,11 @@ export async function load({ locals, url }) {
     }> = {
       color: {
         title: 'Цвет',
-        values: colors_records.map(({ id, ru_title }) => ({ value: id, title: ru_title }))
+        values: colors_records.map(({ id, title }) => ({ value: id, title: title }))
       },
       categories: {
         title: 'Категории',
-        values: categories_records.map(({ id, ru_title }) => ({ value: id, title: ru_title }))
+        values: categories_records.map(({ id, title }) => ({ value: id, title: title }))
       }
     }
 
@@ -66,7 +66,7 @@ export async function load({ locals, url }) {
           id: product.id,
           title: product.title,
           price: product.price,
-          gallery: product.gallery.map((file_name: string) => {
+          gallery: product.gallery.map(file_name => {
             return locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product, file_name);
           })
         }
