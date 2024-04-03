@@ -57,7 +57,7 @@ export async function load({ locals, params }) {
         price: product.price,
         color: {
           id: product.color,
-          title: product.expand?.color.ru_title
+          title: product.expand?.color.title
         },
         gallery: product.gallery.map((file_name: string) => {
           return {
@@ -96,7 +96,7 @@ export async function load({ locals, params }) {
       }).map(color => {
         return {
           id: color.id,
-          title: color.ru_title
+          title: color.title
         }
       }),
     all_size_groups

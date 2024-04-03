@@ -1,6 +1,6 @@
 export async function load({ locals }) {
   const { items } = await locals.pb
-    .collection('products')
+    .collection('product_teasers')
     .getList(1, 10, {
       sort: "-created"
     });

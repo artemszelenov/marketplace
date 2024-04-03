@@ -1,9 +1,9 @@
 <script lang="ts">
   import Button from "$lib/components/UI/Button.svelte";
   import Editor from "$lib/components/UI/Editor.svelte";
-  import Sizes from "./Sizes.svelte";
-  import Photos from "./Photos.svelte";
-  import Colors from "./Colors.svelte";
+  import SizesEdit from "$lib/components/supplier/SizesEdit.svelte";
+  import PhotosEdit from "$lib/components/supplier/PhotosEdit.svelte";
+  import ColorsEdit from "$lib/components/supplier/ColorsEdit.svelte";
 
   export let data;
 
@@ -53,7 +53,7 @@
   </section>
   
   <section class="grid gap-10 auto-rows-max">
-    <Colors
+    <ColorsEdit
       current_product={product}
       products={data.products}
       allowed_colors={data.allowed_colors}
@@ -61,9 +61,9 @@
       {current_color_id}
     />
 
-    <Photos {product} />
+    <PhotosEdit {product} />
 
-    <Sizes {product} {current_stock_item_id} />
+    <SizesEdit {product} {current_stock_item_id} />
 
     <div>
       <label for="count" class="block font-bold mb-2">Количество</label>

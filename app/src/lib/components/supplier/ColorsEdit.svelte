@@ -105,7 +105,7 @@
         {/each}
       </Select>
   
-      <div class="mt-5 flex gap-3">
+      <div class="mt-8 flex gap-3">
         <Button
           type="submit"
           size="sm"

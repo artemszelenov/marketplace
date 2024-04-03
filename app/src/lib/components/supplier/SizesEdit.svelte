@@ -76,7 +76,7 @@
   {/if}
 
   <dialog bind:this={new_size_dialog}>
-    <form method="post" action="?/createStockItem">
+    <form action="?/createStockItem" method="post">
       <input type="hidden" name="product_id" value={product.id}>
   
       <Select name="size_group_id">
@@ -85,7 +85,7 @@
         {/each}
       </Select>
   
-      <div class="mt-5 flex gap-3">
+      <div class="mt-8 flex gap-3">
         <Button
           type="submit"
           size="sm"

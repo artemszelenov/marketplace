@@ -31,7 +31,7 @@
 
     <div class="flex items-center justify-end">
       {#if $page.data.user}
-        <a class="px-3 py-2 text-sm text-black" href="/supplier/account">
+        <a class="px-3 py-2 mr-4 text-black" href="/supplier/account">
           {$page.data.user.company_name}
         </a>
         <form
@@ -39,8 +39,8 @@
           action="/user?/logout"
         >
           <input type="hidden" name="redirect-to" value="/supplier" />
-          <button type="submit" title="Выйти" class="w-[28px]">
-            <svg width="28" height="22" viewBox="0 0 28 22" fill="none">
+          <button type="submit" title="Выйти" class="block">
+            <svg height="18" viewBox="0 0 28 22" fill="none">
               <path d="M17.75 6.3125V3.96875C17.75 3.34715 17.5031 2.75101 17.0635 2.31147C16.624 1.87193 16.0279 1.625 15.4062 1.625H4.15625C3.53465 1.625 2.93851 1.87193 2.49897 2.31147C2.05943 2.75101 1.8125 3.34715 1.8125 3.96875V18.0312C1.8125 18.6529 2.05943 19.249 2.49897 19.6885C2.93851 20.1281 3.53465 20.375 4.15625 20.375H15.4062C16.0279 20.375 16.624 20.1281 17.0635 19.6885C17.5031 19.249 17.75 18.6529 17.75 18.0312V15.6875M21.5 6.3125L26.1875 11M26.1875 11L21.5 15.6875M26.1875 11H10.1914" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>              
           </button>

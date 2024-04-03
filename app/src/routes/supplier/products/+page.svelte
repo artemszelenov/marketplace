@@ -1,10 +1,16 @@
 <script>
+  import NewProduct from '$lib/components/supplier/NewProduct.svelte';
+
   export let data;
 </script>
 
 <div class="flex items-center justify-between">
   <h1 class="text-xl font-semibold">Мои товары</h1>
-  <a href="/supplier/products/new">Добавить товар</a>
+
+  <NewProduct
+    all_size_groups={data.all_size_groups}
+    all_colors={data.all_colors}
+  />
 </div>
 
 <ul class="grid grid-cols-2 md:grid-cols-4 mt-10 gap-4">

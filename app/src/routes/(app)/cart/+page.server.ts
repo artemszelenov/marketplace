@@ -42,7 +42,7 @@ export async function load({ locals, cookies }) {
             price: product.price,
             description: '',
             gallery: [firstImageUrl],
-            color: product.expand?.color?.ru_title,
+            color: product.expand?.color?.title,
             image: firstImageUrl
           },
           stock_item: {

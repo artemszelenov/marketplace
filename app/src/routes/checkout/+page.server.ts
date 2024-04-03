@@ -43,7 +43,7 @@ export async function load({ locals, cookies }) {
             price: product.price,
             description: '',
             gallery: [firstImageUrl],
-            color: product.expand?.color?.ru_title,
+            color: product.expand?.color?.title,
             image: firstImageUrl
           },
           stock_item: {
@@ -148,7 +148,7 @@ export const actions = {
       const product = stock_item.expand?.product;
       const leftover = stock_item.count - cart_item.quantity;
 
-      items_string += `%0A%0A${product.title}%0AРазмер: ${stock_item.expand?.size_group.title}%0AЦвет: ${product.expand?.color.ru_title}%0AКоличество: ${cart_item.quantity}%0A-------------%0AОстаток: ${leftover}`;
+      items_string += `%0A%0A${product.title}%0AРазмер: ${stock_item.expand?.size_group.title}%0AЦвет: ${product.expand?.color.title}%0AКоличество: ${cart_item.quantity}%0A-------------%0AОстаток: ${leftover}`;
 
       locals.pb
         .collection("order_items")
