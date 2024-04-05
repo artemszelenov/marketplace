@@ -24,15 +24,18 @@ export async function load({ locals }) {
     .getFullList();
 
   return {
-    items: stock_items.map(item => {
-      return {
-        id: item.id,
-        title: item.expand?.product.title,
-        count: item.count,
-        size: item.expand?.size_group.title,
-        image: locals.pb_helpers.files.getFileUrlWithCorrectOrigin(item.expand?.product, item.expand?.product.gallery[0])
-      }
-    }),
+    items: stock_items
+      .sort((a, b) => a.product - b.product)
+      .map(item => {
+        return {
+          id: item.id,
+          title: item.expand?.product.title,
+          count: item.count,
+          size: item.expand?.size_group.title,
+          image: locals.pb_helpers.files.getFileUrlWithCorrectOrigin(item.expand?.product, item.expand?.product.gallery[0]),
+          on_moderation: !item.expand?.product.visible
+        }
+      }),
     all_size_groups,
     all_colors
   }

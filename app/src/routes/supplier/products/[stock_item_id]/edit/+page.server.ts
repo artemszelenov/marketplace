@@ -155,7 +155,8 @@ export const actions = {
     await locals.pb
       .collection("products")
       .update(product_id, {
-        "gallery-": [photo_name]
+        "gallery-": [photo_name],
+        visible: false
       })
 
     return { success: true }
@@ -168,7 +169,8 @@ export const actions = {
     await locals.pb
       .collection("products")
       .update(product_id, {
-        "gallery": formData.getAll("photos")
+        "gallery": formData.getAll("photos"),
+        visible: false
       })
 
     return { success: true }
@@ -215,7 +217,8 @@ export const actions = {
       .update(product_id, {
         title,
         description,
-        price
+        price,
+        visible: false
       })
 
     await locals.pb
