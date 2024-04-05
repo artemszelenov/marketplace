@@ -50,6 +50,16 @@
       <label for="description" class="block font-bold mb-2">Описание</label>
       <Editor content={product.description} />
     </div>
+
+    <div>
+      <label for="sku" class="block font-bold mb-2">Артикул</label>
+      <input
+        type="text"
+        name="sku"
+        id="sku"
+        value={data.sku}
+      >
+    </div>
   </section>
   
   <section class="grid gap-10 auto-rows-max">

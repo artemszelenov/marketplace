@@ -4,7 +4,7 @@ export async function load({ locals, params }) {
   const current_stock_item = await locals.pb
     .collection("stock_items")
     .getOne(params.stock_item_id, {
-      expand: "product"
+      expand: "product, product.group"
     });
 
   const current_color_id = current_stock_item.expand?.product.color;
@@ -84,6 +84,7 @@ export async function load({ locals, params }) {
           })
       }
     }),
+    sku: current_stock_item.expand?.product.expand?.group.sku ?? '',
     allowed_colors: all_colors
       .filter(({ id }) => {
         const found = products.find(({ color }: any) => color === id)
@@ -211,14 +212,21 @@ export const actions = {
     const price = formData.get("price")
     const count = formData.get("count")
     const stock_item_id = formData.get("stock_item_id") as string
+    const sku = formData.get("sku") as string
 
-    await locals.pb
+    const { group } = await locals.pb
       .collection("products")
       .update(product_id, {
         title,
         description,
         price,
         visible: false
+      })
+
+    await locals.pb
+      .collection("product_groups")
+      .update(group, {
+        sku
       })
 
     await locals.pb
