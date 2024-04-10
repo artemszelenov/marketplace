@@ -23,7 +23,7 @@
 </script>
 
 <div class="md:gap-10 md:grid md:grid-cols-[1fr_28rem] pb-10">
-  <ul class="flex overflow-auto md:grid gap-3">
+  <ul class="flex overflow-auto md:grid gap-3 no-scrollbar">
     {#each data.product.gallery as src}
       <li class="w-[80%] md:w-auto shrink-0">
         <img
