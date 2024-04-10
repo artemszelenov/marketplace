@@ -11,14 +11,14 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-node": "^4.0.1",
-		"@sveltejs/kit": "^2.5.0",
+		"@sveltejs/adapter-node": "^5.0.1",
+		"@sveltejs/kit": "^2.5.5",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"@types/node": "^20.11.26",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.31",
-		"svelte": "^4.2.9",
-		"svelte-check": "^3.6.3",
+		"svelte": "^4.2.12",
+		"svelte-check": "^3.6.9",
 		"tailwindcss": "^3.4.0",
 		"tslib": "^2.6.2",
 		"typescript": "^5.2.2",
@@ -27,13 +27,13 @@
 	"dependencies": {
 		"@evilmartians/harmony": "^1.2.0",
 		"@fontsource/inter": "^5.0.16",
-		"@nanostores/persistent": "^0.9.1",
+		"@nanostores/persistent": "^0.10.1",
 		"@tiptap/core": "^2.2.4",
 		"@tiptap/extension-bold": "^2.2.4",
 		"@tiptap/pm": "^2.2.4",
 		"@tiptap/starter-kit": "^2.2.4",
-		"nanostores": "^0.9.5",
-		"pocketbase": "^0.21.0",
+		"nanostores": "^0.10.3",
+		"pocketbase": "^0.21.1",
 		"zod": "^3.22.4"
 	}
 }

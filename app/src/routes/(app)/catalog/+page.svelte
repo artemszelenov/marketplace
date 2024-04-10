@@ -29,8 +29,27 @@
   }
 </script>
 
-<section class="grid grid-cols-2 md:mt-12">
-  <h1 class="col-start-1 row-start-1 text-2xl font-bold">Все товары</h1>
+<form action="/search" class="grid">
+	<input name="q" placeholder="Поиск" class="row-start-1 col-start-1">
+
+  <div class="relative row-start-1 col-start-1 right-3 justify-self-end self-center">
+    <Button
+      type="submit"
+      size="xs"
+      title="Поиск"
+    >
+      <svg slot="icon" height="17" viewBox="0 0 512 512" aria-label="Поиск">
+        <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentcolor" stroke-miterlimit="10" stroke-width="32" />
+        <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448" />
+      </svg>
+    </Button>
+  </div>
+</form>
+
+<section class="grid grid-cols-2 mt-8 md:mt-12">
+  <h1 class="col-start-1 row-start-1 text-2xl font-bold">
+    Все товары
+  </h1>
 
   <details class="col-start-1 row-start-1 col-end-3">
     <summary class="max-w-max ml-auto rounded-full">

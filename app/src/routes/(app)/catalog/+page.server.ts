@@ -52,11 +52,11 @@ export async function load({ locals, url }) {
     }> = {
       color: {
         title: 'Цвет',
-        values: colors_records.map(({ id, title }) => ({ value: id, title: title }))
+        values: colors_records.map(({ id, title }) => ({ value: id, title }))
       },
       categories: {
         title: 'Категории',
-        values: categories_records.map(({ id, title }) => ({ value: id, title: title }))
+        values: categories_records.map(({ id, title }) => ({ value: id, title }))
       }
     }
 

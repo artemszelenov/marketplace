@@ -26,8 +26,7 @@
     transform: scale(0.95);
   }
 
-  :is(.action-button, .silent-button):is(:hover, :focus-visible):not(:disabled)::before,
-  :is(a[href], summary):focus-visible:not(:disabled)::before {
+  :is(.action-button, .silent-button):is(:hover, :focus-visible):not(:disabled)::before {
     @apply bg-neutral-200 rounded-full;
 
     position: absolute;
