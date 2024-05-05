@@ -72,7 +72,6 @@
 
       <Button
         type="submit"
-        size="sm"
         additional_class="max-w-max mt-3"
         no_icon
       >

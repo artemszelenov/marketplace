@@ -29,7 +29,6 @@
 
   <Button
     type="submit"
-    size="sm"
     title="Добавить в корзину"
     disabled={!stock_item_id}
   >

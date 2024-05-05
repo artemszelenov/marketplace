@@ -16,17 +16,14 @@
   }
 </script>
 
-<Button
-  size="sm"
-  handler={showNewProductDialog}
->
+<Button handler={showNewProductDialog}>
   <span slot="text">Создать новый товар</span>
   <svg slot="icon" height="28" viewBox="0 0 512 512" aria-hidden="true">
     <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 112v288M400 256H112" />
   </svg>
 </Button>
 
-<dialog bind:this={new_product_dialog}>
+<dialog class="p-10 min-w-[40vmax] m-auto" bind:this={new_product_dialog}>
   <form action="?/createProduct" method="post">
     <label for="title" class="block font-bold mb-2">
       Название нового товара
@@ -60,7 +57,6 @@
     <div class="mt-8 flex gap-3">
       <Button
         type="submit"
-        size="sm"
         additional_class="max-w-max"
         no_icon
       >
@@ -69,7 +65,6 @@
 
       <Button
         appearance="outlined"
-        size="sm"
         additional_class="max-w-max"
         no_icon
         handler={closeNewProductDialog}
@@ -79,9 +74,3 @@
     </div>
   </form>
 </dialog>
-
-<style>
-  dialog {
-    @apply p-10 min-w-[40vmax];
-  }
-</style>

@@ -13,7 +13,6 @@
   <Button
     title="Удалить из корзины"
     type="submit"
-    size="xs"
     appearance="silent"
   >
     <svg slot="icon" viewBox="0 0 512 512" aria-hidden="true">

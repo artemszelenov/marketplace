@@ -44,7 +44,6 @@
             <Button
               type="submit"
               appearance="outlined"
-              size="sm"
               additional_class="max-w-max"
             >
               <span slot="text">{color.title}</span>
@@ -69,7 +68,6 @@
 
   {#if is_colors_edit}
     <Button
-      size="sm"
       additional_class="max-w-max mt-3"
       no_icon
       handler={showNewColorDialog}
@@ -78,7 +76,7 @@
     </Button>
   {/if}
 
-  <dialog bind:this={new_color_dialog}>
+  <dialog class="p-10 m-auto" bind:this={new_color_dialog}>
     <form action="?/createColor" method="post">
       <input type="hidden" name="title" value={current_product.title}>
       <input type="hidden" name="description" value={current_product.description}>
@@ -108,7 +106,6 @@
       <div class="mt-8 flex gap-3">
         <Button
           type="submit"
-          size="sm"
           additional_class="max-w-max"
           no_icon
         >
@@ -117,7 +114,6 @@
   
         <Button
           appearance="outlined"
-          size="sm"
           additional_class="max-w-max"
           no_icon
           handler={closeNewColorDialog}
@@ -128,9 +124,3 @@
     </form>
   </dialog>
 </section>
-
-<style>
-  dialog {
-    @apply p-10;
-  }
-</style>

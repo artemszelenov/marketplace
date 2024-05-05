@@ -59,6 +59,6 @@
 
 <style>
   :global(.prose p) {
-    @apply mb-4;
+    margin-bottom: var(--spacing-4);
   }
 </style>

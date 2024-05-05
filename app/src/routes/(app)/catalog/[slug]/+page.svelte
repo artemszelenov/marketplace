@@ -130,13 +130,9 @@
         </div>
       {/if}
 
-      <p class="description mt-10">{@html data.product.description}</p>
+      <div class="mt-10 *:mt-4">
+        {@html data.product.description}
+      </div>
     </div>
   </div>
 </div>
-
-<style>
-  .description > p + p {
-    @apply mt-4;
-  }
-</style>

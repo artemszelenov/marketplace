@@ -225,7 +225,6 @@
 
         <Button
           as="div"
-          size="xs"
           title="ШАГ 1 ИЗ 3"
           appearance="outlined"
           no_icon
@@ -394,7 +393,6 @@
                   <p class="mt-2 md:mt-0">
                     <Button
                       type="button"
-                      size="xs"
                       title="Заберу здесь"
                       handler={() => deliveryStepDone.set(true)}
                       no_icon
@@ -426,7 +424,6 @@
 
         <Button
           as="div"
-          size="xs"
           title="ШАГ 2 ИЗ 3"
           appearance="outlined"
           no_icon
@@ -522,7 +519,7 @@
                 type="text"
                 name="nickname"
                 placeholder="никнейм"
-                class="row-start-1 col-start-1 col-end-3"
+                class="row-start-1 col-start-1 col-end-3 pl-[9.5rem]"
               />
             </div>
 
@@ -554,7 +551,6 @@
 
         <Button
           as="div"
-          size="xs"
           title="ШАГ 3 ИЗ 3"
           appearance="outlined"
           no_icon
@@ -601,7 +597,6 @@
           type="submit"
           form="checkout-form"
           title="Оплатить"
-          size="base"
         >
           <span slot="text">Оплатить</span>
         </Button>

@@ -2,14 +2,25 @@
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
+@import "@evilmartians/harmony/css/gray.css";
+@import "@evilmartians/harmony/css/neutral.css";
+@import "@evilmartians/harmony/css/red.css";
+@import "@evilmartians/harmony/css/emerald.css";
+@import "tailwindcss";
 
-@tailwind base;
+@theme {
+  --color-gray-900: var(--gray-900);
+  --color-neutral-200: var(--neutral-200);
+  --color-red-600: var(--red-600);
+  --color-emerald-700: var(--emerald-700);
+  --accent-color: var(--color-gray-900);
+  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+}
 
 @layer base {
   :root {
-    --accent-color: theme(colors.gray.900);
     accent-color: var(--accent-color);
-
     scroll-behavior: smooth;
   }
 
@@ -19,7 +30,7 @@
   }
 
   a[href]:not(.action-button, .leaflet-control a) {
-    @apply rounded;
+    border-radius: var(--radius-sm);
   }
 
   :is(a, button):active:not(:disabled) {
@@ -27,20 +38,21 @@
   }
 
   :is(.action-button, .silent-button):is(:hover, :focus-visible):not(:disabled)::before {
-    @apply bg-neutral-200 rounded-full;
-
     position: absolute;
     inset: -5px;
     z-index: -1;
     content: "";
+    background-color: var(--color-neutral-200);
+    border-radius: 9999px;
   }
 
   :is(a[href]):hover:not(:disabled, .logo, .action-button, .teaser-link, .tab-link) {
-    @apply bg-neutral-200;
+    background-color: var(--color-neutral-200);
   }
 
   :is(a[href].active):not(:disabled) {
-    @apply bg-gray-900 text-white;
+    background-color: var(--color-gray-900);
+    color: var(--color-white)
   }
 
   :is(a, button) svg {
@@ -48,40 +60,62 @@
   }
 
   input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]) {
-    @apply block w-full bg-white px-4 py-2.5 border rounded-full;
+    display: block;
+    width: 100%;
+    background-color: var(--color-white);
+    padding-inline: var(--spacing-4);
+    padding-block: var(--spacing-2);
+    border: 1px solid var(--color-gray-900);
+    border-radius: 9999px;
   }
 
   textarea, .tiptap {
-    @apply block w-full bg-white px-4 py-2.5 border rounded;
+    display: block;
+    width: 100%;
+    background-color: var(--color-white);
+    padding-inline: var(--spacing-4);
+    padding-block: var(--spacing-2);
+    border: 1px solid var(--color-gray-900);
+    border-radius: var(--radius-sm);
   }
 
-  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]),
-  select, textarea, .tiptap {
-    @apply focus:outline focus:outline-gray-900 focus:outline-[3px] focus:outline-offset-0;
+  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]):focus,
+  select:focus, textarea:focus, .tiptap:focus {
+    outline: 3px solid var(--color-gray-900);
   }
 
   label:has(+ div > input:required, + input:required)::after {
-    @apply text-red-600;
-
     content: "*";
     margin-left: 1ch;
+    color: var(--color-red-600);
   }
 
   :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-valid {
-    @apply outline outline-emerald-700;
+    outline: 3px solid var(--color-emerald-700);
+    border-color: var(--color-emerald-700);
   }
 
   :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-invalid {
-    @apply outline outline-red-600;
+    outline: 3px solid var(--color-red-600);
+    border-color: var(--color-red-600);
   }
 
   select {
-    @apply appearance-none row-start-1 col-start-1 block w-full bg-white px-4 py-2.5 border rounded-full;
+    appearance: none;
+    grid-row-start: 1; 
+    grid-column-start: 1;
+    display: block;
+    width: 100%;
+    background-color: var(--color-white);
+    padding-inline: var(--spacing-4);
+    padding-block: var(--spacing-2);
+    border: 1px solid var(--color-gray-900);
+    border-radius: 9999px;
   }
 
   select:disabled + svg,
   :is(button, input):disabled {
-    @apply opacity-60;
+    opacity: 0.6;
   }
 
   :is(input[type="checkbox"], input[type="radio"]) {
@@ -90,7 +124,7 @@
   }
 
   :is(input[type="checkbox"], input[type="radio"]):disabled + * {
-    @apply opacity-60;
+    opacity: 0.6;
   }
 
   details > summary {
@@ -101,9 +135,6 @@
     display: none;
   }
 }
-
-@tailwind components;
-@tailwind utilities;
 
 @layer utilities {
   .sr-only {

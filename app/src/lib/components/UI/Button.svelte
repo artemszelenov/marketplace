@@ -1,5 +1,4 @@
 <script lang="ts">
-  export let size: string;
   export let title: string | undefined = "";
   export let type: "submit" | "button" = "button";
   export let handler: () => void = () => {};
@@ -25,7 +24,7 @@
   <a
     {href}
     data-sveltekit-reload
-    class="relative flex items-center gap-[0.5em] w-fit text-white text-{size} font-bold uppercase no-underline cursor-default rounded-full {additional_class}"
+    class="relative flex items-center gap-[0.5em] w-fit text-white text-xs font-bold uppercase no-underline cursor-default rounded-full {additional_class}"
   >
     <div class="flex items-center w-fit bg-gray-900 rounded-full px-[1.5em] h-[2.5em] tracking-wider">
       <slot name='text' />
@@ -40,7 +39,7 @@
     </div>
   </a>
 {:else if as === 'div'}
-  <div class="relative flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase cursor-default rounded-full {additional_class}">
+  <div class="relative flex items-center gap-[0.5em] text-white text-xs font-bold uppercase cursor-default rounded-full {additional_class}">
     {#if $$slots.text}
       <div class="flex items-center rounded-full px-5 h-[2.5em] tracking-wider {appearances[appearance]}">
         <slot name='text' />
@@ -59,7 +58,7 @@
   </div>
 {:else}
   <button
-    class="relative flex items-center gap-[0.5em] text-white text-{size} font-bold uppercase cursor-default rounded-full {additional_class}"
+    class="relative flex items-center gap-[0.5em] text-white text-xs font-bold uppercase cursor-default rounded-full {additional_class}"
     {type}
     {title}
     {disabled}

@@ -35,7 +35,6 @@
   <div class="relative row-start-1 col-start-1 right-3 justify-self-end self-center">
     <Button
       type="submit"
-      size="xs"
       title="Поиск"
     >
       <svg slot="icon" height="17" viewBox="0 0 512 512" aria-label="Поиск">
@@ -53,10 +52,7 @@
 
   <details class="col-start-1 row-start-1 col-end-3">
     <summary class="max-w-max ml-auto rounded-full">
-      <Button
-        as="div"
-        size="xs"
-      >
+      <Button as="div">
         <span slot="text">Фильтры</span>
         <span slot="icon">
           {#if applied_filters_count > 0}
@@ -89,10 +85,14 @@
                 name={filters_group_key}
                 value={entity.value}
                 checked={search_values.includes(entity.value)}
-                class="sr-only"
+                class="sr-only peer"
               >
               <span
-                class="inline-flex items-center text-sm rounded border border-gray-900 px-3 h-[2.5em] cursor-default font-medium"
+                class="
+                  peer-[:hover:not(:checked)]:bg-neutral-200 peer-checked:bg-gray-900 peer-checked:text-white 
+                  inline-flex items-center text-sm font-medium 
+                  rounded border border-gray-900 px-3 h-[2.5em]
+                  cursor-default"
               >
                 {entity.title}
               </span>
@@ -110,7 +110,6 @@
 
         <Button
           type="submit"
-          size="xs"
           handler={reset}
         >
           <span slot="text">Применить</span>
@@ -134,7 +133,6 @@
   <Button
     type="submit"
     form="filter-form"
-    size="xs"
     title="Вернуться к началу"
     handler={goTop}
     additional_class="mr-auto"
@@ -148,7 +146,6 @@
     <Button
       type="submit"
       form="filter-form"
-      size="xs"
       title={`Показать еще ${data.pagination.limit}`}
       handler={loadMore}
     >
@@ -161,19 +158,8 @@
 
   <Button
     as="div"
-    size="xs"
     appearance="outlined"
   >
     <span slot="icon">{next_page}</span>
   </Button>
 </div>
-
-<style>
-  #filter-form [type="checkbox"]:is(:hover, :focus) + * {
-    @apply bg-neutral-200;
-  }
-
-  #filter-form [type="checkbox"]:checked + * {
-    @apply bg-gray-900 text-white;
-  }
-</style>

@@ -41,7 +41,6 @@
             <Button
               type="submit"
               appearance="outlined"
-              size="sm"
               additional_class="max-w-max"
             >
               <span slot="text">{size_title}</span>
@@ -66,7 +65,6 @@
 
   {#if is_sizes_edit}
     <Button
-      size="sm"
       additional_class="max-w-max mt-3"
       no_icon
       handler={showNewSizeDialog}
@@ -75,7 +73,7 @@
     </Button>
   {/if}
 
-  <dialog bind:this={new_size_dialog}>
+  <dialog class="p-10 m-auto" bind:this={new_size_dialog}>
     <form action="?/createStockItem" method="post">
       <input type="hidden" name="product_id" value={product.id}>
   
@@ -88,7 +86,6 @@
       <div class="mt-8 flex gap-3">
         <Button
           type="submit"
-          size="sm"
           additional_class="max-w-max"
           no_icon
         >
@@ -97,7 +94,6 @@
   
         <Button
           appearance="outlined"
-          size="sm"
           additional_class="max-w-max"
           no_icon
           handler={closeNewSizeDialog}
@@ -108,9 +104,3 @@
     </form>
   </dialog>
 </section>
-
-<style>
-  dialog {
-    @apply p-10;
-  }
-</style>

@@ -44,7 +44,6 @@
           as="link"
           href="/checkout"
           title="Оформить заказ"
-          size="xs"
         >
           <span slot="text">Оформить заказ</span>
         </Button>
