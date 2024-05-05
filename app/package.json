@@ -12,28 +12,28 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^5.0.1",
-		"@sveltejs/kit": "^2.5.5",
-		"@sveltejs/vite-plugin-svelte": "^3.0.2",
-		"@types/node": "^20.11.26",
-		"autoprefixer": "^10.4.16",
-		"postcss": "^8.4.31",
-		"svelte": "^4.2.12",
-		"svelte-check": "^3.6.9",
-		"tailwindcss": "^3.4.0",
+		"@sveltejs/kit": "^2.5.7",
+		"@sveltejs/vite-plugin-svelte": "^3.1.0",
+		"@types/node": "^20.12.8",
+		"autoprefixer": "^10.4.19",
+		"postcss": "^8.4.38",
+		"svelte": "^4.2.15",
+		"svelte-check": "^3.7.1",
+		"tailwindcss": "^3.4.3",
 		"tslib": "^2.6.2",
-		"typescript": "^5.2.2",
-		"vite": "^5.0.12"
+		"typescript": "^5.4.5",
+		"vite": "^5.2.11"
 	},
 	"dependencies": {
 		"@evilmartians/harmony": "^1.2.0",
-		"@fontsource/inter": "^5.0.16",
+		"@fontsource/inter": "^5.0.18",
 		"@nanostores/persistent": "^0.10.1",
-		"@tiptap/core": "^2.2.4",
-		"@tiptap/extension-bold": "^2.2.4",
-		"@tiptap/pm": "^2.2.4",
-		"@tiptap/starter-kit": "^2.2.4",
+		"@tiptap/core": "^2.3.1",
+		"@tiptap/extension-bold": "^2.3.1",
+		"@tiptap/pm": "^2.3.1",
+		"@tiptap/starter-kit": "^2.3.1",
 		"nanostores": "^0.10.3",
-		"pocketbase": "^0.21.1",
-		"zod": "^3.22.4"
+		"pocketbase": "^0.21.2",
+		"zod": "^3.23.6"
 	}
 }

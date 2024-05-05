@@ -1,11 +1,19 @@
-import { ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND } from '$env/static/private';
-import { dev } from '$app/environment';
-import PocketBase from "pocketbase";
-import { redirect } from "@sveltejs/kit";
+import { ORIGIN_BACKEND_INTERNAL, ORIGIN_BACKEND } from '$env/static/private'
+import { dev } from '$app/environment'
+import PocketBase from "pocketbase"
+import { redirect } from "@sveltejs/kit"
+
+function pbUrl() {
+  if (dev) {
+    return ORIGIN_BACKEND
+  } else {
+    return ORIGIN_BACKEND_INTERNAL
+  }
+}
 
 export async function handle({ event, resolve }) {
-  event.locals.pb = new PocketBase(ORIGIN_BACKEND_INTERNAL);
-  event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || "");
+  event.locals.pb = new PocketBase(pbUrl())
+  event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || "")
 
   event.locals.pb_helpers = {
     files: {
@@ -19,8 +27,8 @@ export async function handle({ event, resolve }) {
 
   try {
     if (event.locals.pb.authStore.isValid) {
-      await event.locals.pb.collection("users").authRefresh();
-      const logged_in_user = event.locals.pb.authStore.model!;
+      await event.locals.pb.collection("users").authRefresh()
+      const logged_in_user = event.locals.pb.authStore.model!
       event.locals.user = {
         id: logged_in_user.id,
         username: logged_in_user.username,
@@ -28,11 +36,11 @@ export async function handle({ event, resolve }) {
         email: logged_in_user.email,
         verified: logged_in_user.verified,
         company_name: logged_in_user.company_name
-      };
+      }
     }
   } catch (_) {
-    event.locals.pb.authStore.clear();
-    event.locals.user = null;
+    event.locals.pb.authStore.clear()
+    event.locals.user = null
   }
 
   // supplier login check
@@ -41,12 +49,12 @@ export async function handle({ event, resolve }) {
     event.route.id?.startsWith("/supplier") && 
     event.route.id !== "/supplier/login"
   ) {
-    throw redirect(302, "/supplier/login");
+    throw redirect(302, "/supplier/login")
   }
 
-  const response = await resolve(event);
+  const response = await resolve(event)
 
-  response.headers.append('set-cookie', event.locals.pb.authStore.exportToCookie({ secure: !dev }));
+  response.headers.append('set-cookie', event.locals.pb.authStore.exportToCookie({ secure: !dev }))
 
-	return response;
-};
+	return response
+}

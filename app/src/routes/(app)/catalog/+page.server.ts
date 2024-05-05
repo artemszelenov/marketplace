@@ -1,50 +1,50 @@
-import { error } from '@sveltejs/kit';
-import type { Product } from "$lib/schema";
+import { error } from '@sveltejs/kit'
+import type { Product } from '$lib/schema'
 
-const LIMIT = 12;
+const LIMIT = 12
 
 export async function load({ locals, url }) {
-  const next_page = Number(url.searchParams.get("page")) || 1;
+  const next_page = Number(url.searchParams.get('page')) || 1
 
-  const filters_map: { [key: string]: string[] } = {};
+  const filters_map: { [key: string]: string[] } = {}
   for (const [param, value] of url.searchParams.entries()) {
-    if (param === 'page') continue;
+    if (param === 'page') continue
 
-    const filter_name = param;
+    const filter_name = param
 
     if (Array.isArray(filters_map[filter_name])) {
-      filters_map[filter_name].push(value);
+      filters_map[filter_name].push(value)
     } else {
-      filters_map[filter_name] = [value];
+      filters_map[filter_name] = [value]
     }
   }
 
-  const filters_query = [];
+  const filters_query = []
   for (const [filter_name, values] of Object.entries(filters_map)) {
-    const group = [];
+    const group = []
     for (const val of values) {
-      group.push(`${filter_name}.id ?= "${val}"`);
+      group.push(`${filter_name}.id ?= "${val}"`)
     }
-    filters_query.push(`(${group.join(" || ")})`);
+    filters_query.push(`(${group.join(' || ')})`)
   }
 
-  const filter = filters_query.join(" && ");
+  const filter = filters_query.join(' && ')
 
   try {
     const { page, perPage, totalPages, items } = await locals.pb
-      .collection<Product>('product_teasers')
+      .collection<Product>('products')
       .getList(next_page, LIMIT, {
         filter,
-        sort: "-created"
-      });
+        sort: '-created'
+      })
 
     const colors_records = await locals.pb
       .collection('colors')
-      .getFullList();
+      .getFullList()
 
     const categories_records = await locals.pb
       .collection('categories')
-      .getFullList();
+      .getFullList()
 
     const filters: Record<string, {
       title: string,
@@ -67,7 +67,7 @@ export async function load({ locals, url }) {
           title: product.title,
           price: product.price,
           gallery: product.gallery.map(file_name => {
-            return locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product, file_name);
+            return locals.pb_helpers.files.getFileUrlWithCorrectOrigin(product, file_name)
           })
         }
       }),
@@ -78,13 +78,13 @@ export async function load({ locals, url }) {
         done: page === totalPages
       },
       seo: {
-        title: "Каталог"
+        title: 'Каталог'
       }
     }
   } catch (err) {
-    console.log(`Ошибка на сервере`, err);
+    console.log(`Ошибка на сервере`, err)
 		throw error(500, {
 			message: 'Ошибка на сервере'
-		});
+		})
   }
 }

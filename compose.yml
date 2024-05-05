@@ -2,7 +2,7 @@ services:
   app-prod:
     build:
       context: ./app
-      dockerfile: prod.Dockerfile
+      dockerfile: Dockerfile
       args:
         TELEGRAM_BOT_TOKEN_FILE: /run/secrets/tg_bot_token
         TELEGRAM_ORDERS_CHAT_ID_FILE: /run/secrets/tg_orders_chat_id
