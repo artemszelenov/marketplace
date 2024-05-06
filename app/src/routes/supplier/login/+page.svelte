@@ -56,7 +56,7 @@
   </div>
 
   <div class="flex items-start justify-between mt-10">
-    <Button type="submit" size="sm" no_icon>
+    <Button type="submit" no_icon>
       <span slot="text">Войти</span>
     </Button>
   </div>
