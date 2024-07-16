@@ -62,7 +62,7 @@
 </header>
 
 <main class="relative min-h-[100vh] bg-neutral-100 z-10">
-  <div class="px-4 md:px-12 py-4 md:py-12 mx-auto max-w-7xl">
+  <div class="px-4 md:px-12 py-4 md:py-12 mx-auto max-w-7xl overflow-hidden">
     <slot />
   </div>
 </main>
