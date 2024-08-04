@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
+  import { browser } from "$app/environment";
   import { enhance } from "$app/forms";
   import Button from "$lib/components/UI/Button.svelte";
   import Select from "$lib/components/UI/Select.svelte";
@@ -21,7 +21,12 @@
 
   let closest_cities: CdekCity[] = [];
   let map: any;
-  let incompleted_validations = new Set(['fullname', 'phone', 'email', 'agree']);
+  let incompleted_validations = new Set([
+    "fullname",
+    "phone",
+    "email",
+    "agree",
+  ]);
 
   for (const field of Object.values($userInputData)) {
     if (incompleted_validations.has(field.name) && field.valid) {
@@ -35,22 +40,25 @@
     userInfoStepDone.set(false);
   }
 
-  $: if (browser && $deliveryType === 'pickup' && !$deliveryStepDone) {
+  $: if (browser && $deliveryType === "pickup" && !$deliveryStepDone) {
     DG.then(() => {
-        map = DG.map('map', {
-            center: JSON.parse($currentCity.latlng),
-            zoom: 13
-        });
+      map = DG.map("map", {
+        center: JSON.parse($currentCity.latlng),
+        zoom: 13,
+      });
 
-        drawDeliveryPoints();
+      drawDeliveryPoints();
 
-        calculateDelivery();
+      calculateDelivery();
     });
   }
 
-  $: total = data.order_items.reduce((accum, cart_item) => {
-    return accum += cart_item.product.price * cart_item.quantity
-  }, browser ? $deliveryDateAndPrice?.total_sum : 0);
+  $: total = data.order_items.reduce(
+    (accum, cart_item) => {
+      return (accum += cart_item.product.price * cart_item.quantity);
+    },
+    browser ? $deliveryDateAndPrice?.total_sum : 0
+  );
 
   function validateInput(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -62,8 +70,8 @@
         ...userInputData.get(),
         [target.name]: {
           ...userInputData.get()[target.name as FieldName],
-          valid: true
-        }
+          valid: true,
+        },
       });
     } else {
       incompleted_validations.add(target.name);
@@ -72,8 +80,8 @@
         ...userInputData.get(),
         [target.name]: {
           ...userInputData.get()[target.name as FieldName],
-          valid: false
-        }
+          valid: false,
+        },
       });
     }
 
@@ -121,7 +129,7 @@
   function updateCity(city: CdekCity) {
     currentCity.set({
       cdek_city_code: city.code.toString(),
-      latlng: JSON.stringify([city.latitude, city.longitude])
+      latlng: JSON.stringify([city.latitude, city.longitude]),
     });
 
     deliveryOffice.set(null);
@@ -136,25 +144,28 @@
 
   function drawDeliveryPoints() {
     fetch(`/api/cdek/deliverypoints/${$currentCity.cdek_city_code}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const icon = DG.divIcon({
-          className: 'map-cdek-marker',
+          className: "map-cdek-marker",
           iconSize: [35, 35],
         });
 
         for (const deliverypoint of data) {
-          const marker = DG.marker([deliverypoint.location.latitude, deliverypoint.location.longitude], {
-            icon,
-            title: deliverypoint.name,
-            alt: deliverypoint.name,
-            riseOnHover: true,
-            payload: deliverypoint
-          });
+          const marker = DG.marker(
+            [deliverypoint.location.latitude, deliverypoint.location.longitude],
+            {
+              icon,
+              title: deliverypoint.name,
+              alt: deliverypoint.name,
+              riseOnHover: true,
+              payload: deliverypoint,
+            }
+          );
 
           marker.addTo(map);
 
-          marker.on('click', (data: any) => {
+          marker.on("click", (data: any) => {
             deliveryOffice.set(data.target.options.payload);
           });
         }
@@ -163,14 +174,14 @@
 
   function calculateDelivery() {
     fetch(`/api/cdek/calculator/${$currentCity.cdek_city_code}`, {
-      method: 'POST'
+      method: "POST",
     })
-      .then(res => res.json())
-      .then(data => deliveryDateAndPrice.set(data));
+      .then((res) => res.json())
+      .then((data) => deliveryDateAndPrice.set(data));
   }
 </script>
 
-<svelte:window bind:innerWidth={innerWidth}></svelte:window>
+<svelte:window bind:innerWidth />
 
 {#if innerWidth < 600}
   <details class="order-details-mobile">
@@ -185,13 +196,26 @@
               src={order_item.product.image}
               alt={order_item.product.title}
               decoding="async"
-              loading="eager">
+              loading="eager"
+            />
           </li>
         {/each}
       </ul>
 
-      <svg class="shrink-0 chevron ml-auto" width="20" viewBox="0 0 512 512" aria-hidden="true">
-        <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144" />
+      <svg
+        class="shrink-0 chevron ml-auto"
+        width="20"
+        viewBox="0 0 512 512"
+        aria-hidden="true"
+      >
+        <path
+          fill="none"
+          stroke="currentcolor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="48"
+          d="M184 112l144 144-144 144"
+        />
       </svg>
     </summary>
 
@@ -205,30 +229,35 @@
   </details>
 
   <small class="block text-sm mt-5">
-    Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.
+    Если вы случайно перезагрузите страницу, то введенная информация все равно
+    сохранится.
   </small>
 {/if}
 
 <div class="grid md:grid-cols-[1fr_27rem] gap-16 mt-8 pb-10 md-pb-0 md:mt-5">
   <div>
     <details open>
-      <summary class="relative flex items-center justify-between pointer-events-none">
+      <summary
+        class="relative flex items-center justify-between pointer-events-none"
+      >
         <h2 class="flex items-center text-2xl font-bold">
           <span>Доставка</span>
 
           {#if $deliveryStepDone}
-            <svg class="w-[1lh] h-[1lh] ml-3 text-emerald-700" viewBox="0 0 512 512" aria-hidden="true" fill="currentcolor">
-              <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z" />
+            <svg
+              class="w-[1lh] h-[1lh] ml-3 text-emerald-700"
+              viewBox="0 0 512 512"
+              aria-hidden="true"
+              fill="currentcolor"
+            >
+              <path
+                d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z"
+              />
             </svg>
           {/if}
         </h2>
 
-        <Button
-          as="div"
-          title="ШАГ 1 ИЗ 3"
-          appearance="outlined"
-          no_icon
-        >
+        <Button as="div" title="ШАГ 1 ИЗ 3" appearance="outlined" no_icon>
           <span slot="text">ШАГ 1 ИЗ 3</span>
         </Button>
       </summary>
@@ -268,8 +297,20 @@
               on:click={getCurrentPosition}
             >
               <span>Определить город по моей локации</span>
-              <svg viewBox="0 0 512 512" class="ml-1 w-[1lh] h-[1lh]" width="12" height="12">
-                <path d="M448 64L64 240.14h200a8 8 0 018 8V448z" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+              <svg
+                viewBox="0 0 512 512"
+                class="ml-1 w-[1lh] h-[1lh]"
+                width="12"
+                height="12"
+              >
+                <path
+                  d="M448 64L64 240.14h200a8 8 0 018 8V448z"
+                  fill="none"
+                  stroke="currentcolor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="32"
+                />
               </svg>
             </button>
           </div>
@@ -283,18 +324,17 @@
           </label>
 
           <div hidden={$deliveryStepDone} class="mt-2 md:mt-0">
-            <Select
-              name="tk"
-              value="cdek"
-              form="checkout-form"
-            >
+            <Select name="tk" value="cdek" form="checkout-form">
               <option value="post" disabled>Почта России</option>
               <option value="yandex" disabled>Яндекс</option>
               <option value="cdek" selected>CDEK</option>
             </Select>
           </div>
 
-          <p hidden={$deliveryStepDone} class="mt-6 md:mt-0 text-lg font-medium">
+          <p
+            hidden={$deliveryStepDone}
+            class="mt-6 md:mt-0 text-lg font-medium"
+          >
             Способ доставки
           </p>
 
@@ -306,11 +346,11 @@
                   type="radio"
                   name="delivery_type"
                   value="courier"
-                  checked={$deliveryType === 'courier'}
+                  checked={$deliveryType === "courier"}
                   form="checkout-form"
                   disabled
-                  on:change={() => deliveryType.set('courier')}
-                >
+                  on:change={() => deliveryType.set("courier")}
+                />
                 <span class="ml-2">Курьером до двери</span>
               </label>
               <label class="flex items-center">
@@ -319,25 +359,40 @@
                   name="delivery_type"
                   value="pickup"
                   form="checkout-form"
-                  checked={$deliveryType === 'pickup'}
-                  on:change={() => deliveryType.set('pickup')}
-                >
+                  checked={$deliveryType === "pickup"}
+                  on:change={() => deliveryType.set("pickup")}
+                />
                 <span class="ml-2">Самовывоз ПВЗ</span>
               </label>
             </fieldset>
           </div>
 
-          {#if $deliveryType === 'pickup'}
+          {#if $deliveryType === "pickup"}
             {#if !$deliveryStepDone}
               <div id="map" class="aspect-video my-4 md:my-0 md:col-span-2" />
             {/if}
 
-            <div class="md:col-span-2 md:grid md:grid-cols-[0.5fr_1fr] md:gap-y-4 md:gap-x-7">
+            <div
+              class="md:col-span-2 md:grid md:grid-cols-[0.5fr_1fr] md:gap-y-4 md:gap-x-7"
+            >
               <p class="text-lg font-medium">ПВЗ</p>
 
               {#if browser && $deliveryOffice}
-                <input type="hidden" name="delivery-address" value={$deliveryOffice.location.address} form="checkout-form">
-                <input type="hidden" name="delivery-city" value={data.cdek_cities.find(({ code }) => $currentCity.cdek_city_code === code.toString())?.city} form="checkout-form">
+                <input
+                  type="hidden"
+                  name="delivery-address"
+                  value={$deliveryOffice.location.address}
+                  form="checkout-form"
+                />
+                <input
+                  type="hidden"
+                  name="delivery-city"
+                  value={data.cdek_cities.find(
+                    ({ code }) =>
+                      $currentCity.cdek_city_code === code.toString()
+                  )?.city}
+                  form="checkout-form"
+                />
 
                 <p class="text-lg">{$deliveryOffice.owner_code}</p>
 
@@ -360,21 +415,31 @@
                 </p>
 
                 {#if $deliveryOffice.address_comment}
-                  <p class="mt-2 md:mt-0 text-base font-medium">Как добраться</p>
+                  <p class="mt-2 md:mt-0 text-base font-medium">
+                    Как добраться
+                  </p>
                   <p class="mt-1 md:mt-0">{$deliveryOffice.address_comment}</p>
                 {/if}
 
                 {#if $deliveryDateAndPrice}
-                  <p class="mt-2 md:mt-0 text-base font-medium">Срок доставки</p>
+                  <p class="mt-2 md:mt-0 text-base font-medium">
+                    Срок доставки
+                  </p>
                   <p class="mt-1 md:mt-0">
-                    От {$deliveryDateAndPrice.calendar_min} до {$deliveryDateAndPrice.calendar_max} календарных дней.
-                    <br>
+                    От {$deliveryDateAndPrice.calendar_min} до {$deliveryDateAndPrice.calendar_max}
+                    календарных дней.
+                    <br />
                     Мы пришлем вам трек номер по которому можно будет отследить заказ.
                   </p>
 
-                  <p class="mt-2 md:mt-0 text-base font-medium">Стоимость доставки</p>
+                  <p class="mt-2 md:mt-0 text-base font-medium">
+                    Стоимость доставки
+                  </p>
 
-                  <p class="mt-1 md:mt-0">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+                  <p class="mt-1 md:mt-0">
+                    {$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") +
+                      " ₽"}
+                  </p>
                 {/if}
 
                 <div />
@@ -410,24 +475,32 @@
       </div>
     </details>
 
-    <details class="mt-10" class:disabled={!$deliveryStepDone} open={$deliveryStepDone}>
-      <summary class="relative flex items-center justify-between pointer-events-none">
+    <details
+      class="mt-10"
+      class:disabled={!$deliveryStepDone}
+      open={$deliveryStepDone}
+    >
+      <summary
+        class="relative flex items-center justify-between pointer-events-none"
+      >
         <h2 class="flex items-center text-2xl font-bold">
           <span>Получатель</span>
 
           {#if $userInfoStepDone}
-            <svg class="w-[1lh] h-[1lh] ml-3 text-emerald-700" viewBox="0 0 512 512" aria-hidden="true" fill="currentcolor">
-              <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z" />
+            <svg
+              class="w-[1lh] h-[1lh] ml-3 text-emerald-700"
+              viewBox="0 0 512 512"
+              aria-hidden="true"
+              fill="currentcolor"
+            >
+              <path
+                d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z"
+              />
             </svg>
           {/if}
         </h2>
 
-        <Button
-          as="div"
-          title="ШАГ 2 ИЗ 3"
-          appearance="outlined"
-          no_icon
-        >
+        <Button as="div" title="ШАГ 2 ИЗ 3" appearance="outlined" no_icon>
           <span slot="text">ШАГ 2 ИЗ 3</span>
         </Button>
       </summary>
@@ -442,15 +515,13 @@
           enctype="multipart/form-data"
           use:enhance
         >
-          <label for="full_name" class="text-lg font-medium mt-2">
-            ФИО
-          </label>
+          <label for="full_name" class="text-lg font-medium mt-2"> ФИО </label>
           <div class="mt-2 md:mt-0">
             <input
               type="text"
               id="full_name"
-              name={$userInputData['fullname'].name}
-              bind:value={$userInputData['fullname'].data}
+              name={$userInputData["fullname"].name}
+              bind:value={$userInputData["fullname"].data}
               maxlength="300"
               placeholder="Иванов Иван Иванович"
               autocomplete="name"
@@ -467,8 +538,8 @@
             <input
               type="tel"
               id="phone"
-              name={$userInputData['phone'].name}
-              bind:value={$userInputData['phone'].data}
+              name={$userInputData["phone"].name}
+              bind:value={$userInputData["phone"].data}
               pattern={"7[0-9]{10}"}
               minlength="11"
               maxlength="11"
@@ -486,27 +557,29 @@
             <input
               type="email"
               id="email"
-              name={$userInputData['email'].name}
-              bind:value={$userInputData['email'].data}
+              name={$userInputData["email"].name}
+              bind:value={$userInputData["email"].data}
               placeholder="example@gmail.com"
               autocomplete="email"
               required
               on:input={validateInput}
             />
-            <small class="text-xs mt-2 md:ml-4">Необходим для отправки чека.</small>
+            <small class="text-xs mt-2 md:ml-4"
+              >Необходим для отправки чека.</small
+            >
           </div>
 
-          <label for="social-network" class="block mt-6 md:mt-2 text-lg font-medium">
+          <label
+            for="social-network"
+            class="block mt-6 md:mt-2 text-lg font-medium"
+          >
             Способ связи
           </label>
 
           <div class="mt-2 md:mt-0">
             <div class="grid grid-cols-2">
               <div class="relative row-start-1 col-start-1 w-36">
-                <Select
-                  name="social-network"
-                  form="checkout-form"
-                >
+                <Select name="social-network" form="checkout-form">
                   <optgroup label="Предпочитаемая соц. сеть">
                     <option value="tg">Телеграм</option>
                     <option value="wa">WhatsApp</option>
@@ -537,33 +610,36 @@
                 name="agree"
                 value="yes"
                 on:change={validateCheckbox}
+              />
+              <span
+                >Соглашаюсь с <a href="/docs/privacy-policy" class="underline"
+                  >политикой обработки персональных данных</a
+                ></span
               >
-              <span>Соглашаюсь с <a href="/docs/privacy-policy" class="underline">политикой обработки персональных данных</a></span>
             </label>
           </div>
         </form>
       </div>
     </details>
 
-    <details class="mt-10" class:disabled={!$userInfoStepDone} open={$userInfoStepDone}>
-      <summary class="relative flex items-center justify-between pointer-events-none">
+    <details
+      class="mt-10"
+      class:disabled={!$userInfoStepDone}
+      open={$userInfoStepDone}
+    >
+      <summary
+        class="relative flex items-center justify-between pointer-events-none"
+      >
         <h2 class="text-2xl font-bold">Оплата</h2>
 
-        <Button
-          as="div"
-          title="ШАГ 3 ИЗ 3"
-          appearance="outlined"
-          no_icon
-        >
+        <Button as="div" title="ШАГ 3 ИЗ 3" appearance="outlined" no_icon>
           <span slot="text">ШАГ 3 ИЗ 3</span>
         </Button>
       </summary>
 
       {#if innerWidth < 600}
         <div class="mt-5">
-          <h3 class="font-semibold">
-            Ваш заказ
-          </h3>
+          <h3 class="font-semibold">Ваш заказ</h3>
 
           <ul class="space-y-7 mt-4">
             {#each data.order_items as order_item (order_item.id)}
@@ -576,12 +652,12 @@
           <div class="total grid grid-cols-2 justify-items-end gap-4 mt-10">
             {#if $deliveryOffice && $deliveryDateAndPrice}
               <h3 class="font-semibold">Стоимость доставки</h3>
-              <p class="font-semibold">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+              <p class="font-semibold">
+                {$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}
+              </p>
             {/if}
 
-            <h3 class="text-xl font-semibold">
-              Итого
-            </h3>
+            <h3 class="text-xl font-semibold">Итого</h3>
             <p class="text-xl font-semibold">
               {total.toLocaleString("ru-RU") + " ₽"}
             </p>
@@ -590,14 +666,20 @@
       {/if}
 
       <div class="ml-auto max-w-max mt-5">
-        <input type="hidden" name="paid_delivery" value={$deliveryDateAndPrice?.total_sum} form="checkout-form">
-        <input type="hidden" name="paid_total" value={total} form="checkout-form">
-
-        <Button
-          type="submit"
+        <input
+          type="hidden"
+          name="paid_delivery"
+          value={$deliveryDateAndPrice?.total_sum}
           form="checkout-form"
-          title="Оплатить"
-        >
+        />
+        <input
+          type="hidden"
+          name="paid_total"
+          value={total}
+          form="checkout-form"
+        />
+
+        <Button type="submit" form="checkout-form" title="Оплатить">
           <span slot="text">Оплатить</span>
         </Button>
       </div>
@@ -612,9 +694,7 @@
 
   {#if innerWidth > 600}
     <div>
-      <h3 class="font-semibold">
-        Ваш заказ
-      </h3>
+      <h3 class="font-semibold">Ваш заказ</h3>
 
       <ul class="space-y-7 mt-4">
         {#each data.order_items as order_item (order_item.id)}
@@ -627,19 +707,20 @@
       <div class="total grid grid-cols-2 justify-items-end gap-4 mt-10">
         {#if $deliveryOffice && $deliveryDateAndPrice}
           <h3 class="font-semibold">Стоимость доставки</h3>
-          <p class="font-semibold">{$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}</p>
+          <p class="font-semibold">
+            {$deliveryDateAndPrice.total_sum.toLocaleString("ru-RU") + " ₽"}
+          </p>
         {/if}
 
-        <h3 class="text-xl font-semibold">
-          Итого
-        </h3>
+        <h3 class="text-xl font-semibold">Итого</h3>
         <p class="text-xl font-semibold">
           {total.toLocaleString("ru-RU") + " ₽"}
         </p>
       </div>
 
       <small class="block text-sm mt-4">
-        Если вы случайно перезагрузите страницу, то введенная информация все равно сохранится.
+        Если вы случайно перезагрузите страницу, то введенная информация все
+        равно сохранится.
       </small>
     </div>
   {/if}
@@ -648,7 +729,7 @@
 <style>
   :global(.map-cdek-marker) {
     border-radius: 9999px;
-    background-image: url('/cdek-logo.svg');
+    background-image: url("/cdek-logo.svg");
     background-color: var(--accent-color);
     background-repeat: no-repeat;
     background-position: center;
@@ -657,7 +738,7 @@
 
   details.disabled {
     pointer-events: none;
-    opacity: .6;
+    opacity: 0.6;
   }
 
   .total > *:nth-child(odd) {

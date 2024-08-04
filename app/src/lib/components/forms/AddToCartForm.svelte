@@ -1,21 +1,21 @@
 <script lang="ts">
   import type { SubmitFunction } from "@sveltejs/kit";
-  import { invalidate } from '$app/navigation';
+  import { invalidate } from "$app/navigation";
   import { enhance } from "$app/forms";
   import Button from "$lib/components/UI/Button.svelte";
 
   export let stock_item_id: string | undefined;
 
-  let feedback: { type: 'error' | 'success', message: string };
+  let feedback: { type: "error" | "success"; message: string };
 
   const handleFormResult: SubmitFunction = function () {
     return async ({ result }) => {
       if (result.type === "failure") {
-        feedback = { type: 'error', message: result.data?.message }
+        feedback = { type: "error", message: result.data?.message };
       }
 
       if (result.type === "success") {
-        feedback = { type: 'success', message: result.data?.message }
+        feedback = { type: "success", message: result.data?.message };
         invalidate("layout:root");
       }
     };
@@ -23,15 +23,11 @@
 </script>
 
 <form action="/cart?/add" method="POST" use:enhance={handleFormResult}>
-  <input type="hidden" name="stock-item" value={stock_item_id}>
+  <input type="hidden" name="stock-item" value={stock_item_id} />
 
-  <input type="hidden" name="quantity" value="1">
+  <input type="hidden" name="quantity" value="1" />
 
-  <Button
-    type="submit"
-    title="Добавить в корзину"
-    disabled={!stock_item_id}
-  >
+  <Button type="submit" title="Добавить в корзину" disabled={!stock_item_id}>
     <span slot="text">Добавить в корзину</span>
   </Button>
 </form>

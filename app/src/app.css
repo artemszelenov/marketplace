@@ -14,8 +14,8 @@
   --color-red-600: var(--red-600);
   --color-emerald-700: var(--emerald-700);
   --accent-color: var(--color-gray-900);
-  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-family-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 @layer base {
@@ -37,7 +37,9 @@
     transform: scale(0.95);
   }
 
-  :is(.action-button, .silent-button):is(:hover, :focus-visible):not(:disabled)::before {
+  :is(.action-button, .silent-button):is(:hover, :focus-visible):not(
+      :disabled
+    )::before {
     position: absolute;
     inset: -5px;
     z-index: -1;
@@ -46,20 +48,31 @@
     border-radius: 9999px;
   }
 
-  :is(a[href]):hover:not(:disabled, .logo, .action-button, .teaser-link, .tab-link) {
+  :is(a[href]):hover:not(
+      :disabled,
+      .logo,
+      .action-button,
+      .teaser-link,
+      .tab-link
+    ) {
     background-color: var(--color-neutral-200);
   }
 
   :is(a[href].active):not(:disabled) {
     background-color: var(--color-gray-900);
-    color: var(--color-white)
+    color: var(--color-white);
   }
 
   :is(a, button) svg {
     width: 100%;
   }
 
-  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]) {
+  input:not(
+      [type="radio"],
+      [type="checkbox"],
+      [type="reset"],
+      [type="submit"]
+    ) {
     display: block;
     width: 100%;
     background-color: var(--color-white);
@@ -69,7 +82,8 @@
     border-radius: 9999px;
   }
 
-  textarea, .tiptap {
+  textarea,
+  .tiptap {
     display: block;
     width: 100%;
     background-color: var(--color-white);
@@ -79,8 +93,15 @@
     border-radius: var(--radius-sm);
   }
 
-  input:not([type="radio"], [type="checkbox"], [type="reset"], [type="submit"]):focus,
-  select:focus, textarea:focus, .tiptap:focus {
+  input:not(
+      [type="radio"],
+      [type="checkbox"],
+      [type="reset"],
+      [type="submit"]
+    ):focus,
+  select:focus,
+  textarea:focus,
+  .tiptap:focus {
     outline: 3px solid var(--color-gray-900);
   }
 
@@ -90,19 +111,29 @@
     color: var(--color-red-600);
   }
 
-  :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-valid {
+  :is(
+      [type="text"],
+      [type="tel"],
+      [type="email"],
+      [type="password"]
+    ):required:user-valid {
     outline: 3px solid var(--color-emerald-700);
     border-color: var(--color-emerald-700);
   }
 
-  :is([type="text"], [type="tel"], [type="email"], [type="password"]):required:user-invalid {
+  :is(
+      [type="text"],
+      [type="tel"],
+      [type="email"],
+      [type="password"]
+    ):required:user-invalid {
     outline: 3px solid var(--color-red-600);
     border-color: var(--color-red-600);
   }
 
   select {
     appearance: none;
-    grid-row-start: 1; 
+    grid-row-start: 1;
     grid-column-start: 1;
     display: block;
     width: 100%;
@@ -154,7 +185,7 @@
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
     scrollbar-width: none;
   }
 }
