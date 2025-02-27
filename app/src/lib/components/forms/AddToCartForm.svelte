@@ -28,7 +28,7 @@
   <input type="hidden" name="quantity" value="1" />
 
   <Button type="submit" title="Добавить в корзину" disabled={!stock_item_id}>
-    <span slot="text">Добавить в корзину</span>
+    <span slot="text">Add to cart</span>
   </Button>
 </form>
 

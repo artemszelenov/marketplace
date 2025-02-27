@@ -18,7 +18,7 @@ export async function load({ locals, depends, cookies }) {
     user: locals.user,
     cart_items_count,
     seo: {
-      title: "Главная"
+      title: "Home"
     }
   }
 }

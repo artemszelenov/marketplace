@@ -20,7 +20,7 @@
   }
 
   function goTop() {
-    scrollTo(0, 0);
+    requestAnimationFrame(() => window.scrollTo(0, 0));
   }
 
   function loadMore() {
@@ -30,14 +30,14 @@
 </script>
 
 <form action="/search" class="grid">
-	<input name="q" placeholder="Поиск" class="row-start-1 col-start-1">
+    <input name="q" placeholder="Search" class="row-start-1 col-start-1">
 
   <div class="relative row-start-1 col-start-1 right-3 justify-self-end self-center">
     <Button
       type="submit"
-      title="Поиск"
+      title="Search"
     >
-      <svg slot="icon" height="17" viewBox="0 0 512 512" aria-label="Поиск">
+      <svg slot="icon" height="17" viewBox="0 0 512 512" aria-label="Search">
         <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentcolor" stroke-miterlimit="10" stroke-width="32" />
         <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448" />
       </svg>
@@ -47,13 +47,13 @@
 
 <section class="grid grid-cols-2 mt-8 md:mt-12">
   <h1 class="col-start-1 row-start-1 text-2xl font-bold">
-    Все товары
+      All products
   </h1>
 
   <details class="col-start-1 row-start-1 col-end-3">
     <summary class="max-w-max ml-auto rounded-full">
       <Button as="div">
-        <span slot="text">Фильтры</span>
+        <span slot="text">Filters</span>
         <span slot="icon">
           {#if applied_filters_count > 0}
             <span>{applied_filters_count}</span>
@@ -89,8 +89,8 @@
               >
               <span
                 class="
-                  peer-[:hover:not(:checked)]:bg-neutral-200 peer-checked:bg-gray-900 peer-checked:text-white 
-                  inline-flex items-center text-sm font-medium 
+                  peer-[:hover:not(:checked)]:bg-neutral-200 peer-checked:bg-gray-900 peer-checked:text-white
+                  inline-flex items-center text-sm font-medium
                   rounded border border-gray-900 px-3 h-[2.5em]
                   cursor-default"
               >
@@ -104,7 +104,7 @@
       <p class="flex justify-between md:justify-end gap-8 mt-8">
         <input
           type="reset"
-          value="Сбросить все"
+          value="Reset all"
           class="underline underline-offset-[0.2em]"
         >
 
@@ -112,7 +112,7 @@
           type="submit"
           handler={reset}
         >
-          <span slot="text">Применить</span>
+          <span slot="text">Apply</span>
         </Button>
       </p>
 
@@ -133,7 +133,7 @@
   <Button
     type="submit"
     form="filter-form"
-    title="Вернуться к началу"
+    title="Return to top"
     handler={goTop}
     additional_class="mr-auto"
   >
@@ -146,10 +146,10 @@
     <Button
       type="submit"
       form="filter-form"
-      title={`Показать еще ${data.pagination.limit}`}
+      title={`Show ${data.pagination.limit} more`}
       handler={loadMore}
     >
-      <span slot="text">Показать еще {data.pagination.limit}</span>
+      <span slot="text">Show {data.pagination.limit} more</span>
       <svg slot="icon" height="18" viewBox="0 0 512 512" class="rotate-180" aria-hidden="true">
         <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" />
       </svg>

@@ -13,7 +13,7 @@
 
   $: product = data.products.find(product => product.id === current_product_id)!;
 
-  $: current_stock_item = product.stock_items.find((stock_item: any) => stock_item.id === current_stock_item_id)!;  
+  $: current_stock_item = product.stock_items.find((stock_item: any) => stock_item.id === current_stock_item_id)!;
 </script>
 
 <h1 class="text-xl font-semibold">{product.title}</h1>
@@ -24,7 +24,7 @@
 
   <section class="grid gap-10 auto-rows-max">
     <div>
-      <label for="title" class="block font-bold mb-2">Заголовок</label>
+      <label for="title" class="block font-bold mb-2">Title</label>
       <input
         type="text"
         name="title"
@@ -34,7 +34,7 @@
     </div>
 
     <div>
-      <label for="price" class="block font-bold mb-2">Цена</label>
+      <label for="price" class="block font-bold mb-2">Price</label>
       <input
         type="text"
         inputmode="numeric"
@@ -47,12 +47,12 @@
     </div>
 
     <div>
-      <label for="description" class="block font-bold mb-2">Описание</label>
+      <label for="description" class="block font-bold mb-2">Description</label>
       <Editor content={product.description} />
     </div>
 
     <div>
-      <label for="sku" class="block font-bold mb-2">Артикул</label>
+      <label for="sku" class="block font-bold mb-2">SKU</label>
       <input
         type="text"
         name="sku"
@@ -61,7 +61,7 @@
       >
     </div>
   </section>
-  
+
   <section class="grid gap-10 auto-rows-max">
     <ColorsEdit
       current_product={product}
@@ -76,7 +76,7 @@
     <SizesEdit {product} {current_stock_item_id} />
 
     <div>
-      <label for="count" class="block font-bold mb-2">Количество</label>
+      <label for="count" class="block font-bold mb-2">Quantity</label>
       <input
         type="number"
         name="count"
@@ -90,7 +90,7 @@
       additional_class="max-w-max"
       no_icon
     >
-      <span slot="text">Сохранить</span>
+      <span slot="text">Save</span>
     </Button>
   </section>
 </form>

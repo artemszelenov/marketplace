@@ -4,7 +4,7 @@ export async function load({ locals, depends }) {
   return {
     user: locals.user,
     seo: {
-      title: "Кабинет поставщика"
+      title: "Supplier dashboard"
     }
   }
 }

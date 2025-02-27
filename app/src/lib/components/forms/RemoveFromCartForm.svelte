@@ -11,7 +11,7 @@
   <input type="hidden" name="from" value={$page.url.pathname + $page.url.search}>
 
   <Button
-    title="Удалить из корзины"
+    title="Remove from cart"
     type="submit"
     appearance="silent"
   >

@@ -9,15 +9,15 @@
   }, 0);
 </script>
 
-<h1 class="text-2xl font-bold">Корзина</h1>
+<h1 class="text-2xl font-bold">Cart</h1>
 
 <div
   class="md:grid md:grid-cols-[0.8fr_27rem] md:justify-between md:items-start md:gap-16 mt-8 pb-10"
 >
   {#if data.cart_items.length === 0}
     <p>
-      В корзине пусто. Добавьте, что-нибудь из
-      <a href="/catalog">каталога</a>
+      The cart is empty. Add something from
+      <a href="/catalog">catalog</a>
     </p>
   {:else}
     <div>
@@ -32,16 +32,16 @@
 
     <div class="mt-10 md:mt-0">
       <div class="grid grid-cols-[1.3fr_0.7fr] justify-items-end gap-4">
-        <p class="text-xl font-semibold">Стоимость без учета доставки</p>
+        <p class="text-xl font-semibold">Total</p>
 
         <p class="text-xl font-semibold">
-          {total.toLocaleString("ru-RU") + " ₽"}
+          {total.toLocaleString("en") + " $"}
         </p>
       </div>
 
       <div class="ml-auto w-max mt-4">
-        <Button as="link" href="/checkout" title="Оформить заказ">
-          <span slot="text">Оформить заказ</span>
+        <Button title="Оформить заказ" disabled>
+          <span slot="text">Go to checkout</span>
         </Button>
       </div>
     </div>

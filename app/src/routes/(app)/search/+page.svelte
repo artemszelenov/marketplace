@@ -5,7 +5,7 @@
 </script>
 
 <h1 class="text-lg">
-  Результаты по запросу: 
+  Results for:
   <strong class="font-bold">{data.initial_query}</strong>
 </h1>
 

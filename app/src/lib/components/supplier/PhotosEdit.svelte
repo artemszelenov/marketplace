@@ -13,10 +13,10 @@
 <section>
   <div class="flex justify-between">
     <h3 class="font-bold mb-1">
-      Фото
+        Photo
     </h3>
     <button type="button" on:click={togglePhotosEdit}>
-      {is_photos_edit ? "Отменить" : "Редактировать"}
+      {is_photos_edit ? "Cancel" : "Edit"}
     </button>
   </div>
 
@@ -75,7 +75,7 @@
         additional_class="max-w-max mt-3"
         no_icon
       >
-        <span slot="text">Добавить выбранные фото</span>
+        <span slot="text">Add selected photos</span>
       </Button>
     </form>
   {/if}

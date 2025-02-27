@@ -1,12 +1,11 @@
 <script>
   import NewProduct from '$lib/components/supplier/NewProduct.svelte';
-
   export let data;
 </script>
 
 <div class="flex items-center justify-between">
   <h1 class="text-xl font-semibold">
-    Мои товары
+      My Products
   </h1>
 
   <NewProduct
@@ -21,13 +20,13 @@
       <a href="/supplier/products/{item.id}/edit">
         <img class="aspect-square object-cover rounded" src={item.image} alt="">
         <p class="mt-3 font-bold">{item.title}</p>
-        <p>Размер: {item.size}</p>
-        <p>Количество: {item.count}</p>
+        <p>Size: {item.size}</p>
+        <p>Quantity: {item.count}</p>
         {#if item.count <= 2}
-          <p class="text-red-700">Осталось мало</p>
+          <p class="text-red-700">Low stock</p>
         {/if}
         {#if item.on_moderation}
-          <p class="text-yellow-500">На модерации</p>
+          <p class="text-yellow-500">On moderation</p>
         {/if}
       </a>
     </li>

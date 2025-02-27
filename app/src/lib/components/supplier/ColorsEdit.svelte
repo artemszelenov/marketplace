@@ -27,10 +27,10 @@
 <section>
   <div class="flex justify-between">
     <h3 class="font-bold mb-1">
-      Цвета
+        Colors
     </h3>
     <button type="button" on:click={toggleColorsEdit}>
-      {is_colors_edit ? "Отменить" : "Редактировать"}
+      {is_colors_edit ? "Cancel" : "Edit"}
     </button>
   </div>
 
@@ -72,7 +72,7 @@
       no_icon
       handler={showNewColorDialog}
     >
-      <span slot="text">Добавить новый цвет</span>
+      <span slot="text">Add new color</span>
     </Button>
   {/if}
 
@@ -84,7 +84,7 @@
       <input type="hidden" name="group_id" value={current_product.group_id}>
 
       <label for="color_id" class="block font-bold mb-2">
-        Новый цвет
+          New color
       </label>
 
       <Select name="color_id">
@@ -94,7 +94,7 @@
       </Select>
 
       <label for="size_group_id" class="block font-bold mb-2 mt-5">
-        Первый размер для нового цвета
+        First size for new color
       </label>
 
       <Select name="size_group_id">
@@ -102,23 +102,23 @@
           <option value={size_group.id}>{size_group.title}</option>
         {/each}
       </Select>
-  
+
       <div class="mt-8 flex gap-3">
         <Button
           type="submit"
           additional_class="max-w-max"
           no_icon
         >
-          <span slot="text">Добавить</span>
+          <span slot="text">Add</span>
         </Button>
-  
+
         <Button
           appearance="outlined"
           additional_class="max-w-max"
           no_icon
           handler={closeNewColorDialog}
         >
-          <span slot="text">Отмена</span>
+          <span slot="text">Cancel</span>
         </Button>
       </div>
     </form>

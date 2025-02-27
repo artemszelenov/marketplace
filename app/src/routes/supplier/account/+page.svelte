@@ -1,1 +1,1 @@
-<h2 class="text-xl font-semibold">Мой аккаунт</h2>
+<h2 class="text-xl font-semibold">My account</h2>

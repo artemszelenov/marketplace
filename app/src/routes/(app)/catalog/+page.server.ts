@@ -51,11 +51,11 @@ export async function load({ locals, url }) {
       values: { value: string, title: string }[]
     }> = {
       color: {
-        title: 'Цвет',
+        title: 'Color',
         values: colors_records.map(({ id, title }) => ({ value: id, title }))
       },
       categories: {
-        title: 'Категории',
+        title: 'Category',
         values: categories_records.map(({ id, title }) => ({ value: id, title }))
       }
     }
@@ -78,13 +78,13 @@ export async function load({ locals, url }) {
         done: page === totalPages
       },
       seo: {
-        title: 'Каталог'
+        title: 'Catalog'
       }
     }
   } catch (err) {
-    console.log(`Ошибка на сервере`, err)
+    console.log(`Server error`, err)
 		throw error(500, {
-			message: 'Ошибка на сервере'
+			message: 'Server error'
 		})
   }
 }

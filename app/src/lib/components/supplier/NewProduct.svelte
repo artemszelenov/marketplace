@@ -17,7 +17,7 @@
 </script>
 
 <Button handler={showNewProductDialog}>
-  <span slot="text">Создать новый товар</span>
+  <span slot="text">Create new product</span>
   <svg slot="icon" height="28" viewBox="0 0 512 512" aria-hidden="true">
     <path fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 112v288M400 256H112" />
   </svg>
@@ -26,7 +26,7 @@
 <dialog class="p-10 min-w-[40vmax] m-auto" bind:this={new_product_dialog}>
   <form action="?/createProduct" method="post">
     <label for="title" class="block font-bold mb-2">
-      Название нового товара
+        Name of the new product
     </label>
     <input
       type="text"
@@ -35,7 +35,7 @@
     >
 
     <label for="color_id" class="block font-bold mb-2 mt-5">
-      Первый цвет для этого товара
+      First color for this product
     </label>
 
     <Select name="color_id">
@@ -45,7 +45,7 @@
     </Select>
 
     <label for="size_group_id" class="block font-bold mb-2 mt-5">
-      Первый размер для этого цвета
+      First size for this product
     </label>
 
     <Select name="size_group_id">
@@ -60,7 +60,7 @@
         additional_class="max-w-max"
         no_icon
       >
-        <span slot="text">Создать</span>
+        <span slot="text">Create</span>
       </Button>
 
       <Button
@@ -69,7 +69,7 @@
         no_icon
         handler={closeNewProductDialog}
       >
-        <span slot="text">Отмена</span>
+        <span slot="text">Cancel</span>
       </Button>
     </div>
   </form>

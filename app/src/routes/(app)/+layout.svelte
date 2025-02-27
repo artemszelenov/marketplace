@@ -5,11 +5,11 @@
 
   const nav = [
     {
-      text: "Главная",
+      text: "Home",
       url: "/",
     },
     {
-      text: "Каталог",
+      text: "Catalog",
       url: "/catalog",
     }
   ];
@@ -40,7 +40,7 @@
     <div class="flex items-center justify-end">
       <!-- {#if $page.data.user}
         <a class="px-3 py-2 text-sm text-black" href="/user">
-          Мой аккаунт
+        My account
         </a>
       {/if} -->
 

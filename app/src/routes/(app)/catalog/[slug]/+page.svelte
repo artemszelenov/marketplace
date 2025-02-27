@@ -57,14 +57,14 @@
 
       {#if !current_stock_item}
         <p class="mt-2 text-sm text-gray-900">
-          Выберите один из размеров ниже
+            Choose one of the sizes below
         </p>
       {/if}
 
       <div class="mt-10">
         {#if data.product.type === "shoes"}
           <div class="flex items-center gap-4 justify-between">
-            <h2 class="text-xl font-bold text-gray-900">Размеры</h2>
+            <h2 class="text-xl font-bold text-gray-900">Sizes</h2>
 
             <Select
               name="shoes-size-metric"
@@ -79,7 +79,7 @@
             </Select>
           </div>
         {:else}
-          <h2 class="text-xl font-bold text-gray-900">Размеры</h2>
+          <h2 class="text-xl font-bold text-gray-900">Sizes</h2>
         {/if}
 
         <nav class="grid grid-cols-4 md:grid-cols-5 gap-4 mt-4">
@@ -96,7 +96,7 @@
               {:else}
                 <div
                   class="py-1.5 text-s text-center font-medium border-2 border-grey-400 rounded outline-offset-2 cursor-not-allowed opacity-30"
-                  title="Нет в наличии"
+                  title="Not in stock"
                 >
                   {getSizeTitleOf(stock_item)}
                 </div>
@@ -108,7 +108,7 @@
 
       {#if data.product_variants.length > 0}
         <div class="mt-10">
-          <h2 class="text-xl font-bold text-gray-900">Цвета</h2>
+          <h2 class="text-xl font-bold text-gray-900">Colors</h2>
 
           <ul class="flex mt-4 -mx-2 px-2 space-x-2 overflow-x-auto">
             {#each data.product_variants as variant (variant.id)}

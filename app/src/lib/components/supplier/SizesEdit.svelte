@@ -24,10 +24,10 @@
 <section>
   <div class="flex justify-between">
     <h3 class="font-bold mb-1">
-      Размеры
+        Sizes
     </h3>
     <button type="button" on:click={toggleSizesEdit}>
-      {is_sizes_edit ? "Отменить" : "Редактировать"}
+      {is_sizes_edit ? "Cancel" : "Edit"}
     </button>
   </div>
 
@@ -69,36 +69,36 @@
       no_icon
       handler={showNewSizeDialog}
     >
-      <span slot="text">Добавить новый размер</span>
+      <span slot="text">Add new size</span>
     </Button>
   {/if}
 
   <dialog class="p-10 m-auto" bind:this={new_size_dialog}>
     <form action="?/createStockItem" method="post">
       <input type="hidden" name="product_id" value={product.id}>
-  
+
       <Select name="size_group_id">
         {#each product.allowed_size_groups as size_group (size_group.id)}
           <option value={size_group.id}>{size_group.title}</option>
         {/each}
       </Select>
-  
+
       <div class="mt-8 flex gap-3">
         <Button
           type="submit"
           additional_class="max-w-max"
           no_icon
         >
-          <span slot="text">Добавить</span>
+          <span slot="text">Add</span>
         </Button>
-  
+
         <Button
           appearance="outlined"
           additional_class="max-w-max"
           no_icon
           handler={closeNewSizeDialog}
         >
-          <span slot="text">Отмена</span>
+          <span slot="text">Cancel</span>
         </Button>
       </div>
     </form>

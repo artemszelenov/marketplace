@@ -4,7 +4,7 @@
   export let data
 </script>
 
-<h1 class="text-2xl font-bold">Новинки</h1>
+<h1 class="text-2xl font-bold">New items</h1>
 
 <ul class="flex gap-4 mt-7 overflow-auto no-scrollbar">
   {#each data.new_teasers as product (product.id)}
@@ -14,7 +14,7 @@
   {/each}
 </ul>
 
-<h1 class="text-2xl font-bold mt-8">Мужчины</h1>
+<h1 class="text-2xl font-bold mt-8">Men</h1>
 
 <ul class="flex gap-4 mt-7 overflow-auto no-scrollbar">
   {#each data.teasers_men as product (product.id)}
@@ -24,7 +24,7 @@
   {/each}
 </ul>
 
-<h1 class="text-2xl font-bold mt-8">Женщины</h1>
+<h1 class="text-2xl font-bold mt-8">Women</h1>
 
 <ul class="flex gap-4 mt-7 overflow-auto no-scrollbar">
   {#each data.teasers_women as product (product.id)}

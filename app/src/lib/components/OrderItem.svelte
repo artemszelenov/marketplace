@@ -31,19 +31,19 @@
       <table class="w-48 mt-4">
         <tbody>
           <tr>
-            <td class="text-sm">Цена</td>
-            <td class="text-sm font-medium">{order_item.product.price.toLocaleString("ru-RU") + " ₽"}</td>
+            <td class="text-sm">Price</td>
+            <td class="text-sm font-medium">{order_item.product.price.toLocaleString("en") + " S"}</td>
           </tr>
           <tr>
-            <td class="text-sm">Размер</td>
+            <td class="text-sm">Size</td>
             <td class="text-sm font-medium">{getSizeTitleFrom(order_item.stock_item)}</td>
           </tr>
           <tr>
-            <td class="text-sm">Количество</td>
+            <td class="text-sm">Quantity</td>
             <td class="text-sm font-medium">{order_item.quantity}</td>
           </tr>
           <tr>
-            <td class="text-sm">Цвет</td>
+            <td class="text-sm">Color</td>
             <td class="text-sm font-medium">{order_item.product.color}</td>
           </tr>
         </tbody>

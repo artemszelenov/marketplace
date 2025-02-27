@@ -74,13 +74,13 @@ export async function load({ locals, cookies }) {
       cart_items,
       cart_items_count: cart_items.length,
       seo: {
-        title: "Корзина"
+        title: "Cart"
       }
     }
   } catch (err) {
-    console.log(`Ошибка на сервере`, err);
+    console.log(`Server error`, err);
 		throw error(500, {
-			message: 'Ошибка на сервере'
+			message: 'Server error'
 		});
   }
 }
@@ -93,9 +93,9 @@ export const actions = {
     const cart_id_cookie = cookies.get("pb_cart") ?? '';
 
     if (!stock_item_id) {
-      console.log('stock-item не передан');
+      console.log('stock-item not provided');
       throw error(400, {
-        message: 'stock-item не передан'
+        message: 'stock-item not provided'
       });
     }
 
@@ -124,7 +124,7 @@ export const actions = {
       cookies.set("pb_cart", new_cart.id, { path: "/" });
 
       return {
-        message: 'Товар успешно добавлен в корзину'
+        message: 'The product has been added to the cart'
       }
     }
 
@@ -147,7 +147,7 @@ export const actions = {
         });
 
       return {
-        message: 'Товар успешно добавлен в корзину'
+        message: 'The product has been added to the cart'
       }
     }
 
@@ -160,11 +160,11 @@ export const actions = {
         });
 
       return {
-        message: `Успешно. Количество в корзине: ${cart_item_record.quantity + 1}`
+        message: `Successfully. Quantity in cart: ${cart_item_record.quantity + 1}`
       }
     }
 
-    return fail(422, { message: "На складе недостаточно товара" });
+    return fail(422, { message: "There is not enough product in stock" });
   },
 
   remove: async ({ request, locals, cookies }) => {
@@ -174,9 +174,9 @@ export const actions = {
     const cart_id_cookie = cookies.get("pb_cart") ?? '';
 
     if (!cart_item_id) {
-      console.log('cart-item не передан');
+      console.log('cart-item is not provided');
       throw error(400, {
-        message: 'cart-item не передан'
+        message: 'cart-item is not provided'
       });
     }
 
@@ -201,16 +201,15 @@ export const actions = {
       }
 
       return {
-        message: "Товар успешно удален"
+        message: "The product has been removed from the cart"
       }
     } catch (err) {
       if (err instanceof ClientResponseError) {
-        console.log('Pocketbase: Ошибка при удалении товара', err);
+        console.log('Pocketbase: ', err);
         throw error(500, {
           message: '[Pocketbase]: ' + err.message
         });
       }
-      console.log('Неизвестная ошибка', err);
       throw error(500);
     }
   }

@@ -24,7 +24,7 @@
   use:enhance={handleFormResult}
   class="max-w-[400px]"
 >
-  <h2 class="text-xl font-semibold">Вход</h2>
+  <h2 class="text-xl font-semibold">Log in</h2>
 
   {#if errors.length > 0}
     {#each errors as error}
@@ -35,7 +35,7 @@
   <input type="hidden" name="redirect-to" value="/supplier/products" />
 
   <div class="grid grid-cols-[100px_1fr] gap-4 items-center mt-10">
-    <label for="email" class="block text-sm">Почта</label>
+    <label for="email" class="block text-sm">Email</label>
     <input
       class="block w-full mt-1 py-1.5 px-2"
       type="email"
@@ -44,8 +44,8 @@
       placeholder="example@gmail.com"
       required
     />
-  
-    <label for="password" class="block text-sm">Пароль</label>
+
+    <label for="password" class="block text-sm">Password</label>
     <input
       class="block w-full mt-1 py-1.5 px-2"
       type="password"
@@ -57,7 +57,7 @@
 
   <div class="flex items-start justify-between mt-10">
     <Button type="submit" no_icon>
-      <span slot="text">Войти</span>
+      <span slot="text">Log in</span>
     </Button>
   </div>
 </form>
